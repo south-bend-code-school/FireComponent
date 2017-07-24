@@ -1,0 +1,29 @@
+{
+  "name": "firecomponent",
+  "version": "1.0.0",
+  "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
+  "main": "Components.vue",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmattia/FireComponent.git"
+  },
+  "keywords": [
+    "Firebase",
+    "Vue",
+    "Editable",
+    "Medium",
+    "Croppie"
+  ],
+  "author": "David Mattia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmattia/FireComponent/issues"
+  },
+  "homepage": "https://github.com/dmattia/FireComponent#readme",
+  "dependencies": {
+    "medium-editor": "^5.23.1"
+  }
+}
