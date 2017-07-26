@@ -61,10 +61,6 @@ export default {
       type: [String],
       default: () => null
     },
-    dataType: {
-      type: [String],
-      default: () => 'text'
-    },
     customTag: {
       type: [String],
       default: () => 'div'
@@ -89,15 +85,8 @@ export default {
   },
 
   mounted (evt) {
-    if (this.dataType === 'number') {
-      this.firebaseReference.once('value').then(snapshot => {
-        this.setUpdatedValue(snapshot.val())
-      })
-    }
-
     if (this.defaultValue !== null) {
       this.innerHtml = this.defaultValue
-      console.log("YAY")
     } else if (this.firebaseReference !== null) {
       this.updateValueFromReference()
     }
@@ -115,19 +104,9 @@ export default {
 
   methods: {
     addField () {
-      if (this.dataType === 'number') {
-        this.$refs.element.innerHTML = '0'
-        this.innerHtml = '0'
-        this.setUpdatedValue('0')
-      } else if(this.dataType === 'slug') {
-        this.$refs.element.innerHTML = 'some_url'
-        this.innerHtml = 'some_url'
-        this.setUpdatedValue('some_url')
-      } else {
-        this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
-        this.innerHtml = 'lorem ipsum dolor sit amet'
-        this.setUpdatedValue('lorem ipsum dolor sit amet')
-      }
+      this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
+      this.innerHtml = 'lorem ipsum dolor sit amet'
+      this.setUpdatedValue('lorem ipsum dolor sit amet')
     },
 
     updateValueFromReference () {
@@ -153,19 +132,6 @@ export default {
     },
 
     setUpdatedValue (newValue) {
-      if (this.dataType === 'number') {
-        newValue = newValue.replace(/\D/g, '') || null
-        // newValue = this.plainText || 0
-      }
-
-      if (this.dataType === 'slug') {
-        newValue = newValue.replace(/<\/?[^>]+(>|$)/g, "")
-          .toLowerCase()
-          .replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-          .replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
-          .replace(/^-+|-+$/g, ''); // remove leading, trailing -
-      }
-
       this.updatedValue = newValue
     },
 
@@ -220,10 +186,6 @@ export default {
 
   computed: {
     shouldHide () {
-      if (this.dataType === 'number') {
-        return this.updatedValue === null
-      }
-
       // TODO: Clean up this mumbo-jumbo code
       return !this.plainText.length || 
         (this.updatedValue !== null && !this.updatedValue.replace(/<\/?[^>]+(>|$)/g, "").length)
