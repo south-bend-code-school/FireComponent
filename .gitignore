@@ -1,5 +1,6 @@
 # Vim swapfiles
 *.sw[op]
+example/dist
 
 # Logs
 logs

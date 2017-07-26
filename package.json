@@ -14,8 +14,8 @@
     "Firebase",
     "Vue",
     "Editable",
-    "Medium",
-    "Croppie"
+    "Admin",
+    "ContentEditable"
   ],
   "author": "David Mattia",
   "license": "MIT",

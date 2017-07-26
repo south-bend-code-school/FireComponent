@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "firevue-test",
+    "demo": "firevue-test"
+  }
+}
