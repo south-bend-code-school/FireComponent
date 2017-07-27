@@ -1,9 +1,9 @@
 <script>
   import FireText from './src/FireText.vue';
-  // import FireImage from './src/FireImage.vue';
+  import FireHtml from './src/FireHtml.vue';
 
   export default {
     FireText,
-    // FireImage
+    FireHtml
   };
 </script>

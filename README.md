@@ -1,6 +1,6 @@
 # FireComponent
 
-![Demo](https://firevue-test.firebaseapp.com/)
+[Demo](https://firevue-test.firebaseapp.com/)
 
 An opinionated set of high level components for declaratively displaying information from Firebase,
 allowing admin edits if desired

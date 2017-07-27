@@ -6,7 +6,7 @@
       ref="element"
     ></component>
     <template v-if="shouldHide && editable">
-      <button style="display: block" @click="addField">Add Field +</button>
+      <button @click="addField">Add Field +</button>
     </template>
   </div>
 </template>
@@ -61,43 +61,27 @@ export default {
       type: [String],
       default: () => null
     },
-    dataType: {
-      type: [String],
-      default: () => 'text'
-    },
     customTag: {
       type: [String],
-      default: () => 'div'
+      default: () => 'p'
     },
     editable: {
       type: [Boolean],
       default: () => false
-    },
-    mediumEditingOptions: {
-      type: [Object],
-      default: () => {
-        toolbar: true
-      }
-    },
+    }
   },
 
   data () {
     return {
-      innerHtml: '',
-      updatedValue: null 
+      innerText: '',
+      updatedText: null 
     }
   },
 
   mounted (evt) {
-    if (this.dataType === 'number') {
-      this.firebaseReference.once('value').then(snapshot => {
-        this.setUpdatedValue(snapshot.val())
-      })
-    }
-
+    console.log(this.firebaseReference)
     if (this.defaultValue !== null) {
-      this.innerHtml = this.defaultValue
-      console.log("YAY")
+      this.innerText = this.defaultValue
     } else if (this.firebaseReference !== null) {
       this.updateValueFromReference()
     }
@@ -107,7 +91,7 @@ export default {
 
   beforeDestroy () {
     if (this.editable) {
-      this.updateFirebaseWithValue(this.updatedValue)
+      this.updateFirebaseWithValue(this.updatedText)
     }
 
     this.tearDownEditor()
@@ -115,25 +99,15 @@ export default {
 
   methods: {
     addField () {
-      if (this.dataType === 'number') {
-        this.$refs.element.innerHTML = '0'
-        this.innerHtml = '0'
-        this.setUpdatedValue('0')
-      } else if(this.dataType === 'slug') {
-        this.$refs.element.innerHTML = 'some_url'
-        this.innerHtml = 'some_url'
-        this.setUpdatedValue('some_url')
-      } else {
-        this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
-        this.innerHtml = 'lorem ipsum dolor sit amet'
-        this.setUpdatedValue('lorem ipsum dolor sit amet')
-      }
+      this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
+      this.innerText = 'lorem ipsum dolor sit amet'
+      this.setUpdatedValue('lorem ipsum dolor sit amet')
     },
 
     updateValueFromReference () {
       if (this.isListening === undefined) {
         this.isListening = this.firebaseReference.on('value', snapshot => {
-          this.innerHtml = snapshot.val() || ''
+          this.innerText = snapshot.val() || ''
         })
       }
     },
@@ -146,39 +120,26 @@ export default {
     },
 
     createWithOptions (options) {
-      this.updateInnerHtml(this.innerHtml)
+      this.updateInnerHtml(this.innerText)
 
       this.api = new MediumEditor(this.$refs.element, options)
       this.api.subscribe('editableInput', this.onEdit)
     },
 
     setUpdatedValue (newValue) {
-      if (this.dataType === 'number') {
-        newValue = newValue.replace(/\D/g, '') || null
-        // newValue = this.plainText || 0
-      }
-
-      if (this.dataType === 'slug') {
-        newValue = newValue.replace(/<\/?[^>]+(>|$)/g, "")
-          .toLowerCase()
-          .replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-          .replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
-          .replace(/^-+|-+$/g, ''); // remove leading, trailing -
-      }
-
-      this.updatedValue = newValue
+      this.updatedText = newValue
     },
 
     onEdit (e) {
       this.setUpdatedValue(e.target.innerHTML)
 
       if (this.async) {
-        this.updateFirebaseWithValue(this.updatedValue)
+        this.updateFirebaseWithValue(this.updatedText)
       }
     },
 
     updateFirebaseWithValue (newValue) {
-      if (this.firebaseReference !== null && this.updatedValue !== null) {
+      if (this.firebaseReference !== null && this.updatedText !== null) {
         this.firebaseReference.set(newValue)
           .catch(err => {
             console.error(err)
@@ -197,7 +158,12 @@ export default {
       this.tearDownEditor()
 
       if (this.editable) {
-        this.createWithOptions(this.mediumEditorOptions)
+        this.createWithOptions({
+          toolbar: false,
+          disableEditing: false,
+          disableReturn: true,
+          placeholder: false
+        })
       } else {
         this.createWithOptions({
           toolbar: false,
@@ -220,18 +186,10 @@ export default {
 
   computed: {
     shouldHide () {
-      if (this.dataType === 'number') {
-        return this.updatedValue === null
-      }
-
       // TODO: Clean up this mumbo-jumbo code
-      return !this.plainText.length || 
-        (this.updatedValue !== null && !this.updatedValue.replace(/<\/?[^>]+(>|$)/g, "").length)
+      return !this.innerText.length || 
+        (this.updatedText !== null && !this.updatedText.replace(/<\/?[^>]+(>|$)/g, "").length)
     },
-
-    plainText () {
-      return this.innerHtml.replace(/<\/?[^>]+(>|$)/g, '')
-    }
   },
 
   watch: {
@@ -241,13 +199,13 @@ export default {
       }
     },
 
-    innerHtml (newHtml) {
+    innerText (newHtml) {
       this.updateInnerHtml(newHtml)
     },
 
     editable (isEditable) {
-      if (!isEditable && this.updatedValue !== null) {
-        this.updateFirebaseWithValue(this.updatedValue)
+      if (!isEditable && this.updatedText !== null) {
+        this.updateFirebaseWithValue(this.updatedText)
       }
 
       this.refreshMediumEditor()

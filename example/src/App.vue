@@ -6,21 +6,24 @@
           <a href="#" class="brand-logo left" style="margin-left: 10px;">FireComponents</a>
           <ul id="nav-mobile" class="right">
             <li>
-              <button @click="toggleEdit" class="btn-flat white-text">Toggle Editing</button>
+              <button @click="toggleEdit" class="btn-flat white-text">{{ buttonText }}</button>
             </li>
           </ul>
         </div>
       </nav>
     </div>
 
-    <div class="container">
+    <div class="container" v-if="database">
       <h1 class="center">FireText Demo</h1>
   
       <div class="card-panel">
         <h4 class="thin">Current Database:</h4>
-        <pre v-highlightjs><code class="json">{{ database }}</code></pre>
+        <!--
+        <pre v-highlightjs><code class="json" v-text="database"></code></pre>
+        -->
+        <pre v-highlightjs="databaseString"><code class="json"></code></pre>
       </div>
-  
+
       <!-- FireText Simple -->
       <div class="card-panel">
         <h5 class="center">FireText Component</h5>
@@ -87,7 +90,7 @@
         </ul>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
-        <button @click="toggleEdit" class="btn right waves-effect waves-light blue lighten-2 white-text">Toggle Editing</button>
+        <button @click="toggleEdit" class="btn right waves-effect waves-light blue lighten-2 white-text">{{ buttonText }}</button>
         <h5 style="margin-bottom: 25px;">Try It:</h5>
     
         <fire-text
@@ -117,7 +120,7 @@
 &gt;&lt;/fire-html&gt;</code></pre>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
-        <button @click="toggleEdit" class="btn right waves-effect waves-light blue lighten-2 white-text">Toggle Editing</button>
+        <button @click="toggleEdit" class="btn right waves-effect waves-light blue lighten-2 white-text">{{ buttonText }}</button>
         <h5 style="margin-bottom: 25px;">Try It:</h5>
     
         <fire-html
@@ -132,55 +135,6 @@
         </blockquote>
       </div>
     </div>
-
-    <!--
-    <p v-if="editable">
-      MAGIC NUMBER:
-      <fire-text
-        :firebaseReference="ref('magicNumber')"
-        customTag="span"
-        :editable="editable"
-        dataType="number"
-      ></fire-text>
-    </p>
-
-    <p v-if="editable">
-      PICK YOUR URL https://some_url.com/
-      <fire-text
-        :firebaseReference="ref('slug')"
-        customTag="span"
-        :editable="editable"
-        dataType="slug"
-      ></fire-text>
-    </p>
-
-    <p>
-    The magic number * 2 = {{ doubled }}
-    </p>
-
-    <fire-html
-      :firebaseReference="ref('title')"
-      customTag="h2"
-      :editable="editable"
-    ></fire-html>
-
-    <fire-html
-      :defaultValue="body"
-      :firebaseReference="ref('body')"
-      customTag="p"
-      :editable="editable"
-    ></fire-html>
-
-    <fire-text
-      :firebaseReference="ref('postnote')"
-      customTag="span"
-      :editable="editable"
-      style="color: red"
-      :async="true"
-    ></fire-text>
-
-    <pre>{{ database }}</pre>
-    -->
   </div>
 </template>
 
@@ -225,6 +179,14 @@ export default {
     },
     ref (childName) {
       return this.rootReference.child(childName)
+    }
+  },
+  computed: {
+    buttonText () {
+      return this.editable ? 'Stop editing' : 'Edit'
+    },
+    databaseString () {
+      return JSON.stringify(this.database, null, 2)
     }
   }
 }

@@ -161,6 +161,7 @@ export default {
         this.createWithOptions({
           toolbar: false,
           disableEditing: false,
+          disableReturn: true,
           placeholder: false
         })
       } else {
