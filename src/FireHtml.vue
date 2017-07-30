@@ -5,9 +5,6 @@
       :is="customTag"
       ref="element"
     ></component>
-    <template v-if="shouldHide && editable">
-      <button style="display: block" @click="addField">Add Field +</button>
-    </template>
   </div>
 </template>
 
@@ -103,12 +100,6 @@ export default {
   },
 
   methods: {
-    addField () {
-      this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
-      this.innerHtml = 'lorem ipsum dolor sit amet'
-      this.setUpdatedValue('lorem ipsum dolor sit amet')
-    },
-
     updateValueFromReference () {
       if (this.isListening === undefined) {
         this.isListening = this.firebaseReference.on('value', snapshot => {
@@ -187,8 +178,9 @@ export default {
   computed: {
     shouldHide () {
       // TODO: Clean up this mumbo-jumbo code
-      return !this.plainText.length || 
-        (this.updatedValue !== null && !this.updatedValue.replace(/<\/?[^>]+(>|$)/g, "").length)
+      return (!this.plainText.length || 
+        (this.updatedValue !== null && !this.updatedValue.replace(/<\/?[^>]+(>|$)/g, "").length))
+        && !this.editable
     },
 
     plainText () {

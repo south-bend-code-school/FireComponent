@@ -5,9 +5,12 @@
       :is="customTag"
       ref="element"
     ></component>
-    <template v-if="shouldHide && editable">
-      <button @click="addField">Add Field +</button>
-    </template>
+
+    <!-- Placeholder -->
+    <component
+      :class="{ hide: hasLoaded, placeholder: true }"
+      :is="customTag"
+    >...</component>
   </div>
 </template>
 
@@ -25,6 +28,11 @@
 <style scoped>
   @import '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css';
 
+  span {
+    display: inline-block;
+    min-width: 8px;
+  }
+
   .inline {
     display: inline
   }
@@ -40,6 +48,11 @@
 
   .hide {
     display: none;
+  }
+
+  .placeholder {
+    background-color: #bdbdbd;
+    color: #bdbdbd;
   }
 </style>
 
@@ -74,14 +87,15 @@ export default {
   data () {
     return {
       innerText: '',
-      updatedText: null 
+      updatedText: null ,
+      hasLoaded: false
     }
   },
 
   mounted (evt) {
-    console.log(this.firebaseReference)
     if (this.defaultValue !== null) {
       this.innerText = this.defaultValue
+      this.hasLoaded = true
     } else if (this.firebaseReference !== null) {
       this.updateValueFromReference()
     }
@@ -98,16 +112,11 @@ export default {
   },
 
   methods: {
-    addField () {
-      this.$refs.element.innerHTML = 'lorem ipsum dolor sit amet'
-      this.innerText = 'lorem ipsum dolor sit amet'
-      this.setUpdatedValue('lorem ipsum dolor sit amet')
-    },
-
     updateValueFromReference () {
       if (this.isListening === undefined) {
         this.isListening = this.firebaseReference.on('value', snapshot => {
           this.innerText = snapshot.val() || ''
+          this.hasLoaded = true
         })
       }
     },
@@ -186,9 +195,12 @@ export default {
 
   computed: {
     shouldHide () {
+      /*
       // TODO: Clean up this mumbo-jumbo code
       return !this.innerText.length || 
         (this.updatedText !== null && !this.updatedText.replace(/<\/?[^>]+(>|$)/g, "").length)
+      */
+      return !this.innerText.length && !this.editable 
     },
   },
 

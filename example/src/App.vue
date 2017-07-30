@@ -13,15 +13,14 @@
       </nav>
     </div>
 
-    <div class="container" v-if="database">
+    <div class="container">
       <h1 class="center">FireText Demo</h1>
   
       <div class="card-panel">
         <h4 class="thin">Current Database:</h4>
-        <!--
-        <pre v-highlightjs><code class="json" v-text="database"></code></pre>
-        -->
-        <pre v-highlightjs="databaseString"><code class="json"></code></pre>
+        <div v-if="database">
+          <pre v-highlightjs="databaseString"><code class="json"></code></pre>
+        </div>
       </div>
 
       <!-- FireText Simple -->
@@ -31,7 +30,7 @@
 
         <p>Example Code:</p>
         <pre v-highlightjs><code class="html">&lt;fire-text
-  :firebaseReference=&quot;ref('body')&quot;
+  :firebaseReference=&quot;dbRef.child('body')&quot;
   customTag=&quot;p&quot;
   :editable=&quot;editable&quot;
   :async=&quot;true&quot;
@@ -94,14 +93,14 @@
         <h5 style="margin-bottom: 25px;">Try It:</h5>
     
         <fire-text
-          :firebaseReference="ref('body')"
+          :firebaseReference="dbRef.child('body')"
           customTag="p"
           :editable="editable"
           :async="true"
         ></fire-text>
     
         <blockquote>
-        The value is <fire-text class="red-text" :firebaseReference="ref('body')" customTag="span"></fire-text>
+        The value is <fire-text class="red-text" :firebaseReference="dbRef.child('body')" customTag="span"></fire-text>
         </blockquote>
 
       </div>
@@ -113,7 +112,7 @@
 
         <p>Example Code:</p>
         <pre v-highlightjs><code class="html">&lt;fire-html
-  firebaseReference=&quot;ref(&apos;body2&apos;)&quot;
+  firebaseReference=&quot;dbRef.child(&apos;body2&apos;)&quot;
   customTag=&quot;p&quot;
   :editable=&quot;editable&quot;
   :async=&quot;true&quot;
@@ -124,17 +123,42 @@
         <h5 style="margin-bottom: 25px;">Try It:</h5>
     
         <fire-html
-          :firebaseReference="ref('body2')"
+          :firebaseReference="dbRef.child('body2')"
           customTag="p"
           :editable="editable"
           :async="true"
         ></fire-html>
     
         <blockquote>
-        The value is <fire-text class="red-text" :firebaseReference="ref('body2')" customTag="span"></fire-text>
+        The value is <fire-text class="red-text" :firebaseReference="dbRef.child('body2')" customTag="span"></fire-text>
         </blockquote>
       </div>
+
+      <!-- FireImage Simple -->
+      <div class="card-panel">
+        <h5 class="center">FireImage Component</h5>
+        <p class="center">Editable Image using Croppie.js</p>
+
+        <p>Example Code:</p>
+        <pre v-highlightjs><code class="html">&lt;fire-image
+  :storageRef=&quot;storage(&apos;image&apos;)&quot;
+  :editable=&quot;editable&quot;
+&gt;&lt;/fire-image&gt;</code></pre>
+
+        <hr style="margin-top: 20px; margin-bottom: 20px;">
+        <button @click="toggleEdit" class="btn right waves-effect waves-light blue lighten-2 white-text">{{ buttonText }}</button>
+        <h5 style="margin-bottom: 25px;">Try It:</h5>
+    
+        <fire-image
+          :storageRef="sRef.child('image')"
+          :firebaseReference="dbRef.child('image')"
+          :editable="editable"
+          :circle="true"
+          :enforceBoundary="false"
+        ></fire-image>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -145,7 +169,7 @@ const config = {
   authDomain: "firevue-test.firebaseapp.com",
   databaseURL: "https://firevue-test.firebaseio.com",
   projectId: "firevue-test",
-  storageBucket: "",
+  storageBucket: "firevue-test.appspot.com",
   messagingSenderId: "276471204872"
 };
 firebase.initializeApp(config);
@@ -154,7 +178,8 @@ export default {
   name: 'app',
   data () {
     return {
-      rootReference: firebase.database().ref(),
+      dbRef: firebase.database().ref(),
+      sRef: firebase.storage().ref(),
       editable: false,
       body: null,
       database: null,
@@ -163,22 +188,19 @@ export default {
   },
   mounted () {
     window['$']('.collapsible').collapsible()
-    this.rootReference.child('body').on('value', snapshot => {
+    this.dbRef.child('body').on('value', snapshot => {
       this.body = snapshot.val()
     })
-    this.rootReference.on('value', snapshot => {
+    this.dbRef.on('value', snapshot => {
       this.database = snapshot.val()
     })
-    this.rootReference.child('magicNumber').on('value', snapshot => {
+    this.dbRef.child('magicNumber').on('value', snapshot => {
       this.doubled = snapshot.val() * 2
     })
   },
   methods: {
     toggleEdit () {
       this.editable = !this.editable
-    },
-    ref (childName) {
-      return this.rootReference.child(childName)
     }
   },
   computed: {
