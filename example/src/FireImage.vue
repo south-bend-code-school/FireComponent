@@ -63,7 +63,7 @@
               </div>
               <div class="row center">
                 <button class="btn red lighten-2" @click="cancelUpload">Cancel</button>
-                <button class="btn green lighten-2" @click="performCrop" style="margin-left: 30px">Continue</button>
+                <button class="btn green lighten-2" @click="confirmUpload" style="margin-left: 30px">Continue</button>
               </div>
             </div>
           </template>
@@ -212,42 +212,52 @@ export default {
       this.isLoading = false
     },
 
-    performCrop () {
+    confirmUpload () {
+      this.isLoading = true
+
+      this.getResult()
+        .then(this.uploadToStorage)
+        .then(this.updateDatabase)
+        .then(this.stopLoading)
+        .then(this.cancelUpload)
+        .catch(this.onError)
+    },
+
+    getResult () {
       const instance = this
 
-      instance.isLoading = true
-
-      instance.croppieInstance.result({
+      return instance.croppieInstance.result({
         type: 'blob',
         size: { width: instance.width, height: instance.height },
         format: instance.format,
         circle: instance.circle,
         quality: instance.quality
       })
-      .then(fileData => {
-        if (instance.storageRef !== null) {
-          instance.storageRef
-            .put(fileData)
-            .then(snapshot => {
-              return snapshot.downloadURL
-            })
-            .then(url => {
-              if (instance.firebaseReference !== null) {
-                return instance.firebaseReference.set(url)
-              } else {
-                this.imageFromRef = url
-              }
-            })
-            .then(() => {
-              instance.isLoading = false
-            })
-            .then(instance.cancelUpload)
-            .catch(err => {
-              instance.cancelUpload()
-              console.error(err)
-            })
-        }
-      })
+    },
+
+    uploadToStorage (fileData) {
+      return this.storageRef
+        .put(fileData)
+        .then(snapshot => {
+          return snapshot.downloadURL
+        })
+    },
+
+    updateDatabase (newUrl) {
+      if (this.firebaseReference !== null) {
+        this.firebaseReference.set(newUrl)
+      } else {
+        // No database to update, just update the local copy 
+        this.imageFromRef = newUrl
+      }
+    },
+
+    stopLoading () {
+      this.isLoading = false
+    },
+
+    onError (err) {
+      console.error(err)
     },
 
     imageUploaded (e) {
