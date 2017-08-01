@@ -82,7 +82,13 @@
 
     <!-- Not Editable -->
     <template v-else>
-      <img class="responsive-img" :src="imageFromRef">
+      <progressive-img
+        v-if="imageFromRef.length"
+        :src="imageFromRef"
+        :placeholder="thumbnailImage"
+        :blur="30"
+      /> 
+      <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
     </template>
 
   </div>
@@ -116,6 +122,10 @@
 
 <script>
 import Croppie from 'croppie'
+
+import Vue from 'vue'
+import VueProgressiveImage from 'vue-progressive-image'
+Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',
@@ -157,6 +167,7 @@ export default {
   data () {
     return {
       isLoading: false,
+      thumbnailImage: '',
       imageFromRef: '',
       uploadedImage: null,
       croppieInstance: null,
@@ -166,12 +177,28 @@ export default {
 
   mounted (evt) {
     if (this.firebaseReference === null) {
-      this.storageRef.getDownloadURL().then(url => {
-        this.imageFromRef = url
-      })
+      const thumbnailPromise = this.storageRef.child('thumbnail')
+        .getDownloadURL()
+
+      const fullSizePromise = this.storageRef.child('fullsize')
+        .getDownloadURL()
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
+        .then(imageRefs => {
+          this.thumbnailImage = imageRefs[0]
+          this.imageFromRef = imageRefs[1]
+        })
+        .catch(this.setDefaultImages)
     } else {
       this.firebaseReference.on('value', snapshot => {
-        this.imageFromRef = snapshot.val() || ''
+        const data = snapshot.val()
+
+        if (snapshot.exists()) {
+          this.thumbnailImage = data.thumbnail
+          this.imageFromRef = data.fullsize
+        } else {
+          this.setDefaultImages() 
+        }
       })
     }
   },
@@ -179,7 +206,7 @@ export default {
   computed: {
     width () {
       if (this.aspectRatio > 1) {
-        return 400
+        return 600
       } else {
         return this.height * this.aspectRatio
       }
@@ -188,7 +215,7 @@ export default {
       if (this.aspectRatio > 1) {
         return this.width / this.aspectRatio
       } else {
-        return 400
+        return 600
       }
     },
     format () {
@@ -200,6 +227,11 @@ export default {
   },
 
   methods: {
+    setDefaultImages () {
+      this.thumbnailImage = 'https://dummyimage.com/20x20/000/fff'
+      this.imageFromRef = 'https://dummyimage.com/600x400/000/fff'
+    },
+
     rotate () {
       this.croppieInstance.rotate(90)
     },
@@ -215,40 +247,64 @@ export default {
     confirmUpload () {
       this.isLoading = true
 
-      this.getResult()
+      this.getCroppedResults()
         .then(this.uploadToStorage)
         .then(this.updateDatabase)
+
         .then(this.stopLoading)
         .then(this.cancelUpload)
+
         .catch(this.onError)
     },
 
-    getResult () {
+    getCroppedResults () {
       const instance = this
 
-      return instance.croppieInstance.result({
+      const thumbnailPromise = instance.croppieInstance.result({
+        type: 'blob',
+        size: { width: 20, height: 20 / instance.aspectRatio },
+        // format: instance.format,
+        format: 'jpeg',
+        circle: instance.circle,
+        quality: 0.2
+      })
+
+      const fullSizePromise = instance.croppieInstance.result({
         type: 'blob',
         size: { width: instance.width, height: instance.height },
         format: instance.format,
         circle: instance.circle,
         quality: instance.quality
       })
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
     },
 
-    uploadToStorage (fileData) {
-      return this.storageRef
-        .put(fileData)
-        .then(snapshot => {
-          return snapshot.downloadURL
+    uploadToStorage (imageData) {
+      const thumbnailPromise = this.storageRef.child('thumbnail')
+        .put(imageData[0])
+
+      const fullSizePromise = this.storageRef.child('fullsize')
+        .put(imageData[1])
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
+        .then(snapshotArray => {
+          return [
+            snapshotArray[0].downloadURL,
+            snapshotArray[1].downloadURL
+          ]
         })
     },
 
-    updateDatabase (newUrl) {
+    updateDatabase (newUrls) {
       if (this.firebaseReference !== null) {
-        this.firebaseReference.set(newUrl)
+        const thumbnailPromise = this.firebaseReference.child('thumbnail').set(newUrls[0])
+        const fullSizePromise = this.firebaseReference.child('fullsize').set(newUrls[1])
+
+        return Promise.all([thumbnailPromise, fullSizePromise])
       } else {
         // No database to update, just update the local copy 
-        this.imageFromRef = newUrl
+        this.imageFromRef = newUrls[1]
       }
     },
 

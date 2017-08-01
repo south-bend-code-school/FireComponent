@@ -52,6 +52,7 @@
             </div>
           </template>
 
+          <!-- Image uploaded, needs editing-->
           <template v-else>
             <div class="inner-valign-centered">
               <div class="row">
@@ -62,7 +63,7 @@
               </div>
               <div class="row center">
                 <button class="btn red lighten-2" @click="cancelUpload">Cancel</button>
-                <button class="btn green lighten-2" @click="performCrop" style="margin-left: 30px">Continue</button>
+                <button class="btn green lighten-2" @click="confirmUpload" style="margin-left: 30px">Continue</button>
               </div>
             </div>
           </template>
@@ -81,7 +82,13 @@
 
     <!-- Not Editable -->
     <template v-else>
-      <img class="responsive-img" :src="imageFromRef">
+      <progressive-img
+        v-if="imageFromRef.length"
+        :src="imageFromRef"
+        :placeholder="thumbnailImage"
+        :blur="30"
+      /> 
+      <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
     </template>
 
   </div>
@@ -115,6 +122,10 @@
 
 <script>
 import Croppie from 'croppie'
+
+import Vue from 'vue'
+import VueProgressiveImage from 'vue-progressive-image'
+Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',
@@ -156,6 +167,7 @@ export default {
   data () {
     return {
       isLoading: false,
+      thumbnailImage: '',
       imageFromRef: '',
       uploadedImage: null,
       croppieInstance: null,
@@ -165,12 +177,28 @@ export default {
 
   mounted (evt) {
     if (this.firebaseReference === null) {
-      this.storageRef.getDownloadURL().then(url => {
-        this.imageFromRef = url
-      })
+      const thumbnailPromise = this.storageRef.child('thumbnail')
+        .getDownloadURL()
+
+      const fullSizePromise = this.storageRef.child('fullsize')
+        .getDownloadURL()
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
+        .then(imageRefs => {
+          this.thumbnailImage = imageRefs[0]
+          this.imageFromRef = imageRefs[1]
+        })
+        .catch(this.setDefaultImages)
     } else {
       this.firebaseReference.on('value', snapshot => {
-        this.imageFromRef = snapshot.val() || ''
+        const data = snapshot.val()
+
+        if (snapshot.exists()) {
+          this.thumbnailImage = data.thumbnail
+          this.imageFromRef = data.fullsize
+        } else {
+          this.setDefaultImages() 
+        }
       })
     }
   },
@@ -178,7 +206,7 @@ export default {
   computed: {
     width () {
       if (this.aspectRatio > 1) {
-        return 400
+        return 600
       } else {
         return this.height * this.aspectRatio
       }
@@ -187,7 +215,7 @@ export default {
       if (this.aspectRatio > 1) {
         return this.width / this.aspectRatio
       } else {
-        return 400
+        return 600
       }
     },
     format () {
@@ -199,6 +227,11 @@ export default {
   },
 
   methods: {
+    setDefaultImages () {
+      this.thumbnailImage = 'https://dummyimage.com/20x20/000/fff'
+      this.imageFromRef = 'https://dummyimage.com/600x400/000/fff'
+    },
+
     rotate () {
       this.croppieInstance.rotate(90)
     },
@@ -211,42 +244,76 @@ export default {
       this.isLoading = false
     },
 
-    performCrop () {
+    confirmUpload () {
+      this.isLoading = true
+
+      this.getCroppedResults()
+        .then(this.uploadToStorage)
+        .then(this.updateDatabase)
+
+        .then(this.stopLoading)
+        .then(this.cancelUpload)
+
+        .catch(this.onError)
+    },
+
+    getCroppedResults () {
       const instance = this
 
-      instance.isLoading = true
+      const thumbnailPromise = instance.croppieInstance.result({
+        type: 'blob',
+        size: { width: 20, height: 20 / instance.aspectRatio },
+        // format: instance.format,
+        format: 'jpeg',
+        circle: instance.circle,
+        quality: 0.2
+      })
 
-      instance.croppieInstance.result({
+      const fullSizePromise = instance.croppieInstance.result({
         type: 'blob',
         size: { width: instance.width, height: instance.height },
         format: instance.format,
         circle: instance.circle,
         quality: instance.quality
       })
-      .then(fileData => {
-        if (instance.storageRef !== null) {
-          instance.storageRef
-            .put(fileData)
-            .then(snapshot => {
-              return snapshot.downloadURL
-            })
-            .then(url => {
-              if (instance.firebaseReference !== null) {
-                return instance.firebaseReference.set(url)
-              } else {
-                this.imageFromRef = url
-              }
-            })
-            .then(() => {
-              instance.isLoading = false
-            })
-            .then(instance.cancelUpload)
-            .catch(err => {
-              instance.cancelUpload()
-              console.error(err)
-            })
-        }
-      })
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
+    },
+
+    uploadToStorage (imageData) {
+      const thumbnailPromise = this.storageRef.child('thumbnail')
+        .put(imageData[0])
+
+      const fullSizePromise = this.storageRef.child('fullsize')
+        .put(imageData[1])
+
+      return Promise.all([thumbnailPromise, fullSizePromise])
+        .then(snapshotArray => {
+          return [
+            snapshotArray[0].downloadURL,
+            snapshotArray[1].downloadURL
+          ]
+        })
+    },
+
+    updateDatabase (newUrls) {
+      if (this.firebaseReference !== null) {
+        const thumbnailPromise = this.firebaseReference.child('thumbnail').set(newUrls[0])
+        const fullSizePromise = this.firebaseReference.child('fullsize').set(newUrls[1])
+
+        return Promise.all([thumbnailPromise, fullSizePromise])
+      } else {
+        // No database to update, just update the local copy 
+        this.imageFromRef = newUrls[1]
+      }
+    },
+
+    stopLoading () {
+      this.isLoading = false
+    },
+
+    onError (err) {
+      console.error(err)
     },
 
     imageUploaded (e) {

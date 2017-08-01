@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "croppie": "^2.5.0",
-    "firecomponent": "^1.0.3",
+    "firecomponent": "^1.0.4",
     "vue": "^2.3.3",
-    "vue-highlightjs": "^1.3.3"
+    "vue-highlightjs": "^1.3.3",
+    "vue-progressive-image": "^2.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

@@ -57,9 +57,10 @@
 </style>
 
 <script>
+import Messanger from './FireMessanger'
 import MediumEditor from 'medium-editor'
 
-export default {
+const component = {
   name: 'fire-text',
   props: {
     async: {
@@ -93,6 +94,18 @@ export default {
   },
 
   mounted (evt) {
+    Messanger.bus.$on('save', () => {
+      if (this.editable) {
+        this.updateFirebaseWithValue(this.updatedText)
+      }
+    })
+
+    Messanger.bus.$on('reset', () => {
+      if (this.editable) {
+        this.discardEdits()
+      }
+    })
+
     if (this.defaultValue !== null) {
       this.innerText = this.defaultValue
       this.hasLoaded = true
@@ -104,14 +117,14 @@ export default {
   },
 
   beforeDestroy () {
-    if (this.editable) {
-      this.updateFirebaseWithValue(this.updatedText)
-    }
-
     this.tearDownEditor()
   },
 
   methods: {
+    discardEdits () {
+      this.api.resetContent()
+    },
+
     updateValueFromReference () {
       if (this.isListening === undefined) {
         this.isListening = this.firebaseReference.on('value', snapshot => {
@@ -195,11 +208,6 @@ export default {
 
   computed: {
     shouldHide () {
-      /*
-      // TODO: Clean up this mumbo-jumbo code
-      return !this.innerText.length || 
-        (this.updatedText !== null && !this.updatedText.replace(/<\/?[^>]+(>|$)/g, "").length)
-      */
       return !this.innerText.length && !this.editable 
     },
   },
@@ -216,9 +224,11 @@ export default {
     },
 
     editable (isEditable) {
+      /*
       if (!isEditable && this.updatedText !== null) {
         this.updateFirebaseWithValue(this.updatedText)
       }
+      */
 
       this.refreshMediumEditor()
     },
@@ -236,4 +246,6 @@ export default {
     }
   }
 }
+
+export default component
 </script>
