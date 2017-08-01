@@ -96,8 +96,6 @@
 
 <style scoped>
   @import '//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css';
-  @import '//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css';
-  @import '//fonts.googleapis.com/icon?family=Material+Icons';
 
   label[for="file-upload"]  img {
     padding: 5px;
