@@ -82,12 +82,18 @@
 
     <!-- Not Editable -->
     <template v-else>
+      <img
+        v-if="imageFromRef.length"
+        :src="imageFromRef"
+      />
+      <!--
       <progressive-img
         v-if="imageFromRef.length"
         :src="imageFromRef"
         :placeholder="thumbnailImage"
         :blur="30"
       /> 
+      -->
       <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
     </template>
 
@@ -96,8 +102,6 @@
 
 <style scoped>
   @import '//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css';
-  @import '//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css';
-  @import '//fonts.googleapis.com/icon?family=Material+Icons';
 
   label[for="file-upload"]  img {
     padding: 5px;
@@ -124,8 +128,8 @@
 import Croppie from 'croppie'
 
 import Vue from 'vue'
-import VueProgressiveImage from 'vue-progressive-image'
-Vue.use(VueProgressiveImage)
+// import VueProgressiveImage from 'vue-progressive-image'
+// Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',

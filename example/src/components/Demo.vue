@@ -1,27 +1,39 @@
 <template lang="pug">
   div
-    h1.center Fire Components Demo
-
-    v-btn(@click="toggleEdit") {{ buttonText }}
-
-    div(v-if="editable")
-      v-btn(@click="resetData") Reset
-      v-btn(@click="saveData") Save
 
     v-layout(row, wrap)
       v-flex(xs12)
         v-card
-          v-card-title(primary-title)
-            v-layout
-              h3.headline.mb-0(xs12) FirebaseDemo
-              .subheading Explore the FireComponents working together
+          v-card-title.blue.white--text(primary-title)
+            v-layout(row, wrap)
+              v-flex(xs12)
+                h3.mb-0.white--text(xs12) FireComponents Demo
+              v-flex(xs12)
+                .subheading Explore the FireComponents working together
+
+            v-spacer.text-xs-right
+              div(v-if="editable")
+                v-btn(@click="toggleEdit") Cancel
+                v-btn(@click="resetData") Reset
+                v-btn(@click="saveData") Save
+              v-btn.white.blue--text(icon, fab, @click="toggleEdit", v-else)
+                v-icon mode_edit
+
           v-card-text
-            fire-text(
-              :firebaseReference="dbRef.child('body')"
-              customTag="h2"
-              :editable="editable"
-              :async="false"
-            )
+            v-layout(row, wrap)
+              v-flex(xs12)
+                fire-text.text-xs-center(
+                  :firebaseReference="dbRef.child('body')"
+                  customTag="h2"
+                  :editable="editable"
+                  :async="false"
+                )
+              v-flex(xs12 md6 offset-md3)
+                fire-image.text-xs-center(
+                  :aspectRatio="4/3"
+                  :storageRef="sRef.child('image')"
+                  :editable="editable"
+                )
     //
     
       <v-layout row wrap>

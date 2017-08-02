@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-app id="example-2" standalone>
-        <v-navigation-drawer absolute persistent light :mini-variant.sync="mini" v-model="drawer" overflow>
+        <v-navigation-drawer temporary absolute light :mini-variant.sync="mini" v-model="drawer" overflow>
           <v-toolbar flat class="transparent">
             <v-list class="pa-0">
               <v-list-tile avatar tag="div">
@@ -12,11 +12,6 @@
                 <v-list-tile-content>
                   <v-list-tile-title>Menu</v-list-tile-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-btn icon @click.native.stop="mini = !mini">
-                    <v-icon>chevron_left</v-icon>
-                  </v-btn>
-                </v-list-tile-action>
               </v-list-tile>
             </v-list>
           </v-toolbar>
@@ -53,7 +48,7 @@ export default {
   name: 'app',
   data () {
     return {
-      drawer: true,
+      drawer: false,
       items: [
         { title: 'Home', icon: 'dashboard', link: '/' },
         { title: 'Demo', icon: 'question_answer', link: '/demo' }
