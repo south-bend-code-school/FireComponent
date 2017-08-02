@@ -36,7 +36,7 @@
       <!-- Editable, but no image has been uploaded yet -->
       <template v-else>
         <label for="file-upload">
-          <img class="responsive-img" :src="imageFromRef">
+          <img style="width: 100%;" class="responsive-img" :src="imageFromRef">
         </label>
         <input id="file-upload" type="file" @change="imageUploaded" style="display: none"/>
       </template>
@@ -45,19 +45,19 @@
 
     <!-- Not Editable -->
     <template v-else>
+      <!--
       <img
         class="responsive-img"
         v-if="imageFromRef.length"
         :src="imageFromRef"
       />
-      <!--
+      -->
       <progressive-img
         v-if="imageFromRef.length"
         :src="imageFromRef"
         :placeholder="thumbnailImage"
         :blur="30"
       /> 
-      -->
       <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
     </template>
 
@@ -94,6 +94,12 @@
   }
 </style>
 
+<style>
+  .progressive-image-main {
+    width: 100%;
+  }
+</style>
+
 <script>
 import Croppie from 'croppie'
 import Vuetify from 'vuetify'
@@ -102,8 +108,8 @@ import Vue from 'vue'
 
 Vue.use(Vuetify)
 
-// import VueProgressiveImage from 'vue-progressive-image'
-// Vue.use(VueProgressiveImage)
+import VueProgressiveImage from 'vue-progressive-image'
+Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',

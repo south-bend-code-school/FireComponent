@@ -1,6 +1,6 @@
 {
   "name": "firecomponent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
   "main": "Components.vue",
   "scripts": {

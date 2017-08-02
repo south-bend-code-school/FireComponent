@@ -5,75 +5,38 @@
 
       <!-- User has uploaded an image -->
       <template v-if="uploadedImage">
-        <div class="fullscreen valign-wrapper">
+        <div class="fullscreen">
 
           <!-- Image is being processed -->
-          <template v-if="isLoading">
-            <div class="preloader-wrapper inner-valign-centered active">
-              <div class="spinner-layer spinner-blue">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div><div class="gap-patch">
-                  <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-        
-              <div class="spinner-layer spinner-red">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div><div class="gap-patch">
-                  <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-        
-              <div class="spinner-layer spinner-yellow">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div><div class="gap-patch">
-                  <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-        
-              <div class="spinner-layer spinner-green">
-                <div class="circle-clipper left">
-                  <div class="circle"></div>
-                </div><div class="gap-patch">
-                  <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                  <div class="circle"></div>
-                </div>
-              </div>
-            </div>
-          </template>
+          <v-progress-circular indeterminate :size="70" :width="7" class="blue--text" v-if="isLoading"></v-progress-circular>
 
           <!-- Image uploaded, needs editing-->
-          <template v-else>
-            <div class="inner-valign-centered">
-              <div class="row">
-                <img class="responsive-img" :src="uploadedImage" ref="image">
-              </div>
-              <div class="row center" v-if="allowRotations">
-                <button class="btn" @click="rotate"><i class="material-icons">rotate_right</i></button>
-              </div>
-              <div class="row center">
-                <button class="btn red lighten-2" @click="cancelUpload">Cancel</button>
-                <button class="btn green lighten-2" @click="confirmUpload" style="margin-left: 30px">Continue</button>
-              </div>
-            </div>
-          </template>
+          <v-layout row wrap v-else>
+
+            <v-flex xs12>
+              <img class="responsive-img" :src="uploadedImage" ref="image">
+            </v-flex>
+
+            <v-flex xs12 class="text-xs-center" v-if="allowRotations">
+              <v-btn @click="rotate" icon fab class="blue white--text">
+                <v-icon>rotate_right</v-icon>
+              </v-btn>
+            </v-flex>
+
+            <v-flex xs12 class="text-xs-center">
+              <v-btn class="red lighten-2" @click="cancelUpload">Cancel</v-btn>
+              <v-btn class="green lighten-2" @click="confirmUpload" ml-2>Continue</v-btn>
+            </v-flex>
+
+          </v-layout>
         </div>
+
       </template>
 
       <!-- Editable, but no image has been uploaded yet -->
       <template v-else>
         <label for="file-upload">
-          <img class="responsive-img" :src="imageFromRef">
+          <img style="width: 100%;" class="responsive-img" :src="imageFromRef">
         </label>
         <input id="file-upload" type="file" @change="imageUploaded" style="display: none"/>
       </template>
@@ -82,18 +45,19 @@
 
     <!-- Not Editable -->
     <template v-else>
+      <!--
       <img
+        class="responsive-img"
         v-if="imageFromRef.length"
         :src="imageFromRef"
       />
-      <!--
+      -->
       <progressive-img
         v-if="imageFromRef.length"
         :src="imageFromRef"
         :placeholder="thumbnailImage"
         :blur="30"
       /> 
-      -->
       <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
     </template>
 
@@ -102,6 +66,7 @@
 
 <style scoped>
   @import '//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css';
+  @import '//unpkg.com/vuetify/dist/vuetify.min.css';
 
   label[for="file-upload"]  img {
     padding: 5px;
@@ -122,14 +87,29 @@
     left: 0;
     right: 0;
   }
+
+  .responsive-img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+
+<style>
+  .progressive-image-main {
+    width: 100%;
+  }
 </style>
 
 <script>
 import Croppie from 'croppie'
+import Vuetify from 'vuetify'
 
 import Vue from 'vue'
-// import VueProgressiveImage from 'vue-progressive-image'
-// Vue.use(VueProgressiveImage)
+
+Vue.use(Vuetify)
+
+import VueProgressiveImage from 'vue-progressive-image'
+Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',
@@ -209,18 +189,10 @@ export default {
 
   computed: {
     width () {
-      if (this.aspectRatio > 1) {
-        return 600
-      } else {
-        return this.height * this.aspectRatio
-      }
+      return Math.min(this.$refs.image.parentElement.clientWidth, 400);
     },
     height () {
-      if (this.aspectRatio > 1) {
-        return this.width / this.aspectRatio
-      } else {
-        return 600
-      }
+      return this.width / this.aspectRatio
     },
     format () {
       if (this.quality < 0.99) {
