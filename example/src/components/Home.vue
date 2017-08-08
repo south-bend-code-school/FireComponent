@@ -1,9 +1,49 @@
-<template>
-  <div id="home">
-    <div class="container">
-      <h1 class="center">Fire Components</h1>
-    </div>
-  </div>
+<template lang="pug">
+  #home
+    v-layout(row wrap)
+
+      v-flex(xs12)
+        v-parallax(src="https://vuetifyjs.com/static/doc-images/vbanner.jpg", height=600)
+          v-layout(column align-center justify-center)
+            h1.white--text Fire Components
+            h4.white--text Declarative Components that bind to Firebase Rererences
+
+            v-flex(xs12)
+              a(href="https://www.github.com/dmattia/FireComponent")
+                v-btn.grey.darken-3.white--text(large)
+                  v-icon.white--text code
+                  span.ml-2 Github
+      
+              router-link(to="/demo")
+                v-btn.green.darken-1.white--text(large)
+                  span.mr-2 Get Started
+                  v-icon.white--text.right chevron_right
+
+      v-flex.pt-5(xs12).grey.lighten-3
+        v-container
+          h3.text-xs-center Getting Started
+
+          h5.text-xs-center Download Via Npm
+          pre.headline.text-xs-center(v-highlightjs="true")
+            code.Bash $ npm install firecomponent
+
+          h5.text-xs-center.mt-3 Include in your main.js file
+          pre.headline.text-xs-center(v-highlightjs="true")
+            code.javascript
+              | import Vue from 'vue';
+              | import { FireText, FireHtml, FireImage } from 'firecomponent';
+              |  
+              | Vue.component('fire-text', FireText);
+              | Vue.component('fire-html', FireHtml);
+              | Vue.component('fire-image', FireImage);
+
+          .text-xs-center.mt-5
+            router-link(to="/demo")
+              v-btn.red.white--text(light large) View Demo
+
+            router-link(to="/docs")
+              v-btn.green.darken-1.white--text(light large) View Docs
+
 </template>
 
 <script>
@@ -11,3 +51,9 @@ export default {
   name: 'home',
 }
 </script>
+
+<style scoped>
+  a {
+    text-decoration: none;
+  }
+</style>

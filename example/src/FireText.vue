@@ -27,6 +27,7 @@
 
 <style scoped>
   @import '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css';
+  @import '//cdnjs.cloudflare.com/ajax/libs/medium-editor/5.23.2/css/themes/default.min.css';
 
   span {
     display: inline-block;

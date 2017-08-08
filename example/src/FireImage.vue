@@ -5,7 +5,7 @@
 
       <!-- User has uploaded an image -->
       <template v-if="uploadedImage">
-        <div class="fullscreen">
+        <v-layout justify-center align-center class="fullscreen">
 
           <!-- Image is being processed -->
           <v-progress-circular indeterminate :size="70" :width="7" class="blue--text" v-if="isLoading"></v-progress-circular>
@@ -29,29 +29,28 @@
             </v-flex>
 
           </v-layout>
-        </div>
+        </v-layout>
 
       </template>
 
       <!-- Editable, but no image has been uploaded yet -->
       <template v-else>
-        <label for="file-upload">
-          <img style="width: 100%;" class="responsive-img" :src="imageFromRef">
+        <label imageUploader="true" :for="uniqueName + '-upload'">
+          <progressive-img
+            v-if="imageFromRef.length"
+            :src="imageFromRef"
+            :placeholder="thumbnailImage"
+            :blur="30"
+          /> 
+          <img style="width: 100%;" src="http://via.placeholder.com/350x150" v-else>
         </label>
-        <input id="file-upload" type="file" @change="imageUploaded" style="display: none"/>
+        <input :id="uniqueName + '-upload'" type="file" @change="imageUploaded" style="display: none"/>
       </template>
 
     </template>
 
     <!-- Not Editable -->
     <template v-else>
-      <!--
-      <img
-        class="responsive-img"
-        v-if="imageFromRef.length"
-        :src="imageFromRef"
-      />
-      -->
       <progressive-img
         v-if="imageFromRef.length"
         :src="imageFromRef"
@@ -68,7 +67,7 @@
   @import '//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css';
   @import '//unpkg.com/vuetify/dist/vuetify.min.css';
 
-  label[for="file-upload"]  img {
+  label[imageUploader="true"] .progressive-image {
     padding: 5px;
     border: 1px dashed #202020;
   }
@@ -161,6 +160,10 @@ export default {
 
   mounted (evt) {
     if (this.firebaseReference === null) {
+      if (this.storageRef === null) {
+        return
+      }
+
       const thumbnailPromise = this.storageRef.child('thumbnail')
         .getDownloadURL()
 
@@ -188,8 +191,14 @@ export default {
   },
 
   computed: {
+    /**
+     * A unique id for this fire-image component
+     */
+    uniqueName () {
+      return Math.random().toString(36).substring(4)
+    },
     width () {
-      return Math.min(this.$refs.image.parentElement.clientWidth, 400);
+      return Math.min(this.$refs.image.parentElement.clientWidth, 400)
     },
     height () {
       return this.width / this.aspectRatio
@@ -204,8 +213,8 @@ export default {
 
   methods: {
     setDefaultImages () {
-      this.thumbnailImage = 'https://dummyimage.com/20x20/000/fff'
-      this.imageFromRef = 'https://dummyimage.com/600x400/000/fff'
+      this.thumbnailImage = 'https://dummyimage.com/40x30/000/fff'
+      this.imageFromRef = 'https://dummyimage.com/400x300/000/fff'
     },
 
     rotate () {
@@ -223,7 +232,15 @@ export default {
     confirmUpload () {
       this.isLoading = true
 
-      this.getCroppedResults()
+      if(this.storageRef === null) {
+        return this.getCroppedResults()
+          .then(this.stopLoading)
+          .then(this.cancelUpload)
+  
+          .catch(this.onError)
+      }
+
+      return this.getCroppedResults()
         .then(this.uploadToStorage)
         .then(this.updateDatabase)
 
@@ -239,8 +256,7 @@ export default {
       const thumbnailPromise = instance.croppieInstance.result({
         type: 'blob',
         size: { width: 20, height: 20 / instance.aspectRatio },
-        // format: instance.format,
-        format: 'jpeg',
+        format: (instance.circle) ? 'png' : 'jpeg', // allow transparency for circular images
         circle: instance.circle,
         quality: 0.2
       })

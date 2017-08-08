@@ -1,6 +1,6 @@
 {
   "name": "firecomponent",
-  "version": "0.0.2",
+  "version": "1.0.13",
   "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
   "main": "Components.vue",
   "scripts": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "croppie": "^2.5.0",
     "medium-editor": "^5.23.1",
-    "vue-progressive-image": "^2.1.1"
+    "vue-progressive-image": "^2.1.1",
+    "vuetify": "^0.14.8"
   }
 }

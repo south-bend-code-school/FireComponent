@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "croppie": "^2.5.0",
-    "firecomponent": "^1.0.4",
+    "firecomponent": "0.0.4",
     "pug": "^2.0.0-rc.3",
     "pug-loader": "^2.3.0",
     "stylus": "^0.54.5",

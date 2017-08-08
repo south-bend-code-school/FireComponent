@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app class="grey lighten-3">
       <v-app id="example-2" standalone>
         <v-navigation-drawer temporary absolute light :mini-variant.sync="mini" v-model="drawer" overflow>
           <v-toolbar flat class="transparent">
@@ -34,9 +34,7 @@
           <v-toolbar-title>FireComponents</v-toolbar-title>
         </v-toolbar>
         <main>
-          <v-container fluid>
-            <router-view></router-view>
-          </v-container>
+          <router-view></router-view>
         </main>
       </v-app>
     </v-app>
@@ -51,7 +49,10 @@ export default {
       drawer: false,
       items: [
         { title: 'Home', icon: 'dashboard', link: '/' },
-        { title: 'Demo', icon: 'question_answer', link: '/demo' }
+        { title: 'Demo', icon: 'question_answer', link: '/demo' },
+        { title: 'FireText', icon: 'question_answer', link: '/text' },
+        { title: 'FireImage', icon: 'question_answer', link: '/image' },
+        { title: 'FireHtml', icon: 'question_answer', link: '/html' },
       ],
       mini: false,
       right: null
@@ -59,3 +60,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .btn__content {
+    flex: 1 1 auto;
+  }
+</style>

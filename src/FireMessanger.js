@@ -1,13 +1,21 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-const eventBus = new Vue()
+var eventBus = new Vue();
 
-const send = (message) => {
-  eventBus.$emit(message)
-}
+var send = function(message) {
+  eventBus.$emit(message);
+};
+
+var save = function() {
+  send('save');
+};
+
+var reset = function() {
+  send('reset');
+};
 
 export default {
-  save: () => send('save'),
-  reset: () => send('reset'),
+  save: save,
+  reset: reset,
   bus: eventBus,
 }

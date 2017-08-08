@@ -21,6 +21,7 @@
 
 <style scoped>
   @import '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css';
+  @import '//cdnjs.cloudflare.com/ajax/libs/medium-editor/5.23.2/css/themes/default.min.css';
 
   .inline {
     display: inline
@@ -44,7 +45,7 @@
 import MediumEditor from 'medium-editor'
 
 export default {
-  name: 'fire-text',
+  name: 'fire-html',
   props: {
     async: {
       type: [Boolean],
@@ -69,7 +70,10 @@ export default {
     mediumEditingOptions: {
       type: [Object],
       default: () => {
-        toolbar: true
+        return {
+          toolbar: true,
+          placeholder: false
+        }
       }
     },
   },
@@ -154,7 +158,7 @@ export default {
       this.tearDownEditor()
 
       if (this.editable) {
-        this.createWithOptions(this.mediumEditorOptions)
+        this.createWithOptions(this.mediumEditingOptions)
       } else {
         this.createWithOptions({
           toolbar: false,

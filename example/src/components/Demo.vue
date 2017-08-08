@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    v-layout(row, wrap)
+    v-layout.mt-3(row, wrap)
       v-flex(xs12 md10 offset-md1)
         v-card
           v-card-title.blue.white--text(primary-title)
@@ -19,42 +19,52 @@
                 v-icon mode_edit
 
           v-card-text
-            v-layout(row, wrap)
-              v-flex(xs12)
-                fire-text.text-xs-center(
-                  :firebaseReference="dbRef.child('body')"
-                  customTag="h2"
-                  :editable="editable"
-                  :async="false"
-                )
-              v-flex(xs12 md6 offset-md3)
-                fire-image.text-xs-center(
-                  :aspectRatio="4/3"
-                  :storageRef="sRef.child('image')"
-                  :editable="editable"
-                )
-              v-flex.mt-2.text-xs-center(xs12 md6 offset-md3)
-                fire-html.subheading(
-                  :firebaseReference="dbRef.child('body2')"
-                  customTag="h5"
-                  :editable="editable"
-                  :async="true"
-                )
+            v-layout(row, wrap align-center)
+              v-flex(xs12 md4)
+                v-layout(row, wrap)
+                  v-flex(xs12)
+                    fire-image.text-xs-center(
+                      :aspectRatio="4/3"
+                      :storageRef="sRef.child('image')"
+                      :editable="editable"
+                      circle
+                    )
+                  v-flex.mt-2(xs12)
+                    fire-text.text-xs-center(
+                      :firebaseReference="dbRef.child('caption')"
+                      customTag="h3"
+                      :editable="editable"
+                      :async="false"
+                    )
+                  v-flex.text-xs-center(xs12)
+                    fire-text.subheading(
+                      :firebaseReference="dbRef.child('subcaption')"
+                      customTag="h5"
+                      :editable="editable"
+                      :async="true"
+                    )
+              v-flex(xs12 md8)
+                v-layout(row, wrap)
+                  v-flex(xs12)
+                    fire-text(
+                      :firebaseReference="dbRef.child('mainheading')"
+                      customTag="h2"
+                      :editable="editable"
+                      :async="false"
+                    )
+                  v-flex(xs12)
+                    fire-html.subheading(
+                      :firebaseReference="dbRef.child('subhtml')"
+                      customTag="h5"
+                      :editable="editable"
+                      :async="true"
+                    )
+
 </template>
 
 <script>
 import Messanger from '../FireMessanger'
-
-const firebase = window['firebase']
-const config = {
-  apiKey: "AIzaSyB1Xz49dpWzkyBG-n2SL7_6FDpkncR6Ioo",
-  authDomain: "firevue-test.firebaseapp.com",
-  databaseURL: "https://firevue-test.firebaseio.com",
-  projectId: "firevue-test",
-  storageBucket: "firevue-test.appspot.com",
-  messagingSenderId: "276471204872"
-};
-firebase.initializeApp(config);
+import firebase from '../firebase'
 
 export default {
   name: 'app',
@@ -62,7 +72,7 @@ export default {
     return {
       dbRef: firebase.database().ref(),
       sRef: firebase.storage().ref(),
-      editable: false,
+      editable: true,
     }
   },
   methods: {

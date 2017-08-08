@@ -14,10 +14,12 @@ Vue.use(VueRouter)
 
 import Home from './components/Home.vue'
 import Demo from './components/Demo.vue'
+import Text from './components/Text.vue'
 
 const routes = [
   { path: '/', component: Home },
   { path: '/demo', component: Demo },
+  { path: '/text', component: Text },
 ]
 const router = new VueRouter({
   mode: 'history',
@@ -27,7 +29,9 @@ const router = new VueRouter({
 import FireText from './FireText.vue'
 import FireHtml from './FireHtml.vue'
 import FireImage from './FireImage.vue'
-// import { FireText, FireHtml, FireImage } from 'firecomponent';
+/*
+import { FireText, FireHtml, FireImage } from 'firecomponent';
+*/
 
 Vue.component('fire-text', FireText);
 Vue.component('fire-html', FireHtml);
