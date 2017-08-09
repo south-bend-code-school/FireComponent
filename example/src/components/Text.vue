@@ -47,7 +47,7 @@
 
               v-flex(xs12)
                 fire-text.text-xs-center(
-                  :firebaseReference="dbRef.child('fire-text-page')"
+                  path="/fire-text-page"
                   customTag="h3"
                   :editable="editable"
                   :async="false"
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Messanger from '../FireMessanger'
+import Messanger from '../lib/FireMessanger'
 import firebase from '../firebase'
 
 export default {

@@ -31,14 +31,14 @@
                     )
                   v-flex.mt-2(xs12)
                     fire-text.text-xs-center(
-                      :firebaseReference="dbRef.child('caption')"
+                      path="caption"
                       customTag="h3"
                       :editable="editable"
                       :async="false"
                     )
                   v-flex.text-xs-center(xs12)
                     fire-text.subheading(
-                      :firebaseReference="dbRef.child('subcaption')"
+                      path="subcaption"
                       customTag="h5"
                       :editable="editable"
                       :async="true"
@@ -47,14 +47,14 @@
                 v-layout(row, wrap)
                   v-flex(xs12)
                     fire-text(
-                      :firebaseReference="dbRef.child('mainheading')"
+                      path="mainheading"
                       customTag="h2"
                       :editable="editable"
                       :async="false"
                     )
                   v-flex(xs12)
                     fire-html.subheading(
-                      :firebaseReference="dbRef.child('subhtml')"
+                      path="subhtml"
                       customTag="h5"
                       :editable="editable"
                       :async="true"
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import Messanger from '../FireMessanger'
+import Messanger from '../lib/FireMessanger'
 import firebase from '../firebase'
 
 export default {

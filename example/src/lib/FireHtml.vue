@@ -51,9 +51,9 @@ export default {
       type: [Boolean],
       default: () => false
     },
-    firebaseReference: {
-      type: [Object],
-      default: () => null
+    path: {
+      type: [String],
+      default: () => undefined
     },
     defaultValue: {
       type: [String],
@@ -180,6 +180,9 @@ export default {
   },
 
   computed: {
+    firebaseReference () {
+      return this._database.ref(this.path)
+    },
     shouldHide () {
       // TODO: Clean up this mumbo-jumbo code
       return (!this.plainText.length || 

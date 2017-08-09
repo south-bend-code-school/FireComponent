@@ -68,9 +68,9 @@ const component = {
       type: [Boolean],
       default: () => false
     },
-    firebaseReference: {
-      type: [Object],
-      default: () => null
+    path: {
+      type: [String],
+      default: () => undefined
     },
     defaultValue: {
       type: [String],
@@ -89,7 +89,7 @@ const component = {
   data () {
     return {
       innerText: '',
-      updatedText: null,
+      updatedText: null ,
       hasLoaded: false
     }
   },
@@ -208,6 +208,10 @@ const component = {
   },
 
   computed: {
+    firebaseReference () {
+      console.log(this.path)
+      return this._database.ref(this.path)
+    },
     shouldHide () {
       return !this.innerText.length && !this.editable 
     },

@@ -9,33 +9,17 @@ Vue.use(VueHighlightJS)
 import Vuetify from 'vuetify'
 Vue.use(Vuetify)
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import router from './router'
 
-import Home from './components/Home.vue'
-import Demo from './components/Demo.vue'
-import Text from './components/Text.vue'
-
-const routes = [
-  { path: '/', component: Home },
-  { path: '/demo', component: Demo },
-  { path: '/text', component: Text },
-]
-const router = new VueRouter({
-  mode: 'history',
-  routes
+import FireComponent from './lib/FireComponents'
+Vue.use(FireComponent, {
+  apiKey: "AIzaSyB1Xz49dpWzkyBG-n2SL7_6FDpkncR6Ioo",
+  authDomain: "firevue-test.firebaseapp.com",
+  databaseURL: "https://firevue-test.firebaseio.com",
+  projectId: "firevue-test",
+  storageBucket: "firevue-test.appspot.com",
+  messagingSenderId: "276471204872"
 })
-
-import FireText from './FireText.vue'
-import FireHtml from './FireHtml.vue'
-import FireImage from './FireImage.vue'
-/*
-import { FireText, FireHtml, FireImage } from 'firecomponent';
-*/
-
-Vue.component('fire-text', FireText);
-Vue.component('fire-html', FireHtml);
-Vue.component('fire-image', FireImage);
 
 new Vue({
   el: '#app',

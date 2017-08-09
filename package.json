@@ -1,10 +1,10 @@
 {
   "name": "firecomponent",
-  "version": "1.0.13",
+  "version": "1.1.0",
   "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
-  "main": "Components.vue",
+  "main": "./src/FireComponents.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,13 @@
   "homepage": "https://github.com/dmattia/FireComponent#readme",
   "dependencies": {
     "croppie": "^2.5.0",
+    "firebase": "^4.2.0",
     "medium-editor": "^5.23.1",
+    "vue-loader": "^13.0.4",
     "vue-progressive-image": "^2.1.1",
     "vuetify": "^0.14.8"
+  },
+  "devDependencies": {
+    "vue-template-compiler": "^2.4.2"
   }
 }

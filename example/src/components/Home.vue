@@ -28,14 +28,18 @@
             code.Bash $ npm install firecomponent
 
           h5.text-xs-center.mt-3 Include in your main.js file
-          pre.headline.text-xs-center(v-highlightjs="true")
+          // pre.headline.text-xs-center(v-highlightjs="true")
+          pre.headline(v-highlightjs="true")
             code.javascript
-              | import Vue from 'vue';
-              | import { FireText, FireHtml, FireImage } from 'firecomponent';
-              |  
-              | Vue.component('fire-text', FireText);
-              | Vue.component('fire-html', FireHtml);
-              | Vue.component('fire-image', FireImage);
+              | import FireComponent from 'firecomponent'
+              |  Vue.use(FireComponent, {
+              |    apiKey: "AIzaSyB1Xz49dpWzkyBG-n2SL7_6FDpkncR6Ioo",
+              |    authDomain: "firevue-test.firebaseapp.com",
+              |    databaseURL: "https://firevue-test.firebaseio.com",
+              |    projectId: "firevue-test",
+              |    storageBucket: "firevue-test.appspot.com",
+              |    messagingSenderId: "276471204872"
+              |  })
 
           .text-xs-center.mt-5
             router-link(to="/demo")
