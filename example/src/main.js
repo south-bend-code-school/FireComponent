@@ -11,7 +11,7 @@ Vue.use(Vuetify)
 
 import router from './router'
 
-import FireComponent from './lib/FireComponents'
+import FireComponent from '../../src/FireComponents'
 Vue.use(FireComponent, {
   apiKey: "AIzaSyB1Xz49dpWzkyBG-n2SL7_6FDpkncR6Ioo",
   authDomain: "firevue-test.firebaseapp.com",
