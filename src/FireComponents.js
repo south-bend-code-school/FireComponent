@@ -12,16 +12,25 @@ var addFirebaseComputedValue = function(component, firebaseInstance) {
 
 var FireComponent = {
   install: function(Vue, options) {
-    if (options === undefined || options.databaseURL === undefined) {
-      console.error('You must add your firebase configuration object to the firecomponent library')
-      return;
+    var appInstance = null;
+
+    if (options) {
+      try {
+        appInstance = firebase.initializeApp(options, '__firecomponent')
+      } catch (e) {
+        throw new Error('Must pass a valid Firebase Options.')
+      }
+    } else {
+      try {
+        appInstance = firebase.app()
+      } catch (e) {
+        throw new Error('No Firebase App located. Please initialize before installing FireComponent, or pass a valid Firebase Options object.')
+      }
     }
 
-    firebase.initializeApp(options)
-
-    addFirebaseComputedValue(FireText, firebase)
-    addFirebaseComputedValue(FireHtml, firebase)
-    addFirebaseComputedValue(FireImage, firebase)
+    addFirebaseComputedValue(FireText, appInstance)
+    addFirebaseComputedValue(FireHtml, appInstance)
+    addFirebaseComputedValue(FireImage, appInstance)
 
     Vue.component('fire-text', FireText);
     Vue.component('fire-html', FireHtml);

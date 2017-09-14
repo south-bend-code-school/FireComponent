@@ -1,75 +1,92 @@
 <template>
-  <div class="image-editor">
-
+  <div class="image-editor" ref="root">
+    <slot name="display" :src="imageLocation">
+      <div class="fire-image" :class="{'edit-container': editable}">
+        <div class="ratio-enforcer" :style="{ paddingTop: padding*100+'%'}"></div>
+        <div class="content" :style="{ backgroundImage: 'url('+imageLocation+')'}"></div>
+      </div>
+    </slot>
     <template v-if="editable">
-
-      <!-- User has uploaded an image -->
-      <template v-if="uploadedImage">
-        <v-layout justify-center align-center class="fullscreen">
-
-          <!-- Image is being processed -->
-          <v-progress-circular indeterminate :size="70" :width="7" class="blue--text" v-if="isLoading"></v-progress-circular>
-
-          <!-- Image uploaded, needs editing-->
-          <v-layout row wrap v-else>
-
-            <v-flex xs12>
-              <img class="responsive-img" :src="uploadedImage" ref="image">
-            </v-flex>
-
-            <v-flex xs12 class="text-xs-center" v-if="allowRotations">
-              <v-btn @click="rotate" icon fab class="blue white--text">
-                <v-icon>rotate_right</v-icon>
-              </v-btn>
-            </v-flex>
-
-            <v-flex xs12 class="text-xs-center">
-              <v-btn class="red lighten-2" @click="cancelUpload">Cancel</v-btn>
-              <v-btn class="green lighten-2" @click="confirmUpload" ml-2>Continue</v-btn>
-            </v-flex>
-
-          </v-layout>
-        </v-layout>
-
+      <label :for="uniqueName" title="Click to upload new image"></label>
+      <input type="file" :id="uniqueName" @change="imageUploaded">
+    </template>
+    <div v-if="newUpload" class="fullscreen">
+      <template v-if="!uploading">
+        <slot name="croppie-header">
+          <h1 class="header">Tweak Photo</h1>
+        </slot>
+        <div class="croppie-wrapper">
+          <div ref="croppie"></div>
+        </div>
+        <slot name="croppie-controls" :rLeft="rotateLeft" :rRight="rotateRight" :cancel="cancelCropping" :upload="confirmUpload">
+          <button @click="rotateLeft">Rotate Left</button>
+          <button @click="rotateRight">Rotate Right</button>
+          <button @click="cancelCropping">Cancel</button>
+          <button @click="confirmUpload">Complete</button>
+        </slot>
       </template>
-
-      <!-- Editable, but no image has been uploaded yet -->
       <template v-else>
-        <label imageUploader="true" :for="uniqueName + '-upload'">
-          <progressive-img
-            v-if="imageFromRef.length"
-            :src="imageFromRef"
-            :placeholder="thumbnailImage"
-            :blur="30"
-          /> 
-          <img style="width: 100%;" src="http://via.placeholder.com/350x150" v-else>
-        </label>
-        <input :id="uniqueName + '-upload'" type="file" @change="imageUploaded" style="display: none"/>
+        <slot name="uploading" :cancel="cancelUpload" :noWait="noWait">
+          <button @click="cancelUpload">Cancel Upload</button>
+          <button @click="noWait">Continue Without Waiting</button>
+        </slot>
       </template>
-
-    </template>
-
-    <!-- Not Editable -->
-    <template v-else>
-      <progressive-img
-        v-if="imageFromRef.length"
-        :src="imageFromRef"
-        :placeholder="thumbnailImage"
-        :blur="30"
-      /> 
-      <div style="width: 100%; height: 200px;" class="grey lighten-2" v-else></div>
-    </template>
-
+    </div>
   </div>
 </template>
 
-<style scoped>
-  @import '//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css';
-  @import '//unpkg.com/vuetify/dist/vuetify.min.css';
+<style lang="scss" scoped>
+  @import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
+  @import url('//unpkg.com/vuetify/dist/vuetify.min.css');
 
-  label[imageUploader="true"] .progressive-image {
-    padding: 5px;
-    border: 1px dashed #202020;
+  .edit-container {
+    border: 2px dashed black;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .image-editor {
+    position: relative;
+
+    > label {
+      position: absolute;
+      cursor: pointer;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
+    > input {
+      display: none;
+    }
+  }
+
+  .fire-image {
+    width: 100%;
+    position: relative;
+    display: block;
+    > .ratio-enforcer {
+      display: block;
+      height: 0;
+      width: 100%;
+      padding-top: 100%;
+    }
+
+    > .content {
+      position: absolute;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      background-color: black;
+      color: white;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
   }
 
   .inner-valign-centered {
@@ -85,6 +102,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    overflow: scroll;
   }
 
   .responsive-img {
@@ -93,17 +111,12 @@
   }
 </style>
 
-<style>
-  .progressive-image-main {
-    width: 100%;
-  }
-</style>
-
 <script>
 import Croppie from 'croppie'
 import Vuetify from 'vuetify'
 
 import Vue from 'vue'
+import * as _ from 'lodash'
 
 Vue.use(Vuetify)
 
@@ -114,11 +127,7 @@ export default {
   name: 'fire-image',
   props: {
     storageRef: {
-      type: [Object],
-      default: () => null
-    },
-    firebaseReference: {
-      type: [Object],
+      type: [Object,String],
       default: () => null
     },
     editable: {
@@ -128,6 +137,14 @@ export default {
     aspectRatio: {
       type: [Number],
       default: () => 1.0
+    },
+    mobileWidth: {
+      type: [Number],
+      default: () => 400
+    },
+    desktopWidth: {
+      type: [Number],
+      default: () => 1200
     },
     quality: {
       type: [Number],
@@ -149,44 +166,19 @@ export default {
 
   data () {
     return {
-      isLoading: false,
-      thumbnailImage: '',
-      imageFromRef: '',
       uploadedImage: null,
       croppieInstance: null,
-      croppedImage: null
+      croppedImage: null,
+      newUpload: false,
+      uploading: false,
+      uploadTasks: [],
+      imageLocation: null
     }
   },
 
-  mounted (evt) {
-    if (this.firebaseReference === null) {
-      if (this.storageRef === null) {
-        return
-      }
-
-      const thumbnailPromise = this.storageRef.child('thumbnail')
-        .getDownloadURL()
-
-      const fullSizePromise = this.storageRef.child('fullsize')
-        .getDownloadURL()
-
-      return Promise.all([thumbnailPromise, fullSizePromise])
-        .then(imageRefs => {
-          this.thumbnailImage = imageRefs[0]
-          this.imageFromRef = imageRefs[1]
-        })
-        .catch(this.setDefaultImages)
-    } else {
-      this.firebaseReference.on('value', snapshot => {
-        const data = snapshot.val()
-
-        if (snapshot.exists()) {
-          this.thumbnailImage = data.thumbnail
-          this.imageFromRef = data.fullsize
-        } else {
-          this.setDefaultImages() 
-        }
-      })
+  mounted () {
+    if(this._storageRef) {
+      this.loadFromStorage(this._storageRef)
     }
   },
 
@@ -198,88 +190,127 @@ export default {
       return Math.random().toString(36).substring(4)
     },
     width () {
-      return Math.min(this.$refs.image.parentElement.clientWidth, 400)
+      return this.$el && this.$el.clientWidth ? this.$el.clientWidth : null
     },
     height () {
       return this.width / this.aspectRatio
     },
+    padding () {
+      return 1/this.aspectRatio
+    },
     format () {
-      if (this.quality < 0.99) {
+      if (this.quality < 1) {
         return 'jpeg'
       }
       return 'png'
+    },
+    _storageRef () {
+      if(this.storageRef) {
+        console.log(this._storage)
+        try {
+          return _.isString(this.storageRef) ? this._storage.ref(this.storageRef) : this._storage.refFromURL(this.storageRef.toString())
+        } catch (e) {
+          console.error(e)
+          return null
+        }
+      }
+    },
+  },
+
+  watch: {
+    _storageRef (val) {
+      if(val) {
+        this.loadFromStorage(val)
+      }
     }
   },
 
   methods: {
-    setDefaultImages () {
-      this.thumbnailImage = 'https://dummyimage.com/40x30/000/fff'
-      this.imageFromRef = 'https://dummyimage.com/400x300/000/fff'
+    relWidth (w) {
+      const rootWidth = this.$refs.width
+      const windowWidth = window.innerWidth
+      return w * (rootWidth / windowWidth)
     },
-
-    rotate () {
+    relHeight (w) {
+      return this.relWidth(w) / this.aspectRatio
+    },
+    loadFromStorage (ref) {
+      ref = this.isDesktop() ? ref.child('desktop') : ref.child('mobile')
+      ref.getDownloadURL().then((url) => {
+        console.log(url)
+        if(ref.parent.toString() !== this._storageRef.toString()){return;}
+        this.imageLocation = url
+      },() => {
+        console.error('No Image at specified location.')
+      })
+    },
+    isDesktop () {
+      const windowWidth = window.innerWidth
+      return Math.abs(this.desktopWidth - windowWidth) <= Math.abs(this.mobileWidth - windowWidth)
+    },
+    rotateRight () {
       this.croppieInstance.rotate(90)
     },
-
-    cancelUpload () {
+    rotateLeft () {
+      this.croppieInstance.rotate(-90)
+    },
+    cancelCropping () {
       this.croppieInstance.destroy()
       this.croppieInstance = null
+      this.newUpload = false
       this.uploadedImage = null
-      this.croppedImage = null
-      this.isLoading = false
     },
-
     confirmUpload () {
-      this.isLoading = true
-
-      if(this.storageRef === null) {
-        return this.getCroppedResults()
-          .then(this.stopLoading)
-          .then(this.cancelUpload)
-  
-          .catch(this.onError)
-      }
+      this.uploading = true
 
       return this.getCroppedResults()
         .then(this.uploadToStorage)
-        .then(this.updateDatabase)
-
-        .then(this.stopLoading)
-        .then(this.cancelUpload)
-
-        .catch(this.onError)
+        .then((urls) => {
+          this.$emit('uploaded',urls)
+          this.loadFromStorage(this._storageRef)
+        })
+        .then(this.cancelCropping)
+        .catch((err) => {
+          if(!this.newUpload) {
+            this.cancelCropping()
+          }
+          this.onError(err)
+        })
     },
 
     getCroppedResults () {
       const instance = this
 
-      const thumbnailPromise = instance.croppieInstance.result({
+      const mobile = this.croppieInstance.result({
         type: 'blob',
-        size: { width: 20, height: 20 / instance.aspectRatio },
-        format: (instance.circle) ? 'png' : 'jpeg', // allow transparency for circular images
-        circle: instance.circle,
-        quality: 0.2
+        size: { width: this.relWidth(this.mobileWidth), height: this.relHeight(this.mobileWidth) },
+        format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
+        circle: this.circle,
+        quality: this.quality
       })
 
-      const fullSizePromise = instance.croppieInstance.result({
+      const desktop = this.croppieInstance.result({
         type: 'blob',
-        size: { width: instance.width, height: instance.height },
-        format: instance.format,
-        circle: instance.circle,
-        quality: instance.quality
+        size: { width: this.relWidth(this.desktopWidth), height: this.relHeight(this.desktopWidth) },
+        format: this.format,
+        circle: this.circle,
+        quality: this.quality
       })
 
-      return Promise.all([thumbnailPromise, fullSizePromise])
+      return Promise.all([mobile, desktop])
     },
 
     uploadToStorage (imageData) {
-      const thumbnailPromise = this.storageRef.child('thumbnail')
-        .put(imageData[0])
+      const uploadTasks = []
+       uploadTasks.unshift(this._storageRef.child('mobile')
+        .put(imageData[0]))
 
-      const fullSizePromise = this.storageRef.child('fullsize')
-        .put(imageData[1])
+      uploadTasks.unshift(this._storageRef.child('desktop')
+        .put(imageData[1]))
 
-      return Promise.all([thumbnailPromise, fullSizePromise])
+      this.uploadTasks = uploadTasks
+
+      return Promise.all(uploadTasks)
         .then(snapshotArray => {
           return [
             snapshotArray[0].downloadURL,
@@ -288,20 +319,18 @@ export default {
         })
     },
 
-    updateDatabase (newUrls) {
-      if (this.firebaseReference !== null) {
-        const thumbnailPromise = this.firebaseReference.child('thumbnail').set(newUrls[0])
-        const fullSizePromise = this.firebaseReference.child('fullsize').set(newUrls[1])
-
-        return Promise.all([thumbnailPromise, fullSizePromise])
-      } else {
-        // No database to update, just update the local copy 
-        this.imageFromRef = newUrls[1]
-      }
+    noWait () {
+      this.newUpload = false
     },
 
-    stopLoading () {
-      this.isLoading = false
+    cancelUpload () {
+      if(this.uploadTasks) {
+        this.uploadTasks.forEach((task) => {
+          task.cancel()
+        })
+        this.uploadTasks = []
+        this.uploading = false
+      }
     },
 
     onError (err) {
@@ -316,21 +345,31 @@ export default {
         alert('No image found in upload')
         return
       }
-      this.uploadedImage = window.URL.createObjectURL(files[0])
 
-      window.requestAnimationFrame(function() {
-        instance.croppieInstance = new Croppie(instance.$refs.image, {
+      this.uploadedImage = window.URL.createObjectURL(files[0])
+      this.newUpload = true
+
+      const iWidth = this.$refs.root.clientWidth
+      const iHeight = iWidth / this.aspectRatio
+      const oWidth = iWidth * 1.1 > window.innerWidth ? window.innerWidth : iWidth * 1.1
+      const oHeight = iHeight * 1.1 > window.innerHeight ? window.innerHeight : iHeight * 1.1
+
+      this.$nextTick(() => {
+        instance.croppieInstance = new Croppie(instance.$refs.croppie, {
           enforceBoundary: instance.enforceBoundary,
           enableOrientation: instance.allowRotations,
           viewport: {
-            width: instance.width * 0.8,
-            height: instance.height * 0.8,
+            width: iWidth,
+            height: iHeight,
             type: (instance.circle) ? 'circle' : 'square'
           },
           boundary: {
-            width: instance.width,
-            height: instance.height
+            width: oWidth,
+            height: oHeight
           }
+        })
+        instance.croppieInstance.bind({
+          url: this.uploadedImage
         })
       })
     }
