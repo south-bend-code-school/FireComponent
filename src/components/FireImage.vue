@@ -37,7 +37,6 @@
 
 <style lang="scss" scoped>
   @import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
-  @import url('//unpkg.com/vuetify/dist/vuetify.min.css');
 
   .edit-container {
     border: 2px dashed black;
@@ -78,7 +77,7 @@
     > .content {
       position: absolute;
       background-repeat: no-repeat;
-      background-size: contain;
+      background-size: cover;
       background-position: center;
       background-color: black;
       color: white;
@@ -87,11 +86,6 @@
       right: 0;
       left: 0;
     }
-  }
-
-  .inner-valign-centered {
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .fullscreen {
@@ -104,24 +98,13 @@
     right: 0;
     overflow: scroll;
   }
-
-  .responsive-img {
-    max-width: 100%;
-    height: auto;
-  }
 </style>
 
 <script>
 import Croppie from 'croppie'
-import Vuetify from 'vuetify'
 
 import Vue from 'vue'
 import * as _ from 'lodash'
-
-Vue.use(Vuetify)
-
-import VueProgressiveImage from 'vue-progressive-image'
-Vue.use(VueProgressiveImage)
 
 export default {
   name: 'fire-image',
@@ -206,9 +189,8 @@ export default {
     },
     _storageRef () {
       if(this.storageRef) {
-        console.log(this._storage)
         try {
-          return _.isString(this.storageRef) ? this._storage.ref(this.storageRef) : this._storage.refFromURL(this.storageRef.toString())
+          return _.isString(this.storageRef) ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
         } catch (e) {
           console.error(e)
           return null
@@ -237,7 +219,6 @@ export default {
     loadFromStorage (ref) {
       ref = this.isDesktop() ? ref.child('desktop') : ref.child('mobile')
       ref.getDownloadURL().then((url) => {
-        console.log(url)
         if(ref.parent.toString() !== this._storageRef.toString()){return;}
         this.imageLocation = url
       },() => {
@@ -266,6 +247,7 @@ export default {
       return this.getCroppedResults()
         .then(this.uploadToStorage)
         .then((urls) => {
+          this.uploading = false
           this.$emit('uploaded',urls)
           this.loadFromStorage(this._storageRef)
         })

@@ -1,16 +1,19 @@
 <template>
-  <div class="inline">
-    <component
-      :class="{ hide: shouldHide }"
-      :is="customTag"
-      ref="element"
-    ></component>
-
-    <!-- Placeholder -->
-    <component
-      :class="{ hide: hasLoaded, placeholder: true }"
-      :is="customTag"
-    >...</component>
+  <div>
+    <slot name="edit" v-if="editable">
+      <!-- Placeholder -->
+      <component
+        :class="{ hide: hasLoaded, placeholder: true }"
+        :is="customTag"
+      >...</component>
+    </slot>
+    <slot name="display" v-else>
+      <component
+        :class="{ hide: shouldHide }"
+        :is="customTag"
+        ref="element"
+      ></component>
+    </slot>
   </div>
 </template>
 
