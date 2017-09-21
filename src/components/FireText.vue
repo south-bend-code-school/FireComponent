@@ -1,13 +1,13 @@
 <template>
   <div>
-    <slot name="edit" v-if="editable">
+    <slot name="edit">
       <!-- Placeholder -->
       <component
         :class="{ hide: hasLoaded, placeholder: true }"
         :is="customTag"
       >...</component>
     </slot>
-    <slot name="display" v-else>
+    <slot name="display">
       <component
         :class="{ hide: shouldHide }"
         :is="customTag"
@@ -78,6 +78,10 @@ const component = {
     defaultValue: {
       type: [String],
       default: () => null
+    },
+    isNumber: {
+      type: [Boolean],
+      default: () => false
     },
     customTag: {
       type: [String],
@@ -166,6 +170,9 @@ const component = {
 
     updateFirebaseWithValue (newValue) {
       if (this.firebaseReference !== null && this.updatedText !== null) {
+        if(this.isNumber) {
+          newValue = Number(newValue)
+        }
         this.firebaseReference.set(newValue)
           .catch(err => {
             console.error(err)
@@ -212,8 +219,7 @@ const component = {
 
   computed: {
     firebaseReference () {
-      console.log(this.path)
-      return this._database.ref(this.path)
+      return this.$firebase.database().ref(this.path)
     },
     shouldHide () {
       return !this.innerText.length && !this.editable 
