@@ -1,6 +1,6 @@
-import FireHtml from './components/FireHtml.vue';
-import FireText from './components/FireText.vue';
-import FireImage from './components/FireImage.vue';
+import FireHtml from './src/components/FireHtml.vue';
+import FireText from './src/components/FireText.vue';
+import FireImage from './src/components/FireImage.vue';
 
 import firebase from 'firebase';
 import VueProgressiveImage from 'vue-progressive-image';
