@@ -181,7 +181,7 @@ export default {
 
   computed: {
     firebaseReference () {
-      return this._database.ref(this.path)
+      return this.$firebase.database().ref(this.path)
     },
     shouldHide () {
       // TODO: Clean up this mumbo-jumbo code
