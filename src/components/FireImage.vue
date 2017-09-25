@@ -263,9 +263,20 @@ export default {
     getCroppedResults () {
       const instance = this
 
+      const sizes = {
+        mobile: {
+          w: this.relWidth(this.mobileWidth),
+          h: this.relHeight(this.mobileWidth)
+        },
+        desktop: {
+          w: this.relWidth(this.desktopWidth),
+          h: this.relHeight(this.desktopWidth)
+        }
+      }
+
       const mobile = this.croppieInstance.result({
         type: 'blob',
-        size: { width: this.relWidth(this.mobileWidth), height: this.relHeight(this.mobileWidth) },
+        size: { width: sizes.mobile.w, height: sizes.mobile.h },
         format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
         circle: this.circle,
         quality: this.quality
@@ -273,11 +284,12 @@ export default {
 
       const desktop = this.croppieInstance.result({
         type: 'blob',
-        size: { width: this.relWidth(this.desktopWidth), height: this.relHeight(this.desktopWidth) },
+        size: { width: sizes.desktop.w, height: sizes.desktop.h },
         format: this.format,
         circle: this.circle,
         quality: this.quality
       })
+      console.log(sizes)
 
       return Promise.all([mobile, desktop])
     },
