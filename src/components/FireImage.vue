@@ -123,11 +123,11 @@ export default {
     },
     mobileWidth: {
       type: [Number],
-      default: () => 400
+      default: () => 320
     },
     desktopWidth: {
       type: [Number],
-      default: () => 1200
+      default: () => 800
     },
     quality: {
       type: [Number],
@@ -209,7 +209,7 @@ export default {
 
   methods: {
     relWidth (w) {
-      const rootWidth = this.$refs.width
+      const rootWidth = this.$refs.root.width
       const windowWidth = window.innerWidth
       return w * (rootWidth / windowWidth)
     },

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Messanger from '../lib/FireMessanger'
+import Messanger from 'firecomponent/src/components/FireMessanger'
 import firebase from '../firebase'
 
 export default {
