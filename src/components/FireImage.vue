@@ -209,7 +209,7 @@ export default {
 
   methods: {
     relWidth (w) {
-      const rootWidth = this.$refs.root.width
+      const rootWidth = this.$refs.root.clientWidth
       const windowWidth = window.innerWidth
       return w * (rootWidth / windowWidth)
     },
