@@ -10,7 +10,7 @@
       <label :for="uniqueName" title="Click to upload new image"></label>
       <input type="file" :id="uniqueName" @change="imageUploaded">
     </template>
-    <div ref='editor' v-if="newUpload" class="fullscreen">
+    <div ref='editor' v-show="newUpload" class="fullscreen">
       <template v-if="!uploading">
         <slot name="croppie-header">
           <h1 class="header">Crop Photo</h1>
@@ -160,7 +160,7 @@ export default {
       this.loadFromStorage(this._storageRef)
     }
 
-    console.log(this.$refs.editor)
+    console.log(this.$refs)
     this.$nextTick(() => {
       document.getElementsByTagName('body')[0].appendChild(this.$refs.editor)
     })
@@ -271,7 +271,7 @@ export default {
         this.widths.map((width) => {
           return this.croppieInstance.result({
             type: 'blob',
-            size: { width: width, height: w/this.aspectRatio },
+            size: { width: width, height: width/this.aspectRatio },
             format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
             circle: this.circle,
             quality: this.quality
@@ -323,10 +323,16 @@ export default {
       this.uploadedImage = window.URL.createObjectURL(files[0])
       this.newUpload = true
 
-      const iWidth = this.$refs.root.clientWidth
-      const iHeight = iWidth / this.aspectRatio
-      const oWidth = iWidth * 1.1 > window.innerWidth ? window.innerWidth : iWidth * 1.1
-      const oHeight = iHeight * 1.1 > window.innerHeight ? window.innerHeight : iHeight * 1.1
+      var iWidth = this.$refs.root.clientWidth
+      var iHeight = iWidth / this.aspectRatio
+      var oWidth = iWidth * 1.1
+      var oHeight = iHeight * 1.1
+      if(oWidth > window.innerWidth) {
+        oWidth = window.innerWidth*0.8
+        oHeight = oWidth/this.aspectRatio
+        iWidth = oWidth*0.8
+        iHeight = oHeight*0.8
+      }
 
       this.$nextTick(() => {
         instance.croppieInstance = new Croppie(instance.$refs.croppie, {
