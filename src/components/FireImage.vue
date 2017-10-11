@@ -10,10 +10,10 @@
       <label :for="uniqueName" title="Click to upload new image"></label>
       <input type="file" :id="uniqueName" @change="imageUploaded">
     </template>
-    <div v-if="newUpload" class="fullscreen">
+    <div ref='editor' v-if="newUpload" class="fullscreen">
       <template v-if="!uploading">
         <slot name="croppie-header">
-          <h1 class="header">Tweak Photo</h1>
+          <h1 class="header">Crop Photo</h1>
         </slot>
         <div class="croppie-wrapper">
           <div ref="croppie"></div>
@@ -121,13 +121,9 @@ export default {
       type: [Number],
       default: () => 1.0
     },
-    mobileWidth: {
-      type: [Number],
-      default: () => 320
-    },
-    desktopWidth: {
-      type: [Number],
-      default: () => 800
+    widths: {
+      type: [Array],
+      default: () => [320,500]
     },
     quality: {
       type: [Number],
@@ -163,6 +159,11 @@ export default {
     if(this._storageRef) {
       this.loadFromStorage(this._storageRef)
     }
+
+    console.log(this.$refs.editor)
+    this.$nextTick(() => {
+      document.getElementsByTagName('body')[0].appendChild(this.$refs.editor)
+    })
   },
 
   computed: {
@@ -208,16 +209,8 @@ export default {
   },
 
   methods: {
-    relWidth (w) {
-      const rootWidth = this.$refs.root.clientWidth
-      const windowWidth = window.innerWidth
-      return w * (rootWidth / windowWidth)
-    },
-    relHeight (w) {
-      return this.relWidth(w) / this.aspectRatio
-    },
     loadFromStorage (ref) {
-      ref = this.isDesktop() ? ref.child('desktop') : ref.child('mobile')
+      ref = ref.child(''+this.getIndexToDisplay())
       ref.getDownloadURL().then((url) => {
         if(ref.parent.toString() !== this._storageRef.toString()){return;}
         this.imageLocation = url
@@ -225,9 +218,20 @@ export default {
         console.error('No Image at specified location.')
       })
     },
-    isDesktop () {
-      const windowWidth = window.innerWidth
-      return Math.abs(this.desktopWidth - windowWidth) <= Math.abs(this.mobileWidth - windowWidth)
+    getIndexToDisplay () {
+      var min = {
+        index: 0,
+        width: null
+      }
+      this.widths.forEach((width, i) => {
+        if(min.width === null || width < min.width) {
+          min = {
+            index: i,
+            width: width
+          }
+        }
+      })
+      return min.index
     },
     rotateRight () {
       this.croppieInstance.rotate(90)
@@ -263,53 +267,29 @@ export default {
     getCroppedResults () {
       const instance = this
 
-      const sizes = {
-        mobile: {
-          w: this.relWidth(this.mobileWidth),
-          h: this.relHeight(this.mobileWidth)
-        },
-        desktop: {
-          w: this.relWidth(this.desktopWidth),
-          h: this.relHeight(this.desktopWidth)
-        }
-      }
-
-      const mobile = this.croppieInstance.result({
-        type: 'blob',
-        size: { width: sizes.mobile.w, height: sizes.mobile.h },
-        format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
-        circle: this.circle,
-        quality: this.quality
-      })
-
-      const desktop = this.croppieInstance.result({
-        type: 'blob',
-        size: { width: sizes.desktop.w, height: sizes.desktop.h },
-        format: this.format,
-        circle: this.circle,
-        quality: this.quality
-      })
-      console.log(sizes)
-
-      return Promise.all([mobile, desktop])
+      return Promise.all(
+        this.widths.map((width) => {
+          return this.croppieInstance.result({
+            type: 'blob',
+            size: { width: width, height: w/this.aspectRatio },
+            format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
+            circle: this.circle,
+            quality: this.quality
+          })
+        })
+      )
     },
 
     uploadToStorage (imageData) {
-      const uploadTasks = []
-       uploadTasks.unshift(this._storageRef.child('mobile')
-        .put(imageData[0]))
+      this.uploadTasks = imageData.map((image,i) => {
+        return this._storageRef.child(''+i).put(image)
+      })
 
-      uploadTasks.unshift(this._storageRef.child('desktop')
-        .put(imageData[1]))
-
-      this.uploadTasks = uploadTasks
-
-      return Promise.all(uploadTasks)
+      return Promise.all(this.uploadTasks)
         .then(snapshotArray => {
-          return [
-            snapshotArray[0].downloadURL,
-            snapshotArray[1].downloadURL
-          ]
+          return snapshotArray.map((snapshot) => {
+            snapshot.downloadURL
+          })
         })
     },
 
