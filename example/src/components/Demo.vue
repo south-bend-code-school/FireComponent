@@ -25,9 +25,9 @@
                   v-flex(xs12)
                     fire-image.text-xs-center(
                       :aspectRatio="4/3"
+                      :widths='[200,800]'
                       :storageRef="sRef.child('image')"
                       :editable="editable"
-                      circle
                     )
                   v-flex.mt-2(xs12)
                     fire-text.text-xs-center(

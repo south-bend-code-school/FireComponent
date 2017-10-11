@@ -151,7 +151,8 @@ export default {
       newUpload: false,
       uploading: false,
       uploadTasks: [],
-      imageLocation: null
+      imageLocation: null,
+      index: null
     }
   },
 
@@ -219,18 +220,21 @@ export default {
       })
     },
     getIndexToDisplay () {
+      const displaySize = this.$refs.root.clientWidth
       var min = {
         index: 0,
-        width: null
+        offset: null
       }
       this.widths.forEach((width, i) => {
-        if(min.width === null || width < min.width) {
+        const offset = Math.abs(width - displaySize)
+        if(min.offset === null || offset < min.offset) {
           min = {
             index: i,
-            width: width
+            offset: offset
           }
         }
       })
+      this.index=min.index
       return min.index
     },
     rotateRight () {
