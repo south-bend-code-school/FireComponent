@@ -1,6 +1,7 @@
 import FireHtml from './src/components/FireHtml.vue';
 import FireText from './src/components/FireText.vue';
 import FireImage from './src/components/FireImage.vue';
+import FireInput from './src/components/FireInput.vue';
 
 import firebase from 'firebase';
 import VueProgressiveImage from 'vue-progressive-image';
@@ -26,13 +27,15 @@ export function install (Vue, options) {
   Vue.component('fire-text', FireText);
   Vue.component('fire-html', FireHtml);
   Vue.component('fire-image', FireImage);
+  Vue.component('fire-input', FireInput);
 }
 
 // Expose the components
 export {
   FireHtml,
   FireText,
-  FireImage
+  FireImage,
+  FireInput
 };
 
 /* -- Plugin definition & Auto-install -- */
