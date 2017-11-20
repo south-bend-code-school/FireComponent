@@ -37,11 +37,10 @@
                       :async="false"
                     )
                   v-flex.text-xs-center(xs12)
-                    fire-text.subheading(
-                      path="subcaption"
-                      customTag="h5"
+                    fire-input.subheading(
+                      :firebaseRef="subheadingRef"
                       :editable="editable"
-                      :async="true"
+                      customTag='h5'
                     )
               v-flex(xs12 md8)
                 v-layout(row, wrap)
@@ -90,6 +89,10 @@ export default {
     buttonText () {
       return this.editable ? 'Stop editing' : 'Edit'
     },
+    subheadingRef () {
+      console.log()
+      return this.dbRef.child('subheading')
+    }
   }
 }
 </script>

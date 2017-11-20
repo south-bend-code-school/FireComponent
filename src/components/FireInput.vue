@@ -16,38 +16,51 @@ export default {
     'useTransaction': {
       type: [Boolean],
       default: false
+    },
+    'customTag': {
+      type: [String],
+      default: 'span'
     }
   },
   data () {
     return {
-      innerText: null,
-      _innerText: null,
+      content: null,
+      snapshotVal: null,
       unsub: null,
       hasChanges: false,
       saving: false,
       error: null,
-      startTime: null
+      startTime: null,
+      isLoaded: false
     }
   },
   watch: {
     'editable' (val) {
+      if (!val && this.hasChanges) {
+        this.updateContent()
+      }
       this.$nextTick(() => {
         this.$el.contentEditable = val
       })
     },
-    '_innerText' (val) {
-      if (!this.editable) {
-        this.hasChanges = false
-        this.innerText = this._innerText
+    'snapshotVal' (val) {
+      if (!this.editable || !this.isLoaded) {
+        this.isLoaded = true
+        this.updateContent()
       }
     }
   },
   methods: {
+    updateContent () {
+      this.hasChanges = false
+      this.content = this.snapshotVal
+    },
     save () {
+      const innerTextSnapshot = this.$el.innerText
       this.saving = true
-      if (this.useTransaction && typeof this._innerText === 'number') {
+      if (this.useTransaction && typeof this.snapshotVal === 'number') {
         this.firebaseRef.transaction((value) => {
-          const diff = this.innerText - this._innerText.constructor(this.$el.innerText)
+          const diff = this.content - this.snapshotVal.constructor(innerTextSnapshot)
           return value + diff
         }, (err, committed, snapshot) => {
           if (err) {
@@ -56,26 +69,30 @@ export default {
             this.error = 'Did not save.'
           }
 
+          this.content = innerTextSnapshot
           this.saving = false
         }, false)
       } else {
-        this.firebaseRef.set(this._innerText.constructor(this.$el.innerText)).catch(
+        this.firebaseRef.set(this.snapshotVal.constructor(innerTextSnapshot)).catch(
           (err) => {
             this.error = err
           }
         ).then(() => {
+          this.content = innerTextSnapshot
           this.saving = false
         })
       }
     }
   },
-  created () {
+  mounted: function () {
+    this.isLoaded = false
+    this.$nextTick(() => {
+      this.$el.contentEditable = this.editable
+    })
     this.unsub = this.firebaseRef.on('value', (snapshot) => {
       this.hasChanges = true
-      this._innerText = snapshot.val()
+      this.snapshotVal = snapshot.val() || ''
     })
-  },
-  mounted () {
     Messanger.bus.$on('save', () => {
       this.save()
     })
@@ -89,19 +106,19 @@ export default {
 </script>
 
 <template>
-  <span v-if='saving'>
+  <component v-if='saving' :is='customTag'>
     <slot name='spinner'>
       saving
     </slot>
-  </span>
-  <span v-else>
-    {{innerText}}
-  </span>
+  </component>
+  <component v-else :is='customTag'>
+    {{content}}
+  </component>
 </template>
 
 <style scoped>
-  span[contentEditable] {
-    border: 2px dashed black !important;
+  [contenteditable=true] {
+    border: 1px dashed #202020 !important;
     font-size: 16px !important;
     font-weight: 400 !important;
   }
