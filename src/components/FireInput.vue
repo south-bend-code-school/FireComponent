@@ -20,10 +20,6 @@ export default {
     'customTag': {
       type: [String],
       default: 'span'
-    },
-    'displayFormatter': {
-      type: [Function],
-      default: (val) => { return val }
     }
   },
   data () {
@@ -36,15 +32,6 @@ export default {
       error: null,
       startTime: null,
       isLoaded: false
-    }
-  },
-  computed: {
-    formattedContent () {
-      if (this.editable) {
-        return this.content
-      }
-
-      return this.displayFormatter(this.content)
     }
   },
   watch: {
@@ -61,11 +48,6 @@ export default {
         this.isLoaded = true
         this.updateContent()
       }
-    },
-    'formattedContent' (val) {
-      this.$nextTick(() => {
-        this.$el.innerText = val
-      })
     }
   },
   methods: {
@@ -107,9 +89,6 @@ export default {
     },
     reset () {
       this.updateContent()
-      this.$nextTick(() => {
-        this.$el.innerText = this.formattedContent
-      })
     }
   },
   mounted: function () {
@@ -134,7 +113,12 @@ export default {
 
 <template>
   <component :is='customTag'>
-    {{formattedContent}}
+    <template v-if='editable'>
+      {{content}}
+    </template>
+    <slot name='display' v-else :content='content'>
+      {{content}}
+    </slot>
   </component>
 </template>
 

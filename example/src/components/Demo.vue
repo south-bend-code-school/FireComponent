@@ -41,9 +41,11 @@
                       :firebaseRef="subheadingRef"
                       :editable="editable"
                       customTag='h5'
-                      :useTransaction='true'
-                      :displayFormatter='(val) => {return "$" + val }'
                     )
+                      template(
+                        slot='display'
+                        scope='props'
+                      ) ${{props.content}} each
               v-flex(xs12 md8)
                 v-layout(row, wrap)
                   v-flex(xs12)
