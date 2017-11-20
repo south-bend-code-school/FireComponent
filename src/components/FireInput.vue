@@ -18,12 +18,17 @@ export default {
     'customTag': {
       type: [String],
       default: 'span'
+    },
+    'editorStyle': {
+      type: [Object],
+      default: '{}'
     }
   },
   data () {
     return {
       content: null,
       snapshotVal: null,
+      editableContentSnapshot: null,
       unsub: null,
       hasChanges: false,
       saving: false,
@@ -35,12 +40,9 @@ export default {
   },
   watch: {
     'editable' (val) {
-      if (!val && this.hasChanges) {
+      if (!val) {
         this.updateContent()
       }
-      this.$nextTick(() => {
-        this.$el.contentEditable = val
-      })
     },
     'snapshotVal' (val) {
       if (!this.editable || !this.isLoaded) {
@@ -53,13 +55,22 @@ export default {
     updateContent () {
       this.hasChanges = false
       this.content = this.snapshotVal
+      this.editableContentSnapshot = this.snapshotVal
+    },
+    finished () {
+      this.$nextTick(() => {
+        if (!this.error) {
+          this.reset()
+        }
+        this.saving = false
+      })
     },
     save () {
-      const innerTextSnapshot = this.$el.innerText
       this.saving = true
+
       if (this.useTransaction && typeof this.snapshotVal === 'number') {
         this.firebaseRef.transaction((value) => {
-          const diff = this.snapshotVal.constructor(innerTextSnapshot) - this.content
+          const diff = this.snapshotVal.constructor(this.editableContentSnapshot) - this.content
           return value + diff
         }, (err, committed, snapshot) => {
           if (err) {
@@ -68,40 +79,37 @@ export default {
             this.error = 'Did not save.'
           }
 
-          if (!this.error) {
-            this.updateContent()
-          }
-          this.saving = false
+          this.finished()
         }, false)
       } else {
-        this.firebaseRef.set(this.snapshotVal.constructor(innerTextSnapshot)).catch(
+        this.firebaseRef.set(this.snapshotVal.constructor(this.editableContentSnapshot)).catch(
           (err) => {
             this.error = err
           }
-        ).then(() => {
-          if (!this.error) {
-            this.updateContent()
-          }
-          this.saving = false
-        })
+        ).then(this.finished)
       }
     },
     reset () {
-      this.content = this.$el.innerText
+      this.updateContent()
+
       this.$nextTick(() => {
-        this.updateContent()
+        if (this.$refs.editor.innerText !== this.editableContentSnapshot) {
+          this.$refs.editor.innerText = this.editableContentSnapshot
+        }
       })
+    },
+    contentChangeEventHandler (e) {
+      this.editableContentSnapshot = e.target.innerText
     }
   },
   mounted: function () {
     this.isLoaded = false
-    this.$nextTick(() => {
-      this.$el.contentEditable = this.editable
-    })
+
     this.unsub = this.firebaseRef.on('value', (snapshot) => {
       this.hasChanges = true
       this.snapshotVal = snapshot.exists() ? snapshot.val() : null
     })
+
     Messanger.bus.$on('save', this.save)
     Messanger.bus.$on('reset', this.reset)
   },
@@ -115,9 +123,9 @@ export default {
 
 <template>
   <component :is='customTag'>
-    <template v-if='editable'>
+    <span class='editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
       {{content}}
-    </template>
+    </span>
     <slot name='display' v-else :content='content'>
       {{content}}
     </slot>
@@ -125,9 +133,10 @@ export default {
 </template>
 
 <style scoped>
-  [contenteditable=true] {
+  .editor {
     border: 1px dashed #202020 !important;
-    font-size: 16px !important;
-    font-weight: 400 !important;
+    font-size: 16px;
+    font-weight: 400;
+    display: inherit;
   }
 </style>

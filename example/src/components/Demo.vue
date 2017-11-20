@@ -37,10 +37,12 @@
                       :async="false"
                     )
                   v-flex.text-xs-center(xs12)
-                    fire-input.subheading(
+                    fire-input(
                       path="subheading"
                       :editable="editable"
-                      customTag='h5'
+                      :editorStyle="{ 'font-size': 'inherit !important' }"
+                      :useTransaction='true'
+                      customTag='h1'
                     )
                       template(
                         slot='display'
