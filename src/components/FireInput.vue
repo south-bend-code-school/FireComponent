@@ -20,6 +20,10 @@ export default {
     'customTag': {
       type: [String],
       default: 'span'
+    },
+    'displayFormatter': {
+      type: [Function],
+      default: (val) => { return val }
     }
   },
   data () {
@@ -32,6 +36,15 @@ export default {
       error: null,
       startTime: null,
       isLoaded: false
+    }
+  },
+  computed: {
+    formattedContent () {
+      if (this.editable) {
+        return this.content
+      }
+
+      return this.displayFormatter(this.content)
     }
   },
   watch: {
@@ -48,6 +61,11 @@ export default {
         this.isLoaded = true
         this.updateContent()
       }
+    },
+    'formattedContent' (val) {
+      this.$nextTick(() => {
+        this.$el.innerText = val
+      })
     }
   },
   methods: {
@@ -60,7 +78,7 @@ export default {
       this.saving = true
       if (this.useTransaction && typeof this.snapshotVal === 'number') {
         this.firebaseRef.transaction((value) => {
-          const diff = this.content - this.snapshotVal.constructor(innerTextSnapshot)
+          const diff = this.snapshotVal.constructor(innerTextSnapshot) - this.content
           return value + diff
         }, (err, committed, snapshot) => {
           if (err) {
@@ -69,7 +87,9 @@ export default {
             this.error = 'Did not save.'
           }
 
-          this.content = innerTextSnapshot
+          if (!this.error) {
+            this.updateContent()
+          }
           this.saving = false
         }, false)
       } else {
@@ -78,10 +98,18 @@ export default {
             this.error = err
           }
         ).then(() => {
-          this.content = innerTextSnapshot
+          if (!this.error) {
+            this.updateContent()
+          }
           this.saving = false
         })
       }
+    },
+    reset () {
+      this.updateContent()
+      this.$nextTick(() => {
+        this.$el.innerText = this.formattedContent
+      })
     }
   },
   mounted: function () {
@@ -93,9 +121,8 @@ export default {
       this.hasChanges = true
       this.snapshotVal = snapshot.val() || ''
     })
-    Messanger.bus.$on('save', () => {
-      this.save()
-    })
+    Messanger.bus.$on('save', this.save)
+    Messanger.bus.$on('reset', this.reset)
   },
   beforeDestroy () {
     if (this.unsub) {
@@ -106,13 +133,8 @@ export default {
 </script>
 
 <template>
-  <component v-if='saving' :is='customTag'>
-    <slot name='spinner'>
-      saving
-    </slot>
-  </component>
-  <component v-else :is='customTag'>
-    {{content}}
+  <component :is='customTag'>
+    {{formattedContent}}
   </component>
 </template>
 
