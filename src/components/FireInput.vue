@@ -100,7 +100,7 @@ export default {
     })
     this.unsub = this.firebaseRef.on('value', (snapshot) => {
       this.hasChanges = true
-      this.snapshotVal = snapshot.val() || ''
+      this.snapshotVal = snapshot.exists() ? snapshot.val() || null
     })
     Messanger.bus.$on('save', this.save)
     Messanger.bus.$on('reset', this.reset)
