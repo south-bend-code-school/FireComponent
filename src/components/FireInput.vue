@@ -123,7 +123,7 @@ export default {
 
 <template>
   <component :is='customTag'>
-    <span class='editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
+    <span key='__editor__' class='editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
       {{content}}
     </span>
     <slot name='display' v-else :content='content'>
