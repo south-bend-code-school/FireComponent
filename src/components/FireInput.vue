@@ -21,7 +21,7 @@ export default {
     },
     'editorStyle': {
       type: [Object],
-      default: '{}'
+      default: Object.create(null)
     }
   },
   data () {
