@@ -3,11 +3,9 @@ import Messanger from './FireMessanger'
 
 export default {
   props: {
-    'firebaseRef': {
+    'path': {
       required: true,
-      validator: function (val) {
-        return typeof val.off === 'function' && typeof val.set === 'function' && typeof val.on === 'function' && typeof val.transaction === 'function'
-      }
+      type: [String]
     },
     'editable': {
       required: true,
@@ -31,7 +29,8 @@ export default {
       saving: false,
       error: null,
       startTime: null,
-      isLoaded: false
+      isLoaded: false,
+      firebaseRef: this.$firebase.database().ref(this.path)
     }
   },
   watch: {
@@ -88,7 +87,10 @@ export default {
       }
     },
     reset () {
-      this.updateContent()
+      this.content = this.$el.innerText
+      this.$nextTick(() => {
+        this.updateContent()
+      })
     }
   },
   mounted: function () {

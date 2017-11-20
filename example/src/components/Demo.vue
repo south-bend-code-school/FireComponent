@@ -38,7 +38,7 @@
                     )
                   v-flex.text-xs-center(xs12)
                     fire-input.subheading(
-                      :firebaseRef="subheadingRef"
+                      path="subheading"
                       :editable="editable"
                       customTag='h5'
                     )
