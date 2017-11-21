@@ -35,7 +35,8 @@ export default {
       error: null,
       startTime: null,
       isLoaded: false,
-      firebaseRef: this.$firebase.database().ref(this.path)
+      firebaseRef: this.$firebase.database().ref(this.path),
+      editorKey: 'editor-' + Math.random().toString(36).substring(4)
     }
   },
   watch: {
@@ -123,7 +124,7 @@ export default {
 
 <template>
   <component :is='customTag'>
-    <span key='__editor__' class='editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
+    <span :key='editorKey' class='editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
       {{content}}
     </span>
     <slot name='display' v-else :content='content'>
