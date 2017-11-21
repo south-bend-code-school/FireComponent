@@ -40,7 +40,6 @@
                     fire-input(
                       path="subheading"
                       :editable="editable"
-                      :editorStyle="{ 'font-size': 'inherit !important' }"
                       :useTransaction='true'
                       customTag='h1'
                     )
