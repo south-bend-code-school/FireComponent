@@ -30,18 +30,14 @@
                       :editable="editable"
                     )
                   v-flex.mt-2(xs12)
-                    fire-text.text-xs-center(
+                    fire-input(
                       path="caption"
-                      customTag="h3"
                       :editable="editable"
-                      :async="false"
                     )
                   v-flex.text-xs-center(xs12)
                     fire-input(
                       path="subheading"
                       :editable="editable"
-                      :useTransaction='true'
-                      customTag='h1'
                     )
                       template(
                         slot='display'

@@ -192,7 +192,7 @@ const component = {
 
       if (this.editable) {
         this.createWithOptions({
-          toolbar: false,
+          toolbar: true,
           disableEditing: false,
           disableReturn: true,
           placeholder: false
