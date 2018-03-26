@@ -18,8 +18,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
-
 .firecomponent--fire-image--container {
   position: relative;
 }

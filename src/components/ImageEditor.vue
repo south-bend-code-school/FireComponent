@@ -190,6 +190,8 @@ export default {
 </template>
 
 <style lang="scss">
+@import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
+
 .firecomponent--image-editor--container {
   background-color: white;
   z-index: 9999;
