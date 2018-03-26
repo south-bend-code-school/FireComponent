@@ -2,6 +2,7 @@ import FireHtml from './src/components/FireHtml.vue';
 import FireText from './src/components/FireText.vue';
 import FireImage from './src/components/FireImage.vue';
 import FireInput from './src/components/FireInput.vue';
+import ImageEditor from './src/components/ImageEditor.vue';
 
 import firebase from 'firebase';
 import VueProgressiveImage from 'vue-progressive-image';
@@ -23,6 +24,14 @@ export function install (Vue, options) {
   }
 
   Vue.use(VueProgressiveImage);
+
+  var editorID = 'firecomponent--image-editor'
+  var insertElem = window.document.createElement("div")
+  insertElem.id = editorID
+  new Vue({
+    el: '#'+editorID,
+    render: h => h(ImageEditor)
+  })
 
   Vue.component('fire-text', FireText);
   Vue.component('fire-html', FireHtml);

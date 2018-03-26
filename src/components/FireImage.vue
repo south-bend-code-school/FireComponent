@@ -1,107 +1,70 @@
 <template>
-  <div class="image-editor" ref="root">
+  <div class="firecomponent--fire-image--container" ref="root">
     <slot name="display" :src="imageLocation">
-      <div class="fire-image" :class="{'edit-container': editable}">
-        <div class="ratio-enforcer" :style="{ paddingTop: padding*100+'%'}"></div>
-        <div class="content" :style="{ backgroundImage: 'url('+imageLocation+')'}"></div>
+      <div class="firecomponent--fire-image--display">
+        <div class="firecomponent--fire-image--ratio-enforcer" :style="{ paddingTop: padding*100+'%'}"></div>
+        <div class="firecomponent--fire-image--content" :style="{ backgroundImage: 'url('+imageLocation+')'}"></div>
       </div>
     </slot>
-    <template v-if="editable">
-      <label :for="uniqueName" title="Click to upload new image"></label>
+    <div class="firecomponent--fire-image--edit-controller" v-if="editable">
+      <slot name="edit-controller" :for="uniqueName">
+        <label :for="uniqueName" title="Click to upload new image">Change</label>
+      </slot>
       <input type="file" :id="uniqueName" @change="imageUploaded">
-    </template>
-    <div ref='editor' v-show="newUpload" class="fullscreen">
-      <template v-if="!uploading">
-        <slot name="croppie-header">
-          <h1 class="header">Crop Photo</h1>
-        </slot>
-        <div class="croppie-wrapper">
-          <div ref="croppie"></div>
-        </div>
-        <slot name="croppie-controls" :rLeft="rotateLeft" :rRight="rotateRight" :cancel="cancelCropping" :upload="confirmUpload">
-          <button @click="rotateLeft">Rotate Left</button>
-          <button @click="rotateRight">Rotate Right</button>
-          <button @click="cancelCropping">Cancel</button>
-          <button @click="confirmUpload">Complete</button>
-        </slot>
-      </template>
-      <template v-else>
-        <slot name="uploading" :cancel="cancelUpload" :noWait="noWait">
-          <button @click="cancelUpload">Cancel Upload</button>
-          <button @click="noWait">Continue Without Waiting</button>
-        </slot>
-      </template>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-  @import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
+@import url('//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css');
 
-  .edit-container {
-    border: 2px dashed black;
+.firecomponent--fire-image--container {
+  position: relative;
+}
+
+.firecomponent--fire-image--edit-controller {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding-right: 10px !important;
+  padding-bottom: 10px !important;
+  > * {
+    z-index: 2;
   }
-
-  .header {
-    text-align: center;
+  > input {
+    display: none;
   }
+}
 
-  .image-editor {
-    position: relative;
-
-    > label {
-      position: absolute;
-      cursor: pointer;
-      z-index: 1;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-    }
-    > input {
-      display: none;
-    }
-  }
-
-  .fire-image {
-    width: 100%;
-    position: relative;
+.firecomponent--fire-image--display {
+  width: 100%;
+  position: relative;
+  display: block;
+  > .firecomponent--fire-image--ratio-enforcer {
     display: block;
-    > .ratio-enforcer {
-      display: block;
-      height: 0;
-      width: 100%;
-      padding-top: 100%;
-    }
-
-    > .content {
-      position: absolute;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      background-color: black;
-      color: white;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-    }
+    height: 0;
+    width: 100%;
+    padding-top: 100%;
   }
 
-  .fullscreen {
-    background-color: white;
-    z-index: 2000;
-    position: fixed;
+  > .firecomponent--fire-image--content {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: black;
+    color: white;
     top: 0;
     bottom: 0;
-    left: 0;
     right: 0;
-    overflow: scroll;
+    left: 0;
   }
+}
 </style>
 
 <script>
-import Croppie from 'croppie'
+import * as ImageBus from './ImageBus'
 
 import Vue from 'vue'
 import * as _ from 'lodash'
@@ -160,11 +123,6 @@ export default {
     if(this._storageRef) {
       this.loadFromStorage(this._storageRef)
     }
-
-    console.log(this.$refs)
-    this.$nextTick(() => {
-      document.getElementsByTagName('body')[0].appendChild(this.$refs.editor)
-    })
   },
 
   computed: {
@@ -192,7 +150,7 @@ export default {
     _storageRef () {
       if(this.storageRef) {
         try {
-          return _.isString(this.storageRef) ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
+          return _.isString(this.storageRef) ? this._firebase.storage().ref(this.storageRef) : this._firebase.storage().refFromURL(this.storageRef.toString())
         } catch (e) {
           console.error(e)
           return null
@@ -237,127 +195,34 @@ export default {
       this.index=min.index
       return min.index
     },
-    rotateRight () {
-      this.croppieInstance.rotate(90)
-    },
-    rotateLeft () {
-      this.croppieInstance.rotate(-90)
-    },
-    cancelCropping () {
-      this.croppieInstance.destroy()
-      this.croppieInstance = null
-      this.newUpload = false
-      this.uploadedImage = null
-    },
-    confirmUpload () {
-      this.uploading = true
-
-      return this.getCroppedResults()
-        .then(this.uploadToStorage)
-        .then((urls) => {
-          this.uploading = false
-          this.$emit('uploaded',urls)
-          this.loadFromStorage(this._storageRef)
-        })
-        .then(this.cancelCropping)
-        .catch((err) => {
-          if(!this.newUpload) {
-            this.cancelCropping()
-          }
-          this.onError(err)
-        })
-    },
-
-    getCroppedResults () {
-      const instance = this
-
-      return Promise.all(
-        this.widths.map((width) => {
-          return this.croppieInstance.result({
-            type: 'blob',
-            size: { width: width, height: width/this.aspectRatio },
-            format: (this.circle) ? 'png' : 'jpeg', // allow transparency for circular images
-            circle: this.circle,
-            quality: this.quality
-          })
-        })
-      )
-    },
-
-    uploadToStorage (imageData) {
-      this.uploadTasks = imageData.map((image,i) => {
-        return this._storageRef.child(''+i).put(image)
-      })
-
-      return Promise.all(this.uploadTasks)
-        .then(snapshotArray => {
-          return snapshotArray.map((snapshot) => {
-            snapshot.downloadURL
-          })
-        })
-    },
-
-    noWait () {
-      this.newUpload = false
-    },
-
-    cancelUpload () {
-      if(this.uploadTasks) {
-        this.uploadTasks.forEach((task) => {
-          task.cancel()
-        })
-        this.uploadTasks = []
-        this.uploading = false
-      }
-    },
-
-    onError (err) {
-      console.error(err)
-    },
-
     imageUploaded (e) {
-      var instance = this
-      var files = e.target.files
-
-      if (!files.length) {
-        alert('No image found in upload')
-        return
+      const location = this._storageRef.toString()
+      const config = {
+        widths: this.widths,
+        aspectRatio: this.aspectRatio,
+        enforceBoundary: this.enforceBoundary,
+        allowRotations: this.allowRotations,
+        circle: this.circle,
+        format: this.format
       }
-
-      this.uploadedImage = window.URL.createObjectURL(files[0])
-      this.newUpload = true
-
-      var iWidth = this.$refs.root.clientWidth
-      var iHeight = iWidth / this.aspectRatio
-      var oWidth = iWidth * 1.1
-      var oHeight = iHeight * 1.1
-      if(oWidth > window.innerWidth) {
-        oWidth = window.innerWidth*0.8
-        oHeight = oWidth/this.aspectRatio
-        iWidth = oWidth*0.8
-        iHeight = oHeight*0.8
+      ImageBus.bus.$on(location + '-cancelled', this.newCancelledCallback(location))
+      ImageBus.bus.$on(location + '-completed', this.newCompletedCallback(location))
+      ImageBus.newUpload(location, e, config)
+    },
+    newCancelledCallback (location) {
+      const callback = () => {
+        ImageBus.bus.$off(location + '-cancelled', callback)
       }
-
-      this.$nextTick(() => {
-        instance.croppieInstance = new Croppie(instance.$refs.croppie, {
-          enforceBoundary: instance.enforceBoundary,
-          enableOrientation: instance.allowRotations,
-          viewport: {
-            width: iWidth,
-            height: iHeight,
-            type: (instance.circle) ? 'circle' : 'square'
-          },
-          boundary: {
-            width: oWidth,
-            height: oHeight
-          }
-        })
-        instance.croppieInstance.bind({
-          url: this.uploadedImage
-        })
-      })
+      return callback
+    },
+    newCompletedCallback (location) {
+      const callback = (e, urls) => {
+        ImageBus.bus.$off(location + '-completed', callback)
+        const index = this.getIndexToDisplay()
+        this.imageLocation = urls[index]
+      }
+      return callback
     }
-  },
-
+  }
 }
 </script>
