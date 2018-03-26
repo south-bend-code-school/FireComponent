@@ -8,7 +8,7 @@
     </slot>
     <div class="firecomponent--fire-image--edit-controller" v-if="editable">
       <slot name="edit-controller" :for="uniqueName">
-        <label class="firecomponent--button" :for="uniqueName" title="Click to upload new image">
+        <label class="firecomponent--button firecomponent--fire-image-change-label" :for="uniqueName" title="Click to upload new image">
           Change
         </label>
       </slot>

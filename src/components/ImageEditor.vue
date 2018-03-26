@@ -179,7 +179,7 @@ export default {
           </slot>
         </div>
       </div>
-      <div v-show="uploading">
+      <div class="firecomponent--image-editor--uploading-controls" v-show="uploading">
         <slot name="uploading" :cancel="cancel" :noWait="continueWithoutWaiting">
           <button class="firecomponent--button" @click="cancel">Cancel Upload</button>
           <button class="firecomponent--button" @click="continueWithoutWaiting">Continue Without Waiting</button>
@@ -227,6 +227,10 @@ export default {
   height: 100%;
   width: 100%;
   flex-direction: column;
+}
+
+.firecomponent--image-editor--uploading-controls {
+  text-align: center;
 }
 
 .firecomponent--button {
