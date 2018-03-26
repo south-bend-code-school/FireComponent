@@ -8,7 +8,9 @@
     </slot>
     <div class="firecomponent--fire-image--edit-controller" v-if="editable">
       <slot name="edit-controller" :for="uniqueName">
-        <label :for="uniqueName" title="Click to upload new image">Change</label>
+        <label class="firecomponent--fire-image-change-label" :for="uniqueName" title="Click to upload new image">
+          Change
+        </label>
       </slot>
       <input type="file" :id="uniqueName" @change="imageUploaded">
     </div>
@@ -35,6 +37,11 @@
   > input {
     display: none;
   }
+}
+
+.firecomponent--fire-image-change-label {
+  background-color: black;
+  color: white;
 }
 
 .firecomponent--fire-image--display {
@@ -150,7 +157,7 @@ export default {
     _storageRef () {
       if(this.storageRef) {
         try {
-          return _.isString(this.storageRef) ? this._firebase.storage().ref(this.storageRef) : this._firebase.storage().refFromURL(this.storageRef.toString())
+          return _.isString(this.storageRef) ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
         } catch (e) {
           console.error(e)
           return null

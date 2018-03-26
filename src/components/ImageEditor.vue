@@ -1,4 +1,5 @@
 <script>
+import Croppie from 'croppie'
 import * as ImageBus from './ImageBus'
 export default {
   name: 'FireImageEditor',
@@ -10,6 +11,7 @@ export default {
       task: null,
       config: null,
       tasks: {},
+      uploading: false,
       watchers: {}
     }
   },
@@ -18,7 +20,7 @@ export default {
   },
   computed: {
     storageRef () {
-      return this._firebase.storage().ref(this.location || '')
+      return this.$firebase.storage().refFromURL(this.location || '')
     },
     fileURL () {
       return this.files.length ? window.URL.createObjectURL(this.files[0]) : ''
@@ -30,27 +32,26 @@ export default {
       if (!this.config) {
         return null
       }
-      const width = this.config.widths.sort((a, b) => { return b - a})[0]
-      return {
-        width: width,
-        height: width / this.config.aspectRatio,
+      const base = this.boundary.width*0.8
+      const viewport = {
         type: this.config.circle ? 'circle' : 'square'
       }
+      if (this.config.aspectRatio > 1) {
+        viewport.width = base
+        viewport.height = base / this.config.aspectRatio
+      } else {
+        viewport.width = base / this.config.aspectRatio
+        viewport.height = base
+      }
+      return viewport
     },
     boundary () {
-      if (!this.config) {
-        return null
-      }
-      if (this.config.aspectRatio > 1) {
-        return {
-          width: this.viewport.width,
-          height: this.viewport.height
-        }
-      } else {
-        return {
-          width: this.viewport.height,
-          height: this.viewport.height
-        }
+      const maxWidth = window.innerWidth*0.8
+      const maxHeight = window.innerHeight*0.5
+      const chosen = Math.min(maxWidth,maxHeight)
+      return {
+        width: chosen,
+        height: chosen
       }
     },
     imageFormat () {
@@ -58,6 +59,9 @@ export default {
         return null
       }
       return this.config.circle ? 'png' : this.config.format
+    },
+    allowOrientation () {
+      return this.config ? this.config.enableOrientation : false
     }
   },
   methods: {
@@ -84,7 +88,7 @@ export default {
       this.initializeCroppie()
     },
     rotate (degrees) {
-      if (this.croppie) {
+      if (this.croppie && this.allowOrientation) {
         this.croppie.rotate(degrees)
       }
     },
@@ -115,7 +119,7 @@ export default {
       const eventCopy = this.event
       this.tasks[locationCopy] = []
       this.uploading = true
-      Promise.all([
+      Promise.all(
         this.config.widths.map((width, index) => {
           const ref = this.storageRef.child(index+'')
           return this.getCroppedImage(width)
@@ -123,8 +127,7 @@ export default {
               return this.uploadToCloudStorage(image, ref)
             })
         })
-      ])
-      .then((snapshots) => {
+      ).then((snapshots) => {
         if (locationCopy === this.location) {
           this.teardown()
           this.uploading = false
@@ -160,7 +163,7 @@ export default {
 <template>
   <div ref='root' v-if='event' class="firecomponent--image-editor--container">
     <div class="firecomponent--image-editor--vertical-aligner">
-      <template v-show="!uploading">
+      <div v-show="!uploading">
         <slot name="croppie-header">
           <h1 class="firecomponent--image-editor--header">Crop Photo</h1>
         </slot>
@@ -168,20 +171,20 @@ export default {
           <div ref="croppie"></div>
         </div>
         <div class="firecomponent--image-editor--controls">
-          <slot name="croppie-controls" :rLeft="rotateLeft" :rRight="rotateRight" :cancel="cancelCropping" :upload="confirmUpload">
-            <button @click="rotateLeft">Rotate Left</button>
-            <button @click="rotateRight">Rotate Right</button>
-            <button @click="cancelCropping">Cancel</button>
-            <button @click="confirmUpload">Complete</button>
+          <slot name="croppie-controls" :rotate="rotate" :cancel="cancel" :upload="upload">
+            <button class="firecomponent--image-editor--button" @click="rotate(-90)" v-if="allowOrientation">Rotate Left</button>
+            <button class="firecomponent--image-editor--button" @click="rotate(90)" v-if="allowOrientation">Rotate Right</button>
+            <button class="firecomponent--image-editor--button" @click="cancel">Cancel</button>
+            <button class="firecomponent--image-editor--button" @click="upload">Complete</button>
           </slot>
         </div>
-      </template>
-      <template v-show="uploading">
-        <slot name="uploading" :cancel="cancelUpload" :noWait="noWait">
-          <button @click="cancelUpload">Cancel Upload</button>
-          <button @click="noWait">Continue Without Waiting</button>
+      </div>
+      <div v-show="uploading">
+        <slot name="uploading" :cancel="cancel" :noWait="continueWithoutWaiting">
+          <button class="firecomponent--image-editor--button" @click="cancel">Cancel Upload</button>
+          <button class="firecomponent--image-editor--button" @click="continueWithoutWaiting">Continue Without Waiting</button>
         </slot>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -229,5 +232,8 @@ export default {
   display: flex;
   justify-content: center;
   align-content: center;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
 }
 </style>
