@@ -172,24 +172,24 @@ export default {
         </div>
         <div class="firecomponent--image-editor--controls">
           <slot name="croppie-controls" :rotate="rotate" :cancel="cancel" :upload="upload">
-            <button class="firecomponent--image-editor--button" @click="rotate(-90)" v-if="allowOrientation">Rotate Left</button>
-            <button class="firecomponent--image-editor--button" @click="rotate(90)" v-if="allowOrientation">Rotate Right</button>
-            <button class="firecomponent--image-editor--button" @click="cancel">Cancel</button>
-            <button class="firecomponent--image-editor--button" @click="upload">Complete</button>
+            <button class="firecomponent--button" @click="rotate(-90)" v-if="allowOrientation">Rotate Left</button>
+            <button class="firecomponent--button" @click="rotate(90)" v-if="allowOrientation">Rotate Right</button>
+            <button class="firecomponent--button" @click="cancel">Cancel</button>
+            <button class="firecomponent--button" @click="upload">Complete</button>
           </slot>
         </div>
       </div>
       <div v-show="uploading">
         <slot name="uploading" :cancel="cancel" :noWait="continueWithoutWaiting">
-          <button class="firecomponent--image-editor--button" @click="cancel">Cancel Upload</button>
-          <button class="firecomponent--image-editor--button" @click="continueWithoutWaiting">Continue Without Waiting</button>
+          <button class="firecomponent--button" @click="cancel">Cancel Upload</button>
+          <button class="firecomponent--button" @click="continueWithoutWaiting">Continue Without Waiting</button>
         </slot>
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .firecomponent--image-editor--container {
   background-color: white;
   z-index: 9999;
@@ -214,14 +214,6 @@ export default {
   }
 }
 
-.firecomponent--image-editor--button {
-  padding: 0 1em;
-  border-radius: 1000px !important;
-  text-transform: none;
-  background-color: black;
-  color: white;
-}
-
 .firecomponent--image-editor--controls {
   display: block;
   width: 100%;
@@ -235,5 +227,15 @@ export default {
   height: 100%;
   width: 100%;
   flex-direction: column;
+}
+
+.firecomponent--button {
+  border-radius: 3px;
+  text-transform: none;
+  background-color: black;
+  color: white;
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
