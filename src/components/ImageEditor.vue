@@ -7,7 +7,6 @@ export default {
       event: null,
       croppie: null,
       location: null,
-      files: [],
       task: null,
       config: null,
       tasks: {},
