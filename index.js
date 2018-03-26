@@ -28,6 +28,7 @@ export function install (Vue, options) {
   var editorID = 'firecomponent--image-editor'
   var insertElem = window.document.createElement("div")
   insertElem.id = editorID
+  window.document.body.appendChild(insertElem)
   new Vue({
     el: '#'+editorID,
     render: h => h(ImageEditor)
