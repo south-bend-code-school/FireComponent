@@ -160,7 +160,7 @@ export default {
 </script>
 
 <template>
-  <div ref='root' v-if='event' class="firecomponent--image-editor--container">
+  <div ref='root' v-show='event' class="firecomponent--image-editor--container">
     <div class="firecomponent--image-editor--vertical-aligner">
       <div v-show="!uploading">
         <slot name="croppie-header">

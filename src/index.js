@@ -15,6 +15,9 @@ export function install (Vue, firebase) {
     return;
   }
 
+  Vue.prototype.$imageBus = newImageBus(Vue)
+  Vue.prototype.$messenger = newFireMessenger(Vue)
+
   var editorID = 'firecomponent--image-editor'
   var insertElem = window.document.createElement("div")
   insertElem.id = editorID
@@ -23,9 +26,6 @@ export function install (Vue, firebase) {
     el: '#'+editorID,
     render: h => h(ImageEditor)
   })
-
-  Vue.prototype.$imageBus = newImageBus(Vue)
-  Vue.prototype.$messenger = newFireMessenger(Vue)
 
   Vue.component('fire-text', FireText);
   Vue.component('fire-html', FireHtml);
