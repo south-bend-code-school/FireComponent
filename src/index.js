@@ -8,7 +8,7 @@ import { newFireMessenger } from './components/FireMessanger';
 
 // Install the components
 export function install (Vue, firebase) {
-  if (typeof options === 'object') {
+  if (typeof firebase === 'object') {
     Vue.prototype.$firebase = firebase;
   } else {
     console.error('You must add your firebase configuration object to the firecomponent library');

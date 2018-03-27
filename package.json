@@ -2,7 +2,7 @@
   "name": "firecomponent",
   "version": "1.1.0",
   "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
-  "main": "./dist/firecomponent.js",
+  "main": "./src/index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js"
   },
