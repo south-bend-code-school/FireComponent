@@ -2,9 +2,9 @@
   "name": "firecomponent",
   "version": "1.1.0",
   "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
-  "main": "./src/FireComponents.js",
+  "main": "./dist/firecomponent.js",
   "scripts": {
-    "build": "node build.js"
+    "build": "webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -27,11 +27,19 @@
     "croppie": "^2.5.0",
     "firebase": "^4.2.0",
     "medium-editor": "^5.23.1",
-    "vue-loader": "^13.0.4",
+    "vue": "^2.5.16",
     "vue-progressive-image": "^2.1.1",
     "vuetify": "^0.14.8"
   },
   "devDependencies": {
-    "vue-template-compiler": "^2.4.2"
+    "babel-loader": "^7.1.4",
+    "css-loader": "^0.28.11",
+    "node-sass": "^4.8.3",
+    "sass-loader": "^6.0.7",
+    "vue-loader": "^14.2.2",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13",
+    "webpack-merge": "^4.1.2"
   }
 }

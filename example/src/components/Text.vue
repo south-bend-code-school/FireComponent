@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import Messanger from 'firecomponent/src/components/FireMessanger'
 import firebase from '../firebase'
 
 export default {
@@ -124,10 +123,10 @@ export default {
       this.editable = !this.editable
     },
     resetData () {
-      Messanger.reset()
+      this.$messenger.reset()
     },
     saveData () {
-      Messanger.save()
+      this.$messenger.save()
     }
   },
 }

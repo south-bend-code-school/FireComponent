@@ -1,29 +1,19 @@
-import FireHtml from './src/components/FireHtml.vue';
-import FireText from './src/components/FireText.vue';
-import FireImage from './src/components/FireImage.vue';
-import FireInput from './src/components/FireInput.vue';
-import ImageEditor from './src/components/ImageEditor.vue';
-
-import firebase from 'firebase';
-import VueProgressiveImage from 'vue-progressive-image';
+import FireHtml from './components/FireHtml.vue';
+import FireText from './components/FireText.vue';
+import FireImage from './components/FireImage.vue';
+import FireInput from './components/FireInput.vue';
+import ImageEditor from './components/ImageEditor.vue';
+import { newImageBus } from './components/ImageBus';
+import { newFireMessenger } from './components/FireMessanger';
 
 // Install the components
-export function install (Vue, options) {
+export function install (Vue, firebase) {
   if (typeof options === 'object') {
-    // @param options can be either a firebase object itself
-    // or otherwise a firebase config object
-    if (options.databaseURL !== undefined) {
-      firebase.initializeApp(options);
-      Vue.prototype.$firebase = firebase;
-    } else {
-      Vue.prototype.$firebase = options;
-    }
+    Vue.prototype.$firebase = firebase;
   } else {
     console.error('You must add your firebase configuration object to the firecomponent library');
     return;
   }
-
-  Vue.use(VueProgressiveImage);
 
   var editorID = 'firecomponent--image-editor'
   var insertElem = window.document.createElement("div")
@@ -33,6 +23,9 @@ export function install (Vue, options) {
     el: '#'+editorID,
     render: h => h(ImageEditor)
   })
+
+  Vue.prototype.$imageBus = newImageBus(Vue)
+  Vue.prototype.$messenger = newFireMessenger(Vue)
 
   Vue.component('fire-text', FireText);
   Vue.component('fire-html', FireHtml);

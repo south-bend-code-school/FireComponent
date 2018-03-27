@@ -1,6 +1,5 @@
 <script>
 import Croppie from 'croppie'
-import * as ImageBus from './ImageBus'
 export default {
   name: 'FireImageEditor',
   data () {
@@ -16,7 +15,7 @@ export default {
     }
   },
   created () {
-    ImageBus.bus.$on('newUpload', this.handleUpload)
+    this.$imageBus.bus.$on('newUpload', this.handleUpload)
   },
   computed: {
     storageRef () {
@@ -80,7 +79,7 @@ export default {
     },
     handleUpload (location, e, config) {
       if (this.event || e.target.files.length <= 0) {
-        return ImageBus.bus.$emit(location + '-cancelled', e)
+        return this.$imageBus.bus.$emit(location + '-cancelled', e)
       }
       this.event = e
       this.location = location
@@ -93,7 +92,7 @@ export default {
       }
     },
     cancel () {
-      ImageBus.bus.$emit(this.location + '-cancelled', this.e)
+      this.$imageBus.bus.$emit(this.location + '-cancelled', this.e)
       const tasks = this.tasks[this.location]
       if (tasks && tasks.length) {
         tasks.forEach((task) => {
@@ -133,7 +132,7 @@ export default {
           this.uploading = false
         }
         this.tasks[locationCopy] = null
-        ImageBus.bus.$emit(locationCopy + '-completed', eventCopy, snapshots.map((ss) => { return ss.downloadURL }))
+        this.$imageBus.bus.$emit(locationCopy + '-completed', eventCopy, snapshots.map((ss) => { return ss.downloadURL }))
       })
     },
     getCroppedImage (width) {

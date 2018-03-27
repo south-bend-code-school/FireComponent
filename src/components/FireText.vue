@@ -61,7 +61,6 @@
 </style>
 
 <script>
-import Messanger from './FireMessanger'
 import MediumEditor from 'medium-editor'
 
 const component = {
@@ -102,13 +101,13 @@ const component = {
   },
 
   mounted (evt) {
-    Messanger.bus.$on('save', () => {
+    this.$messenger.bus.$on('save', () => {
       if (this.editable) {
         this.updateFirebaseWithValue(this.updatedText)
       }
     })
 
-    Messanger.bus.$on('reset', () => {
+    this.$messenger.bus.$on('reset', () => {
       if (this.editable) {
         this.discardEdits()
       }

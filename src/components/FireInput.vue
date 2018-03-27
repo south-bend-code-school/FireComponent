@@ -1,6 +1,4 @@
 <script>
-import Messanger from './FireMessanger'
-
 export default {
   props: {
     'path': {
@@ -111,8 +109,8 @@ export default {
       this.snapshotVal = snapshot.exists() ? snapshot.val() : null
     })
 
-    Messanger.bus.$on('save', this.save)
-    Messanger.bus.$on('reset', this.reset)
+    this.$messenger.bus.$on('save', this.save)
+    this.$messenger.bus.$on('reset', this.reset)
   },
   beforeDestroy () {
     if (this.unsub) {

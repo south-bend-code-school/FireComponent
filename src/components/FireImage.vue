@@ -64,11 +64,6 @@
 </style>
 
 <script>
-import * as ImageBus from './ImageBus'
-
-import Vue from 'vue'
-import * as _ from 'lodash'
-
 export default {
   name: 'fire-image',
   props: {
@@ -150,7 +145,7 @@ export default {
     _storageRef () {
       if(this.storageRef) {
         try {
-          return _.isString(this.storageRef) ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
+          return typeof this.storageRef === 'string' ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
         } catch (e) {
           console.error(e)
           return null
@@ -205,19 +200,19 @@ export default {
         circle: this.circle,
         format: this.format
       }
-      ImageBus.bus.$on(location + '-cancelled', this.newCancelledCallback(location))
-      ImageBus.bus.$on(location + '-completed', this.newCompletedCallback(location))
-      ImageBus.newUpload(location, e, config)
+      this.$imageBus.bus.$on(location + '-cancelled', this.newCancelledCallback(location))
+      this.$imageBus.bus.$on(location + '-completed', this.newCompletedCallback(location))
+      this.$imageBus.newUpload(location, e, config)
     },
     newCancelledCallback (location) {
       const callback = () => {
-        ImageBus.bus.$off(location + '-cancelled', callback)
+        this.$imageBus.bus.$off(location + '-cancelled', callback)
       }
       return callback
     },
     newCompletedCallback (location) {
       const callback = (e, urls) => {
-        ImageBus.bus.$off(location + '-completed', callback)
+        this.$imageBus.bus.$off(location + '-completed', callback)
         const index = this.getIndexToDisplay()
         this.imageLocation = urls[index]
       }

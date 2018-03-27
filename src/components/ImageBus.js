@@ -1,9 +1,12 @@
-import Vue from 'vue';
+export function newImageBus (_Vue) {
+  var bus = new _Vue();
 
-var eventBus = new Vue();
+  var newUpload = function (...params) {
+    bus.$emit('newUpload', ...params)
+  }
 
-export const bus = eventBus
-
-export function newUpload (...params) {
-  eventBus.$emit('newUpload', ...params)
+  return {
+    bus,
+    newUpload
+  }
 }
