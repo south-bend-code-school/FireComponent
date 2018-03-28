@@ -27,6 +27,7 @@
     "croppie": "^2.5.0",
     "firebase": "^4.2.0",
     "medium-editor": "^5.23.1",
+    "tinymce": "^4.7.9",
     "vue": "^2.5.16",
     "vue-progressive-image": "^2.1.1",
     "vuetify": "^0.14.8"

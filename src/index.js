@@ -17,6 +17,12 @@ export function install (Vue, firebase) {
 
   Vue.prototype.$imageBus = newImageBus(Vue)
   Vue.prototype.$messenger = newFireMessenger(Vue)
+  // Add a accessor for getting the unique id of the component
+  Object.defineProperty(Vue.prototype, '$uniqId', {
+    get () {
+      return this._uid
+    },
+  })
 
   var editorID = 'firecomponent--image-editor'
   var insertElem = window.document.createElement("div")
