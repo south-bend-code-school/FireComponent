@@ -1,5 +1,6 @@
 <script>
 export default {
+  name: 'fire-input',
   props: {
     'path': {
       required: true,

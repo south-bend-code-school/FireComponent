@@ -3,6 +3,7 @@ import FireText from './components/FireText.vue';
 import FireImage from './components/FireImage.vue';
 import FireInput from './components/FireInput.vue';
 import ImageEditor from './components/ImageEditor.vue';
+import HTMLEditor from './components/HTMLEditor.vue';
 import { newImageBus } from './components/ImageBus';
 import { newFireMessenger } from './components/FireMessanger';
 
@@ -37,6 +38,7 @@ export function install (Vue, firebase) {
   Vue.component('fire-html', FireHtml);
   Vue.component('fire-image', FireImage);
   Vue.component('fire-input', FireInput);
+  Vue.component('fire-html-editor', HTMLEditor);
 }
 
 // Expose the components
