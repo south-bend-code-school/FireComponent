@@ -1,5 +1,5 @@
 <script>
-import Croppie from 'croppie'
+import { Croppie } from 'croppie'
 export default {
   name: 'FireImageEditor',
   data () {
