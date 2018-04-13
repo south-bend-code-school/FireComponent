@@ -15,10 +15,11 @@ export default [
 			format: 'umd'
 		},
 		plugins: [
-			resolve(), // so Rollup can find `ms`
+			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({
-				css: true,
+			vue({ autoStyles: false, styleToImports: true }),
+			scss({
+				output: './dist/fire-component.css'
 			}),
       uglify()
 		]
@@ -38,10 +39,11 @@ export default [
 			{ file: pkg.module, format: 'es' }
     ],
     plugins: [
-			resolve(), // so Rollup can find `ms`
+			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({
-				css: true,
+      vue({ autoStyles: false, styleToImports: true }),
+			scss({
+				output: './dist/fire-component.css'
 			}),
       uglify()
     ]
