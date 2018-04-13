@@ -15,9 +15,9 @@ export default [
 			format: 'umd'
 		},
 		plugins: [
-			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
+			resolve(), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-			vue({ css: true }),
+			vue({ autoStyles: false, styleToImports: true }),
 			scss(),
       uglify()
 		]
@@ -39,7 +39,7 @@ export default [
     plugins: [
 			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({ css: true }),
+			vue({ autoStyles: false, styleToImports: true }),
 			scss(),
       uglify()
     ]
