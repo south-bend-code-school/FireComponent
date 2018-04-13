@@ -18,6 +18,7 @@ export default [
 			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
 			vue({ css: true }),
+			scss(),
       uglify()
 		]
 	},
@@ -39,6 +40,7 @@ export default [
 			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
       vue({ css: true }),
+			scss(),
       uglify()
     ]
 	}

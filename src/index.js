@@ -14,23 +14,23 @@ export function install (Vue, firebase) {
     return;
   }
 
-  Vue.prototype.$imageBus = new ImageBus(Vue)
-  Vue.prototype.$messenger = new FireMessenger(Vue)
+  Vue.prototype.$imageBus = new ImageBus(Vue);
+  Vue.prototype.$messenger = new FireMessenger(Vue);
   // Add a accessor for getting the unique id of the component
   Object.defineProperty(Vue.prototype, '$uniqId', {
     get () {
-      return this._uid
+      return this._uid;
     },
   })
 
-  var editorID = 'firecomponent--image-editor'
-  var insertElem = window.document.createElement("div")
-  insertElem.id = editorID
-  window.document.body.appendChild(insertElem)
+  var editorID = 'firecomponent--image-editor';
+  var insertElem = window.document.createElement("div");
+  insertElem.id = editorID;
+  window.document.body.appendChild(insertElem);
   new Vue({
     el: '#'+editorID,
     render: h => h(ImageEditor)
-  })
+  });
 
   Vue.component('fire-image', FireImage);
   Vue.component('fire-input', FireInput);

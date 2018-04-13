@@ -61,12 +61,12 @@ export default {
   </component>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .firecomponent--inline-editor {
-  &:focus {
-    outline: -webkit-focus-ring-color auto 5px;
-  }
   width: 100%;
   display: inline-block;
+}
+.firecomponent--inline-editor:focus {
+  outline: -webkit-focus-ring-color auto 5px;
 }
 </style>
