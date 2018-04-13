@@ -36505,36 +36505,25 @@
     }
   }
 
-  function newImageBus (_Vue) {
-    var bus = new _Vue();
+  function ImageBus (_Vue) {
+    this.bus = new _Vue();
 
-    var newUpload = function (...params) {
+    this.newUpload = function (...params) {
       bus.$emit('newUpload', ...params);
     };
-
-    return {
-      bus,
-      newUpload
-    }
   }
 
-  function newFireMessenger (_Vue) {
-    var bus = new _Vue();
-    var send = function (message) {
+  function FireMessenger (_Vue) {
+    this.bus = new _Vue();
+    this.send = function (message) {
       bus.$emit(message);
     };
-    var save = function () {
-      send('save');
+    this.save = function () {
+      this.send('save');
     };
-    var reset = function () {
-      send('reset');
+    this.reset = function () {
+      this.send('reset');
     };
-    return {
-      bus,
-      send,
-      save,
-      reset
-    }
   }
 
   // Install the components
@@ -36546,8 +36535,8 @@
       return;
     }
 
-    Vue.prototype.$imageBus = newImageBus(Vue);
-    Vue.prototype.$messenger = newFireMessenger(Vue);
+    Vue.prototype.$imageBus = new ImageBus(Vue);
+    Vue.prototype.$messenger = new FireMessenger(Vue);
     // Add a accessor for getting the unique id of the component
     Object.defineProperty(Vue.prototype, '$uniqId', {
       get () {

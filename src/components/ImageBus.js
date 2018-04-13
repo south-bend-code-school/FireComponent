@@ -1,12 +1,7 @@
-export function newImageBus (_Vue) {
-  var bus = new _Vue();
+export default function ImageBus (_Vue) {
+  this.bus = new _Vue();
 
-  var newUpload = function (...params) {
+  this.newUpload = function (...params) {
     bus.$emit('newUpload', ...params)
-  }
-
-  return {
-    bus,
-    newUpload
-  }
+  };
 }

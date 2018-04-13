@@ -1,18 +1,12 @@
-export function newFireMessenger (_Vue) {
-  var bus = new _Vue();
-  var send = function (message) {
+export default function FireMessenger (_Vue) {
+  this.bus = new _Vue();
+  this.send = function (message) {
     bus.$emit(message);
   };
-  var save = function () {
-    send('save');
+  this.save = function () {
+    this.send('save');
   };
-  var reset = function () {
-    send('reset');
+  this.reset = function () {
+    this.send('reset');
   };
-  return {
-    bus,
-    send,
-    save,
-    reset
-  }
 }

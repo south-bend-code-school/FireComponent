@@ -5,8 +5,8 @@ import FireInput from './components/FireInput.vue';
 import ImageEditor from './components/ImageEditor.vue';
 import HTMLEditor from './components/HTMLEditor.vue';
 import InlineEditor from './components/InlineEditor.vue';
-import { newImageBus } from './components/ImageBus';
-import { newFireMessenger } from './components/FireMessanger';
+import ImageBus from './components/ImageBus';
+import FireMessenger from './components/FireMessanger';
 
 // Install the components
 export function install (Vue, firebase) {
@@ -17,8 +17,8 @@ export function install (Vue, firebase) {
     return;
   }
 
-  Vue.prototype.$imageBus = newImageBus(Vue)
-  Vue.prototype.$messenger = newFireMessenger(Vue)
+  Vue.prototype.$imageBus = new ImageBus(Vue)
+  Vue.prototype.$messenger = new FireMessenger(Vue)
   // Add a accessor for getting the unique id of the component
   Object.defineProperty(Vue.prototype, '$uniqId', {
     get () {
