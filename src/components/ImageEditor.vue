@@ -1,5 +1,5 @@
 <script>
-import { Croppie } from 'croppie'
+import Croppie from 'croppie'
 export default {
   name: 'FireImageEditor',
   data () {
@@ -66,7 +66,7 @@ export default {
   methods: {
     initializeCroppie () {
       this.$nextTick(() => {
-        this.croppie = new Croppie(this.$refs.croppie, {
+        this.croppie = new window.Croppie(this.$refs.croppie, {
           enforceBoundary: this.config.enforceBoundary,
           enableOrientation: this.config.enableOrientation,
           viewport: this.viewport,

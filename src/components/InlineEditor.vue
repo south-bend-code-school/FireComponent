@@ -21,33 +21,52 @@ export default {
   },
   data () {
     return {
-      uniqueKey: 'firecomponent--inline-editor--' + this.$uniqId
+      uniqueKey: 'firecomponent--inline-editor--' + this.$uniqId,
+      isEditing: false
+    }
+  },
+  computed: {
+    title () {
+      if (this.editable) {
+        return 'Click to Edit'
+      }
+      return null
     }
   },
   methods: {
     contentChangeEventHandler (e) {
       this.$emit('input', e)
+    },
+    startEdit (e) {
+      this.isEditing = this.editable
+    },
+    stopEdit (e) {
+      this.isEditing = false
+    },
+    attemptStop (e) {
+      this.isEditing = this.$refs.editor === document.activeElement
     }
   }
 }
 </script>
 
 <template>
-  <component :is='customTag'>
-    <span :key='uniqueKey' class='firecomponent--inline-editor' :style='editorStyle' ref='editor' v-if='editable' @input='contentChangeEventHandler' contenteditable="true">
-      {{content}}
-    </span>
-    <slot name='display' v-else :content='content'>
-      {{content}}
+  <component :is='customTag' @mouseover='startEdit' @mouseleave='attemptStop' style='width: 100%;' :title='title'>
+    <div :key='uniqueKey' class='firecomponent--inline-editor' @blur='stopEdit' :style='editorStyle' ref='editor' v-if='isEditing' @input='contentChangeEventHandler' contenteditable="true">
+      {{value}}
+    </div>
+    <slot name='display' ref='displayer' v-else :content='value'>
+      {{value}}
     </slot>
   </component>
 </template>
 
-<style scoped>
-  .firecomponent--inline-editor {
-    border: 1px dashed #202020 !important;
-    font-size: 16px;
-    font-weight: 400;
-    display: inherit;
+<style lang="scss" scoped>
+.firecomponent--inline-editor {
+  &:focus {
+    outline: -webkit-focus-ring-color auto 5px;
   }
+  width: 100%;
+  display: inline-block;
+}
 </style>

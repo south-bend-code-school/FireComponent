@@ -1,0 +1,148 @@
+@import '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css';
+@import '//cdnjs.cloudflare.com/ajax/libs/medium-editor/5.23.2/css/themes/default.min.css';
+@import '//cdn.jsdelivr.net/medium-editor/latest/css/medium-editor.min.css';
+@import '//cdnjs.cloudflare.com/ajax/libs/medium-editor/5.23.2/css/themes/default.min.css';
+@import url("//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css");
+.inline {
+  display: inline; }
+
+[contenteditable=true] {
+  border: 1px dashed #202020;
+  background-color: rgba(255, 255, 255, 0.2); }
+
+.medium-editor-placeholder:after {
+  margin: 0; }
+
+.hide {
+  display: none; }
+
+/**
+ *This ensures that span elements under the medium editor do not take up
+ * an entire line. It cannot be a scoped style because the p tag inside
+ * the medium editor does not have the same scope as the span
+ */
+span[contentEditable] p {
+  display: inline; }
+
+span {
+  display: inline-block;
+  min-width: 8px; }
+
+.inline {
+  display: inline; }
+
+[contenteditable=true] {
+  border: 1px dashed #202020;
+  background-color: rgba(255, 255, 255, 0.2); }
+
+.medium-editor-placeholder:after {
+  margin: 0; }
+
+.hide {
+  display: none; }
+
+.placeholder {
+  background-color: #bdbdbd;
+  color: #bdbdbd; }
+
+/**
+ *This ensures that span elements under the medium editor do not take up
+ * an entire line. It cannot be a scoped style because the p tag inside
+ * the medium editor does not have the same scope as the span
+ */
+span[contentEditable] p {
+  display: inline; }
+
+.firecomponent--fire-image--container {
+  position: relative; }
+
+.firecomponent--fire-image--edit-controller {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding-right: 10px !important;
+  padding-bottom: 10px !important; }
+  .firecomponent--fire-image--edit-controller > * {
+    z-index: 2; }
+  .firecomponent--fire-image--edit-controller > input {
+    display: none; }
+
+.firecomponent--fire-image--display {
+  width: 100%;
+  position: relative;
+  display: block; }
+  .firecomponent--fire-image--display > .firecomponent--fire-image--ratio-enforcer {
+    display: block;
+    height: 0;
+    width: 100%;
+    padding-top: 100%; }
+  .firecomponent--fire-image--display > .firecomponent--fire-image--content {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: black;
+    color: white;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0; }
+
+.editor {
+  border: 1px dashed #202020 !important;
+  font-size: 16px;
+  font-weight: 400;
+  display: inherit; }
+
+.firecomponent--image-editor--container {
+  background-color: white;
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: scroll; }
+
+.firecomponent--image-editor--header {
+  color: black;
+  text-align: center; }
+
+.firecomponent--image-editor--croppie-wrapper {
+  display: block;
+  max-width: 100%;
+  width: 100%; }
+  .firecomponent--image-editor--croppie-wrapper > div {
+    max-width: 100%; }
+
+.firecomponent--image-editor--controls {
+  display: block;
+  width: 100%;
+  text-align: center; }
+
+.firecomponent--image-editor--vertical-aligner {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+  width: 100%;
+  flex-direction: column; }
+
+.firecomponent--image-editor--uploading-controls {
+  text-align: center; }
+
+.firecomponent--button {
+  border-radius: 3px;
+  text-transform: none;
+  background-color: black;
+  color: white;
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer; }
+
+.firecomponent--inline-editor {
+  width: 100%;
+  display: inline-block; }
+  .firecomponent--inline-editor:focus {
+    outline: -webkit-focus-ring-color auto 5px; }
