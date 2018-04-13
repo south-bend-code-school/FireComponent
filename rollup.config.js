@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import vue from 'rollup-plugin-vue';
 import scss from 'rollup-plugin-scss';
 import uglify from 'rollup-plugin-uglify';
+import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
 
 export default [
@@ -20,6 +21,9 @@ export default [
 			vue({ autoStyles: false, styleToImports: true }),
 			scss({
 				output: './dist/fire-component.css'
+			}),
+			babel({
+				exclude: 'node_modules/**'
 			}),
       uglify()
 		]
@@ -44,6 +48,9 @@ export default [
       vue({ autoStyles: false, styleToImports: true }),
 			scss({
 				output: './dist/fire-component.css'
+			}),
+			babel({
+				exclude: 'node_modules/**'
 			}),
       uglify()
     ]

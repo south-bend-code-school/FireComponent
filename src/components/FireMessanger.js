@@ -1,7 +1,7 @@
 export default function FireMessenger (_Vue) {
   this.bus = new _Vue();
   this.send = function (message) {
-    bus.$emit(message);
+    this.bus.$emit(message);
   };
   this.save = function () {
     this.send('save');
