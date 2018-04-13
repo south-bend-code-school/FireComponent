@@ -17,8 +17,9 @@ export default [
 		plugins: [
 			resolve(), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({ autoStyles: false, styleToImports: true }),
-      scss({ output: './dist/styles/bundle.css' }),
+      vue({
+				css: true,
+			}),
       uglify()
 		]
 	},
@@ -39,8 +40,9 @@ export default [
     plugins: [
 			resolve(), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({ autoStyles: false, styleToImports: true }),
-      scss({ output: './dist/styles/bundle.css' }),
+      vue({
+				css: true,
+			}),
       uglify()
     ]
 	}
