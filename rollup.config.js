@@ -3,7 +3,6 @@ import commonjs from 'rollup-plugin-commonjs';
 import vue from 'rollup-plugin-vue';
 import scss from 'rollup-plugin-scss';
 import uglify from 'rollup-plugin-uglify';
-import babel from 'rollup-plugin-babel';
 import pkg from './package.json';
 
 export default [
@@ -18,13 +17,7 @@ export default [
 		plugins: [
 			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-			vue({ autoStyles: false, styleToImports: true }),
-			scss({
-				output: './dist/fire-component.css'
-			}),
-			babel({
-				exclude: 'node_modules/**'
-			}),
+			vue({ css: true }),
       uglify()
 		]
 	},
@@ -45,13 +38,7 @@ export default [
     plugins: [
 			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
-      vue({ autoStyles: false, styleToImports: true }),
-			scss({
-				output: './dist/fire-component.css'
-			}),
-			babel({
-				exclude: 'node_modules/**'
-			}),
+      vue({ css: true }),
       uglify()
     ]
 	}
