@@ -42,6 +42,7 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-scss": "^0.4.0",
     "rollup-plugin-typescript2": "^0.12.0",
+    "rollup-plugin-uglify": "^3.0.0",
     "rollup-plugin-vue": "^3.0.0",
     "sass-loader": "^6.0.7",
     "vue-loader": "^14.2.2",

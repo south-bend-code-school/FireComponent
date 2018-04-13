@@ -2,6 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import vue from 'rollup-plugin-vue';
 import scss from 'rollup-plugin-scss';
+import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
 
 export default [
@@ -17,7 +18,8 @@ export default [
 			resolve(), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
       vue({ autoStyles: false, styleToImports: true }),
-      scss({ output: './dist/styles/bundle.css' })
+      scss({ output: './dist/styles/bundle.css' }),
+      uglify()
 		]
 	},
 
@@ -38,7 +40,8 @@ export default [
 			resolve(), // so Rollup can find `ms`
       commonjs(), // so Rollup can convert `ms` to an ES module
       vue({ autoStyles: false, styleToImports: true }),
-      scss({ output: './dist/styles/bundle.css' })
+      scss({ output: './dist/styles/bundle.css' }),
+      uglify()
     ]
 	}
 ];
