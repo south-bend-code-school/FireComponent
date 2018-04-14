@@ -1,39 +1,40 @@
 import vue from 'rollup-plugin-vue';
-import scss from 'rollup-plugin-scss';
+import commonjs from 'rollup-plugin-commonjs';
+import resolve from 'rollup-plugin-node-resolve';
+import sass from 'rollup-plugin-sass';
 import uglify from 'rollup-plugin-uglify';
-import pkg from './package.json';
-import babel from 'rollup-plugin-babel';
-import babelrc from 'babelrc-rollup';
-import istanbul from 'rollup-plugin-istanbul';
-
-let external = Object.keys(pkg.dependencies);
-
-let plugins = [
-	vue({ autoStyles: false, styleToImports: true }),
-	scss(),
-	babel(babelrc()),
-	uglify()
-];
-
-plugins.push(istanbul({
-	exclude: ['test/**/*', 'node_modules/**/*']
-}));
 
 export default {
+  name: 'Fleet',
   input: 'src/index.js',
-  plugins: plugins,
-  external: external,
   output: [
     {
-      file: pkg.main,
+			file: 'dist/fire-component.umd.js',
+			name: 'blah',
       format: 'umd',
-      name: 'fire-component',
-      sourceMap: true
     },
     {
-      file: pkg.module,
-      format: 'es',
-      sourceMap: true
-    }
+      file: 'dist/fire-component.esm.js',
+      format: 'es'
+    },
+    {
+      file: 'dist/fire-component.cjs.js',
+      format: 'cjs'
+    },
+  ],
+  plugins: [
+    resolve({
+      jsnext: true,
+      module: true
+    }),
+    commonjs(),
+    vue(),
+    sass({
+      output: 'dist/css/fleet.css',
+      options: {
+        // node-sass options
+      }
+    }),
+    uglify()
   ]
 };

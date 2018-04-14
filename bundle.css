@@ -1,29 +1,28 @@
-@import url("//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css");
-.firecomponent--fire-image--container {
+.firecomponent--fire-image--container[data-v-138f7b76] {
   position: relative; }
 
-.firecomponent--fire-image--edit-controller {
+.firecomponent--fire-image--edit-controller[data-v-138f7b76] {
   position: absolute;
   right: 0;
   bottom: 0;
   z-index: 1;
   padding-right: 10px !important;
   padding-bottom: 10px !important; }
-  .firecomponent--fire-image--edit-controller > * {
+  .firecomponent--fire-image--edit-controller > *[data-v-138f7b76] {
     z-index: 2; }
-  .firecomponent--fire-image--edit-controller > input {
+  .firecomponent--fire-image--edit-controller > input[data-v-138f7b76] {
     display: none; }
 
-.firecomponent--fire-image--display {
+.firecomponent--fire-image--display[data-v-138f7b76] {
   width: 100%;
   position: relative;
   display: block; }
-  .firecomponent--fire-image--display > .firecomponent--fire-image--ratio-enforcer {
+  .firecomponent--fire-image--display > .firecomponent--fire-image--ratio-enforcer[data-v-138f7b76] {
     display: block;
     height: 0;
     width: 100%;
     padding-top: 100%; }
-  .firecomponent--fire-image--display > .firecomponent--fire-image--content {
+  .firecomponent--fire-image--display > .firecomponent--fire-image--content[data-v-138f7b76] {
     position: absolute;
     background-repeat: no-repeat;
     background-size: cover;
@@ -35,12 +34,149 @@
     right: 0;
     left: 0; }
 
-.editor {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.editor[data-v-df63bd98] {
   border: 1px dashed #202020 !important;
   font-size: 16px;
   font-weight: 400;
-  display: inherit; }
+  display: inherit;
+}
 
+@import url("//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css");
 .firecomponent--image-editor--container {
   background-color: white;
   z-index: 9999;
@@ -87,9 +223,75 @@
   font-weight: bold;
   cursor: pointer; }
 
-.firecomponent--inline-editor {
-  width: 100%;
-  display: inline-block; }
 
-.firecomponent--inline-editor:focus {
-  outline: -webkit-focus-ring-color auto 5px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.firecomponent--inline-editor[data-v-8691ead4] {
+  width: 100%;
+  display: inline-block;
+}
+.firecomponent--inline-editor[data-v-8691ead4]:focus {
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
