@@ -1,47 +1,39 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import vue from 'rollup-plugin-vue';
 import scss from 'rollup-plugin-scss';
 import uglify from 'rollup-plugin-uglify';
 import pkg from './package.json';
+import babel from 'rollup-plugin-babel';
+import babelrc from 'babelrc-rollup';
+import istanbul from 'rollup-plugin-istanbul';
 
-export default [
-	// browser-friendly UMD build
-	{
-		input: 'src/index.js',
-		output: {
-			name: 'fire-component',
-			file: pkg.browser,
-			format: 'umd'
-		},
-		plugins: [
-			resolve(), // so Rollup can find `ms`
-      commonjs(), // so Rollup can convert `ms` to an ES module
-			vue({ autoStyles: false, styleToImports: true }),
-			scss(),
-      uglify()
-		]
-	},
+let external = Object.keys(pkg.dependencies);
 
-	// CommonJS (for Node) and ES module (for bundlers) build.
-	// (We could have three entries in the configuration array
-	// instead of two, but it's quicker to generate multiple
-	// builds from a single configuration where possible, using
-	// an array for the `output` option, where we can specify 
-	// `file` and `format` for each target)
-	{
-		input: 'src/index.js',
-		external: ['ms'],
-		output: [
-			{ file: pkg.main, format: 'cjs' },
-			{ file: pkg.module, format: 'es' }
-    ],
-    plugins: [
-			resolve({ browser: true, jsnext: true, main: true }), // so Rollup can find `ms`
-      commonjs(), // so Rollup can convert `ms` to an ES module
-			vue({ autoStyles: false, styleToImports: true }),
-			scss(),
-      uglify()
-    ]
-	}
+let plugins = [
+	vue({ autoStyles: false, styleToImports: true }),
+	scss(),
+	babel(babelrc()),
+	uglify()
 ];
+
+plugins.push(istanbul({
+	exclude: ['test/**/*', 'node_modules/**/*']
+}));
+
+export default {
+  input: 'src/index.js',
+  plugins: plugins,
+  external: external,
+  output: [
+    {
+      file: pkg.main,
+      format: 'umd',
+      name: 'fire-component',
+      sourceMap: true
+    },
+    {
+      file: pkg.module,
+      format: 'es',
+      sourceMap: true
+    }
+  ]
+};
