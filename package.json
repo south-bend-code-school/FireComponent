@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "fire-component",
   "version": "1.0.0",
   "description": "A Vue.js Plugin for components wrapping Firebase integration.",
@@ -133,5 +134,41 @@
   "license": {
     "type": "MIT",
     "url": "http://www.opensource.org/licenses/mit-license.php"
+=======
+  "name": "firecomponent",
+  "version": "1.1.0",
+  "description": "A set of components for displaying information from Firebase, allowing admin edits if desired Edit",
+  "main": "./src/FireComponents.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmattia/FireComponent.git"
+  },
+  "keywords": [
+    "Firebase",
+    "Vue",
+    "Editable",
+    "Admin",
+    "ContentEditable"
+  ],
+  "author": "David Mattia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dmattia/FireComponent/issues"
+  },
+  "homepage": "https://github.com/dmattia/FireComponent#readme",
+  "dependencies": {
+    "croppie": "^2.5.0",
+    "firebase": "^4.2.0",
+    "medium-editor": "^5.23.1",
+    "vue-loader": "^13.0.4",
+    "vue-progressive-image": "^2.1.1",
+    "vuetify": "^0.14.8"
+  },
+  "devDependencies": {
+    "vue-template-compiler": "^2.4.2"
+>>>>>>> 4230812aa077915ff9d562123a958aff897b3b76
   }
 }
