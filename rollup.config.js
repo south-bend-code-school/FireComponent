@@ -3,6 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import sass from 'rollup-plugin-sass';
 import uglify from 'rollup-plugin-uglify';
+import { minify } from 'uglify-es';
 
 export default {
   name: 'Fleet',
@@ -34,7 +35,6 @@ export default {
       options: {
         // node-sass options
       }
-    }),
-    uglify()
+    })
   ]
 };
