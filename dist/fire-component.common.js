@@ -70,7 +70,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -180,6 +180,176 @@ module.exports = function normalizeComponent (
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = {
+  props: {
+    path: {
+      required: true,
+      validator: function validator() {
+        throw new Error('NOT IMPLEMENTED');
+      }
+    },
+    customTag: {
+      type: String,
+      default: 'div'
+    }
+  },
+  data: function data() {
+    return {
+      componentEditable: false,
+      isEditing: false,
+      shownVal: this.value,
+      sourceChanged: false,
+      updating: false,
+      isBlurring: false,
+      showEditableIndicator: false
+    };
+  },
+  created: function created() {
+    this.$fc_permission.bus.$on('permissionChange', this.editableMixinPermissionChange);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$fc_permission.bus.$off('permissionChange', this.editableMixinPermissionChange);
+  },
+
+  watch: {
+    content: function content(val, old) {
+      if (!this.isEditing && old === this.shownVal || !this.componentEditable) {
+        this.shownVal = val;
+      }
+    },
+
+    reference: {
+      handler: function handler(val) {
+        var _this = this;
+
+        if (val) {
+          this.loading = true;
+          this.loadData(val).catch(function () {
+            // TODO: Display error
+          }).then(function () {
+            _this.loading = false;
+            _this.shownVal = _this.content;
+          });
+        }
+      },
+
+      immediate: true
+    },
+    shownVal: function shownVal(val) {
+      var _this2 = this;
+
+      this.$nextTick(function () {
+        if (_this2.$refs.editElement) {
+          _this2.$refs.editElement.innerText = val;
+        }
+      });
+    }
+  },
+  computed: {
+    reference: function reference() {
+      throw new Error('NOT IMPLEMENTED');
+    }
+  },
+  methods: {
+    editableMixinPermissionChange: function editableMixinPermissionChange(permission) {
+      this.componentEditable = !!permission;
+    },
+    editableOnFocus: function editableOnFocus() {
+      this.isEditing = true;
+      this.isBlurring = false;
+    },
+    editableOnBlur: function editableOnBlur() {
+      var _this3 = this;
+
+      this.isBlurring = true;
+      setTimeout(function () {
+        _this3.isEditing = !_this3.isBlurring;
+      }, 10);
+    },
+    editableOnInput: function editableOnInput(e) {
+      this.shownVal = e.target.textContent;
+    },
+    editableOnSave: function editableOnSave() {
+      var _this4 = this;
+
+      this.updating = true;
+      this.shownVal = this.$refs.editElement.textContent;
+      this.updateData(this.shownVal).then(function () {
+        _this4.updating = false;
+      });
+    },
+    editableOnCancel: function editableOnCancel() {
+      this.shownVal = this.content;
+    },
+    loadData: function loadData() {
+      throw new Error('NOT IMPLEMENTED');
+    },
+    updateData: function updateData() {
+      throw new Error('NOT IMPLEMENTED');
+    },
+    editableOnMouseOver: function editableOnMouseOver() {
+      this.showEditableIndicator = true;
+    },
+    editableOnMouseLeave: function editableOnMouseLeave() {
+      this.showEditableIndicator = false;
+    }
+  }
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Valid path for a Firestore DocumentReference
+var VALID_DOC_PATH = exports.VALID_DOC_PATH = /^\/?[A-Za-z0-9_]+\/[A-Za-z0-9_]+(\/[A-Za-z0-9_]+\/[A-Za-z0-9_]+)*\/?$/;
+
+// Valid path for a Firestore CollectionReference
+var VALID_COLL_PATH = exports.VALID_COLL_PATH = /^\/?[A-Za-z0-9_]+(\/[A-Za-z0-9_]+\/[A-Za-z0-9_]+)*\/?$/;
+
+// Valid path for a Firestore DocumentSnapshot Field
+var VALID_FIELD_PATH = exports.VALID_FIELD_PATH = /^[A-Za-z0-9_]+(\.[A-Za-z0-9_]+)*$/;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = EditableManager;
+function EditableManager(_Vue) {
+  this.bus = new _Vue();
+
+  this.permissionChange = function () {
+    var _bus;
+
+    for (var _len = arguments.length, params = Array(_len), _key = 0; _key < _len; _key++) {
+      params[_key] = arguments[_key];
+    }
+
+    (_bus = this.bus).$emit.apply(_bus, ['permissionChange'].concat(params));
+  };
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = FireMessenger;
 function FireMessenger(_Vue) {
   this.bus = new _Vue();
@@ -195,7 +365,7 @@ function FireMessenger(_Vue) {
 }
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -220,45 +390,18 @@ function ImageBus(_Vue) {
 }
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function injectStyle (ssrContext) {
 var i
-  __webpack_require__(16)
+  __webpack_require__(24)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(7),
+  __webpack_require__(13),
   /* template */
-  __webpack_require__(20),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-6982fce2",
-  /* moduleIdentifier (server only) */
-  "3a103132"
-)
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/FireImage.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] FireImage.vue: functional components are not supported with templates, they should use render functions.")}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function injectStyle (ssrContext) {
-var i
-  __webpack_require__(13)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(8),
-  /* template */
-  __webpack_require__(17),
+  __webpack_require__(31),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -274,45 +417,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function injectStyle (ssrContext) {
 var i
-  __webpack_require__(14)
+  __webpack_require__(29)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(9),
+  __webpack_require__(14),
   /* template */
-  __webpack_require__(18),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  "047e954a"
-)
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/ImageEditor.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] ImageEditor.vue: functional components are not supported with templates, they should use render functions.")}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function injectStyle (ssrContext) {
-var i
-  __webpack_require__(15)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(10),
-  /* template */
-  __webpack_require__(19),
+  __webpack_require__(36),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -328,264 +444,142 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+function injectStyle (ssrContext) {
+var i
+  __webpack_require__(27)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(15),
+  /* template */
+  __webpack_require__(34),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-3d6c45e0",
+  /* moduleIdentifier (server only) */
+  "770f288a"
+)
+Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/firestore/Number.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Number.vue: functional components are not supported with templates, they should use render functions.")}
 
+module.exports = Component.exports
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-exports.default = {
-  name: 'fire-image',
-  props: {
-    storageRef: {
-      type: [Object, String],
-      default: function _default() {
-        return null;
-      }
-    },
-    editable: {
-      type: [Boolean],
-      default: function _default() {
-        return false;
-      }
-    },
-    aspectRatio: {
-      type: [Number],
-      default: function _default() {
-        return 1.0;
-      }
-    },
-    widths: {
-      type: [Array],
-      default: function _default() {
-        return [320, 500];
-      }
-    },
-    quality: {
-      type: [Number],
-      default: function _default() {
-        return 1.0;
-      }
-    },
-    circle: {
-      type: [Boolean],
-      default: function _default() {
-        return false;
-      }
-    },
-    enforceBoundary: {
-      type: [Boolean],
-      default: function _default() {
-        return true;
-      }
-    },
-    allowRotations: {
-      type: [Boolean],
-      default: function _default() {
-        return true;
-      }
-    }
-  },
-
-  data: function data() {
-    return {
-      uploadedImage: null,
-      croppieInstance: null,
-      croppedImage: null,
-      newUpload: false,
-      uploading: false,
-      uploadTasks: [],
-      imageLocation: null,
-      index: null
-    };
-  },
-  mounted: function mounted() {
-    if (this._storageRef) {
-      this.loadFromStorage(this._storageRef);
-    }
-  },
-
-
-  computed: {
-    /**
-     * A unique id for this fire-image component
-     */
-    uniqueName: function uniqueName() {
-      return Math.random().toString(36).substring(4);
-    },
-    width: function width() {
-      return this.$el && this.$el.clientWidth ? this.$el.clientWidth : null;
-    },
-    height: function height() {
-      return this.width / this.aspectRatio;
-    },
-    padding: function padding() {
-      return 1 / this.aspectRatio;
-    },
-    format: function format() {
-      if (this.quality < 1) {
-        return 'jpeg';
-      }
-      return 'png';
-    },
-    _storageRef: function _storageRef() {
-      if (this.storageRef) {
-        try {
-          return typeof this.storageRef === 'string' ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString());
-        } catch (e) {
-          console.error(e);
-          return null;
-        }
-      }
-    }
-  },
-
-  watch: {
-    _storageRef: function _storageRef(val) {
-      if (val) {
-        this.loadFromStorage(val);
-      }
-    }
-  },
-
-  methods: {
-    loadFromStorage: function loadFromStorage(ref) {
-      var _this = this;
-
-      ref = ref.child('' + this.getIndexToDisplay());
-      ref.getDownloadURL().then(function (url) {
-        if (ref.parent.toString() !== _this._storageRef.toString()) {
-          return;
-        }
-        _this.imageLocation = url;
-      }, function () {
-        console.error('No Image at specified location.');
-      });
-    },
-    getIndexToDisplay: function getIndexToDisplay() {
-      var displaySize = this.$refs.root.clientWidth;
-      var min = {
-        index: 0,
-        offset: null
-      };
-      this.widths.forEach(function (width, i) {
-        var offset = Math.abs(width - displaySize);
-        if (min.offset === null || offset < min.offset) {
-          min = {
-            index: i,
-            offset: offset
-          };
-        }
-      });
-      this.index = min.index;
-      return min.index;
-    },
-    imageUploaded: function imageUploaded(e) {
-      var location = this._storageRef.toString();
-      var config = {
-        widths: this.widths,
-        aspectRatio: this.aspectRatio,
-        enforceBoundary: this.enforceBoundary,
-        allowRotations: this.allowRotations,
-        circle: this.circle,
-        format: this.format
-      };
-      this.$imageBus.bus.$on(location + '-cancelled', this.newCancelledCallback(location));
-      this.$imageBus.bus.$on(location + '-completed', this.newCompletedCallback(location));
-      this.$imageBus.newUpload(location, e, config);
-    },
-    newCancelledCallback: function newCancelledCallback(location) {
-      var _this2 = this;
-
-      var callback = function callback() {
-        _this2.$imageBus.bus.$off(location + '-cancelled', callback);
-      };
-      return callback;
-    },
-    newCompletedCallback: function newCompletedCallback(location) {
-      var _this3 = this;
-
-      var callback = function callback(e, urls) {
-        _this3.$imageBus.bus.$off(location + '-completed', callback);
-        var index = _this3.getIndexToDisplay();
-        _this3.imageLocation = urls[index];
-      };
-      return callback;
-    }
-  }
-};
 
 /***/ }),
-/* 8 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function injectStyle (ssrContext) {
+var i
+  __webpack_require__(28)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(16),
+  /* template */
+  __webpack_require__(35),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-573f3184",
+  /* moduleIdentifier (server only) */
+  "517ddbc2"
+)
+Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/firestore/Text.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function injectStyle (ssrContext) {
+var i
+  __webpack_require__(30)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(17),
+  /* template */
+  __webpack_require__(37),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-78ca2479",
+  /* moduleIdentifier (server only) */
+  "1b81e204"
+)
+Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/rtdb/Text.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function injectStyle (ssrContext) {
+var i
+  __webpack_require__(26)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(18),
+  /* template */
+  __webpack_require__(33),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  "aa555562"
+)
+Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/storage/Editor.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Editor.vue: functional components are not supported with templates, they should use render functions.")}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+function injectStyle (ssrContext) {
+var i
+  __webpack_require__(25)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(19),
+  /* template */
+  __webpack_require__(32),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-09c5f564",
+  /* moduleIdentifier (server only) */
+  "dbefd52e"
+)
+Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/storage/Image.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Image.vue: functional components are not supported with templates, they should use render functions.")}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -714,8 +708,8 @@ exports.default = {
       _this4.snapshotVal = snapshot.exists() ? snapshot.val() : null;
     });
 
-    this.$messenger.bus.$on('save', this.save);
-    this.$messenger.bus.$on('reset', this.reset);
+    this.$fc_messenger.bus.$on('save', this.save);
+    this.$fc_messenger.bus.$on('reset', this.reset);
   },
   beforeDestroy: function beforeDestroy() {
     if (this.unsub) {
@@ -725,7 +719,70 @@ exports.default = {
 };
 
 /***/ }),
-/* 9 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  name: 'FireComponentInlineEditor',
+  props: {
+    value: {
+      type: [String, Number],
+      required: true
+    },
+    editable: {
+      required: true,
+      type: [Boolean]
+    },
+    customTag: {
+      type: [String],
+      default: 'span'
+    },
+    editorStyle: {
+      type: [Object],
+      default: function _default() {
+        return Object.create(null);
+      }
+    }
+  },
+  data: function data() {
+    return {
+      uniqueKey: 'firecomponent--inline-editor--' + this.$uniqId,
+      isEditing: false
+    };
+  },
+
+  computed: {
+    title: function title() {
+      if (this.editable) {
+        return 'Click to Edit';
+      }
+      return null;
+    }
+  },
+  methods: {
+    contentChangeEventHandler: function contentChangeEventHandler(e) {
+      this.$emit('input', e);
+    },
+    startEdit: function startEdit(e) {
+      this.isEditing = this.editable;
+    },
+    stopEdit: function stopEdit(e) {
+      this.isEditing = false;
+    },
+    attemptStop: function attemptStop(e) {
+      this.isEditing = this.$refs.editor === document.activeElement;
+    }
+  }
+};
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -735,7 +792,238 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _croppie = __webpack_require__(12);
+var _EditableMixin = __webpack_require__(1);
+
+var _EditableMixin2 = _interopRequireDefault(_EditableMixin);
+
+var _firestore = __webpack_require__(2);
+
+var FirestoreHelpers = _interopRequireWildcard(_firestore);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  mixins: [_EditableMixin2.default],
+  name: 'FireComponent-Firestore-Number',
+  props: {
+    path: {
+      required: true,
+      validator: function validator(path) {
+        return path.hasOwnProperty('firestore') && path.hasOwnProperty('collection') || FirestoreHelpers.VALID_DOC_PATH.test(path);
+      }
+    },
+    fieldPath: {
+      type: Array,
+      required: true,
+      validator: function validator(fieldPath) {
+        return fieldPath.reduce(function (p, c) {
+          return p && c.constructor === String;
+        });
+      }
+    }
+  },
+  data: function data() {
+    return {
+      document: null
+    };
+  },
+
+  computed: {
+    content: function content() {
+      try {
+        return this.fieldPath.reduce(function (path, step) {
+          return path[step];
+        }, this.document) || 0;
+      } catch (e) {
+        return 0;
+      }
+    },
+    reference: function reference() {
+      if (typeof this.path === 'string') {
+        return this.$firebase.firestore().doc(this.path);
+      }
+
+      return this.path;
+    }
+  },
+  methods: {
+    loadData: function loadData(path) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _this.$bindAsObject('document', path, reject, resolve);
+      });
+    },
+    updateData: function updateData(val) {
+      return this.reference.update(this.fieldPath.join('.'), val);
+    },
+    editableOnInput: function editableOnInput(e) {
+      this.shownVal = Number(e.target.textContent.replace(/[^0-9\.]/g, ''));
+    }
+  }
+};
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _EditableMixin = __webpack_require__(1);
+
+var _EditableMixin2 = _interopRequireDefault(_EditableMixin);
+
+var _firestore = __webpack_require__(2);
+
+var FirestoreHelpers = _interopRequireWildcard(_firestore);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  mixins: [_EditableMixin2.default],
+  name: 'FireComponent-Firestore-Text',
+  props: {
+    path: {
+      required: true,
+      validator: function validator(path) {
+        return path.hasOwnProperty('firestore') && path.hasOwnProperty('collection') || FirestoreHelpers.VALID_DOC_PATH.test(path);
+      }
+    },
+    fieldPath: {
+      type: Array,
+      required: true,
+      validator: function validator(fieldPath) {
+        return fieldPath.reduce(function (p, c) {
+          return p && c.constructor === String;
+        });
+      }
+    }
+  },
+  data: function data() {
+    return {
+      document: null
+    };
+  },
+
+  computed: {
+    content: function content() {
+      try {
+        return this.fieldPath.reduce(function (path, step) {
+          return path[step];
+        }, this.document) || '';
+      } catch (e) {
+        return '';
+      }
+    },
+    reference: function reference() {
+      if (typeof this.path === 'string') {
+        return this.$firebase.firestore().doc(this.path);
+      }
+
+      return this.path;
+    }
+  },
+  methods: {
+    loadData: function loadData(path) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _this.$bindAsObject('document', path, reject, resolve);
+      });
+    },
+    updateData: function updateData(val) {
+      return this.reference.update(this.fieldPath.join('.'), val);
+    }
+  }
+};
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _EditableMixin = __webpack_require__(1);
+
+var _EditableMixin2 = _interopRequireDefault(_EditableMixin);
+
+var _rtdb = __webpack_require__(20);
+
+var RTDBHelpers = _interopRequireWildcard(_rtdb);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  mixins: [_EditableMixin2.default],
+  name: 'FireComponent-RTDB-Text',
+  props: {
+    path: {
+      required: true,
+      validator: function validator(path) {
+        return path.hasOwnProperty('root') || RTDBHelpers.VALID_PATH.test(path);
+      }
+    }
+  },
+  data: function data() {
+    return {
+      json: null
+    };
+  },
+
+  computed: {
+    content: function content() {
+      try {
+        return this.json['.value'] || '';
+      } catch (e) {
+        return '';
+      }
+    },
+    reference: function reference() {
+      return this.$firebase.database().ref(this.path);
+    }
+  },
+  methods: {
+    loadData: function loadData(path) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _this.$bindAsObject('json', path, reject, resolve);
+      });
+    },
+    updateData: function updateData(val) {
+      return this.reference.set(val);
+    }
+  }
+};
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _croppie = __webpack_require__(23);
 
 var _croppie2 = _interopRequireDefault(_croppie);
 
@@ -756,7 +1044,7 @@ exports.default = {
     };
   },
   created: function created() {
-    this.$imageBus.bus.$on('newUpload', this.handleUpload);
+    this.$fc_image.bus.$on('newUpload', this.handleUpload);
   },
 
   computed: {
@@ -823,7 +1111,7 @@ exports.default = {
     },
     handleUpload: function handleUpload(location, e, config) {
       if (this.event || e.target.files.length <= 0) {
-        return this.$imageBus.bus.$emit(location + '-cancelled', e);
+        return this.$fc_image.bus.$emit(location + '-cancelled', e);
       }
       this.event = e;
       this.location = location;
@@ -836,7 +1124,7 @@ exports.default = {
       }
     },
     cancel: function cancel() {
-      this.$imageBus.bus.$emit(this.location + '-cancelled', this.e);
+      this.$fc_image.bus.$emit(this.location + '-cancelled', this.e);
       var tasks = this.tasks[this.location];
       if (tasks && tasks.length) {
         tasks.forEach(function (task) {
@@ -875,7 +1163,7 @@ exports.default = {
           _this2.uploading = false;
         }
         _this2.tasks[locationCopy] = null;
-        _this2.$imageBus.bus.$emit(locationCopy + '-completed', eventCopy, snapshots.map(function (ss) {
+        _this2.$fc_image.bus.$emit(locationCopy + '-completed', eventCopy, snapshots.map(function (ss) {
           return ss.downloadURL;
         }));
       });
@@ -904,7 +1192,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 10 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,61 +1201,283 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _storage = __webpack_require__(21);
+
+var StorageHelpers = _interopRequireWildcard(_storage);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 exports.default = {
-  name: 'FireComponentInlineEditor',
+  name: 'fire-image',
   props: {
-    value: {
-      type: [String, Number],
-      required: true
+    path: {
+      type: [Object, String],
+      required: true,
+      validator: function validator(path) {
+        return !!path.bucket && typeof path.bucket === 'string' || StorageHelpers.VALID_PATH.test(path);
+      }
     },
     editable: {
-      required: true,
-      type: [Boolean]
-    },
-    customTag: {
-      type: [String],
-      default: 'span'
-    },
-    editorStyle: {
-      type: [Object],
+      type: [Boolean],
       default: function _default() {
-        return Object.create(null);
+        return false;
       }
+    },
+    aspectRatio: {
+      type: [Number],
+      default: function _default() {
+        return 1.0;
+      }
+    },
+    widths: {
+      type: [Array],
+      default: function _default() {
+        return [320, 500];
+      }
+    },
+    quality: {
+      type: [Number],
+      default: function _default() {
+        return 1.0;
+      }
+    },
+    circle: {
+      type: [Boolean],
+      default: function _default() {
+        return false;
+      }
+    },
+    enforceBoundary: {
+      type: [Boolean],
+      default: function _default() {
+        return true;
+      }
+    },
+    allowRotations: {
+      type: [Boolean],
+      default: function _default() {
+        return true;
+      }
+    },
+    bgColor: {
+      type: [String],
+      default: 'inherit'
+    },
+    noImageText: {
+      type: [String],
+      default: 'No Image'
+    },
+    textColor: {
+      type: [String],
+      default: '#909090'
     }
   },
+
   data: function data() {
     return {
-      uniqueKey: 'firecomponent--inline-editor--' + this.$uniqId,
-      isEditing: false
+      newUpload: false,
+      index: null,
+      imageURL: '',
+      showEdit: false,
+      width: 0,
+      height: 0,
+      loading: true
     };
   },
 
   computed: {
-    title: function title() {
-      if (this.editable) {
-        return 'Click to Edit';
+    /**
+     * A unique id for this fire-image component
+     */
+    showEditBtn: function showEditBtn() {
+      return this.editable && this.showEdit;
+    },
+    uniqueName: function uniqueName() {
+      return Math.random().toString(36).substring(4);
+    },
+    padding: function padding() {
+      return 1 / this.aspectRatio;
+    },
+    format: function format() {
+      if (this.quality < 1) {
+        return 'jpeg';
       }
-      return null;
+      return 'png';
+    },
+    reference: function reference() {
+      if (this.path) {
+        try {
+          return typeof this.path === 'string' ? this.$firebase.storage().ref(this.path) : this.$firebase.storage().refFromURL(this.path.toString());
+        } catch (e) {
+          console.error(e);
+          return null;
+        }
+      }
+    },
+    displayURL: function displayURL() {
+      return this.imageURL || '"data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' version=\'1.1\' height=\'' + 50 / this.aspectRatio + 'px\' width=\'50px\'><text text-anchor=\'middle\' x=\'25\' y=\'' + 25 / this.aspectRatio + '\' fill=\'' + this.textColor + '\' font-size=\'5\'>' + (this.loading ? 'Loading...' : this.noImageText) + '</text></svg>"';
+    }
+  },
+  watch: {
+    reference: {
+      handler: function handler(val) {
+        var _this = this;
+
+        this.$nextTick(function () {
+          if (val) {
+            _this.loadFromStorage(val);
+          }
+        });
+      },
+
+      immediate: true
     }
   },
   methods: {
-    contentChangeEventHandler: function contentChangeEventHandler(e) {
-      this.$emit('input', e);
+    loadFromStorage: function loadFromStorage(reference) {
+      var _this2 = this;
+
+      this.loading = true;
+      this.imageURL = '';
+      reference = reference.child('' + this.getIndexToDisplay());
+      reference.getDownloadURL().then(function (url) {
+        if (reference.parent.toString() !== _this2.reference.toString()) {
+          return;
+        }
+        _this2.imageURL = url;
+      }).catch(function (err) {
+        if (true) {
+          console.error(err);
+        }
+      }).then(function () {
+        _this2.loading = false;
+      });
     },
-    startEdit: function startEdit(e) {
-      this.isEditing = this.editable;
+    getIndexToDisplay: function getIndexToDisplay() {
+      var displaySize = this.$refs.root.clientWidth;
+      var min = {
+        index: 0,
+        offset: null
+      };
+      this.widths.forEach(function (width, i) {
+        var offset = Math.abs(width - displaySize);
+        if (min.offset === null || offset < min.offset) {
+          min = {
+            index: i,
+            offset: offset
+          };
+        }
+      });
+      this.index = min.index;
+      return min.index;
     },
-    stopEdit: function stopEdit(e) {
-      this.isEditing = false;
+    imageUploaded: function imageUploaded(e) {
+      var location = this.reference.toString();
+      var config = {
+        widths: this.widths,
+        aspectRatio: this.aspectRatio,
+        enforceBoundary: this.enforceBoundary,
+        allowRotations: this.allowRotations,
+        circle: this.circle,
+        format: this.format
+      };
+      this.$fc_image.bus.$on(location + '-cancelled', this.newCancelledCallback(location));
+      this.$fc_image.bus.$on(location + '-completed', this.newCompletedCallback(location));
+      this.$fc_image.newUpload(location, e, config);
     },
-    attemptStop: function attemptStop(e) {
-      this.isEditing = this.$refs.editor === document.activeElement;
+    newCancelledCallback: function newCancelledCallback(location) {
+      var _this3 = this;
+
+      var callback = function callback() {
+        _this3.$fc_image.bus.$off(location + '-cancelled', callback);
+      };
+      return callback;
+    },
+    newCompletedCallback: function newCompletedCallback(location) {
+      var _this4 = this;
+
+      var callback = function callback(e, urls) {
+        _this4.$fc_image.bus.$off(location + '-completed', callback);
+        var index = _this4.getIndexToDisplay();
+        _this4.imageURL = urls[index];
+      };
+      return callback;
     }
   }
-};
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
-/* 11 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -976,39 +1486,129 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FireInput = exports.FireImage = undefined;
+var VALID_PATH = exports.VALID_PATH = /^\/?[A-Za-z0-9_]+(\/[A-Za-z0-9_]+)*\/?$/;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Valid path for a Firebase Storage Reference
+var VALID_PATH = exports.VALID_PATH = /^\/?[A-Za-z0-9_]+(\/[A-Za-z0-9_]+)*\/?$/;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FireInput = exports.StorageImage = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; // Legacy
+
+
+// New
+
 
 exports.install = install;
 
-var _FireImage = __webpack_require__(3);
-
-var _FireImage2 = _interopRequireDefault(_FireImage);
-
-var _FireInput = __webpack_require__(4);
+var _FireInput = __webpack_require__(6);
 
 var _FireInput2 = _interopRequireDefault(_FireInput);
 
-var _ImageEditor = __webpack_require__(5);
-
-var _ImageEditor2 = _interopRequireDefault(_ImageEditor);
-
-var _InlineEditor = __webpack_require__(6);
+var _InlineEditor = __webpack_require__(7);
 
 var _InlineEditor2 = _interopRequireDefault(_InlineEditor);
 
-var _ImageBus = __webpack_require__(2);
+var _Number = __webpack_require__(8);
+
+var _Number2 = _interopRequireDefault(_Number);
+
+var _Text = __webpack_require__(9);
+
+var _Text2 = _interopRequireDefault(_Text);
+
+var _Text3 = __webpack_require__(10);
+
+var _Text4 = _interopRequireDefault(_Text3);
+
+var _Editor = __webpack_require__(11);
+
+var _Editor2 = _interopRequireDefault(_Editor);
+
+var _Image = __webpack_require__(12);
+
+var _Image2 = _interopRequireDefault(_Image);
+
+var _EditableManager = __webpack_require__(3);
+
+var _EditableManager2 = _interopRequireDefault(_EditableManager);
+
+var _ImageBus = __webpack_require__(5);
 
 var _ImageBus2 = _interopRequireDefault(_ImageBus);
 
-var _FireMessanger = __webpack_require__(1);
+var _FireMessanger = __webpack_require__(4);
 
 var _FireMessanger2 = _interopRequireDefault(_FireMessanger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Install the components
+function installBuses(_Vue) {
+  _Vue.prototype.$fc_image = new _ImageBus2.default(_Vue);
+  _Vue.prototype.$fc_messenger = new _FireMessanger2.default(_Vue);
+  _Vue.prototype.$fc_permission = new _EditableManager2.default(_Vue);
+}
+
+function installProperties(_Vue) {
+  // Add a accessor for getting the unique id of the component
+  Object.defineProperty(_Vue.prototype, '$uniqId', {
+    get: function get() {
+      return this._uid;
+    }
+  });
+}
+
+function insertComponent(_Vue, _Component, anchorId, tag) {
+  var insertElem = window.document.createElement(tag || "div");
+  insertElem.id = anchorId;
+  window.document.body.appendChild(insertElem);
+  new _Vue({
+    el: '#' + anchorId,
+    render: function render(h) {
+      return h(_Component);
+    }
+  });
+}
+
+function insertSingularComponents(_Vue) {
+  insertComponent(_Vue, _Editor2.default, 'firecomponent--image-editor', 'div');
+}
+
+function registerGlobalComponents(_Vue) {
+  // Legacy
+  _Vue.component('fire-image', _Image2.default);
+  _Vue.component('fire-input', _FireInput2.default);
+  _Vue.component('fire-text', _Text4.default);
+  _Vue.component('fire-inline-editor', _InlineEditor2.default);
+
+  // New
+  _Vue.component('rtdb-text', _Text4.default);
+  _Vue.component('firestore-text', _Text2.default);
+  _Vue.component('firestore-number', _Number2.default);
+  _Vue.component('storage-image', _Image2.default);
+}
+
+// Install the Package
 function install(Vue, firebase) {
   if ((typeof firebase === 'undefined' ? 'undefined' : _typeof(firebase)) === 'object') {
     Vue.prototype.$firebase = firebase;
@@ -1017,33 +1617,14 @@ function install(Vue, firebase) {
     return;
   }
 
-  Vue.prototype.$imageBus = new _ImageBus2.default(Vue);
-  Vue.prototype.$messenger = new _FireMessanger2.default(Vue);
-  // Add a accessor for getting the unique id of the component
-  Object.defineProperty(Vue.prototype, '$uniqId', {
-    get: function get() {
-      return this._uid;
-    }
-  });
-
-  var editorID = 'firecomponent--image-editor';
-  var insertElem = window.document.createElement("div");
-  insertElem.id = editorID;
-  window.document.body.appendChild(insertElem);
-  new Vue({
-    el: '#' + editorID,
-    render: function render(h) {
-      return h(_ImageEditor2.default);
-    }
-  });
-
-  Vue.component('fire-image', _FireImage2.default);
-  Vue.component('fire-input', _FireInput2.default);
-  Vue.component('fire-inline-editor', _InlineEditor2.default);
+  installBuses(Vue);
+  installProperties(Vue);
+  insertSingularComponents(Vue);
+  registerGlobalComponents(Vue);
 }
 
 // Expose the components
-exports.FireImage = _FireImage2.default;
+exports.StorageImage = _Image2.default;
 exports.FireInput = _FireInput2.default;
 
 /* -- Plugin definition & Auto-install -- */
@@ -1073,7 +1654,7 @@ if (GlobalVue) {
 }
 
 /***/ }),
-/* 12 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*************************
@@ -2664,31 +3245,49 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 13 */
+/* 24 */
 /***/ (function(module, exports) {
 
 // empty (null-loader)
 
 /***/ }),
-/* 14 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // empty (null-loader)
 
 /***/ }),
-/* 15 */
+/* 26 */
 /***/ (function(module, exports) {
 
 // empty (null-loader)
 
 /***/ }),
-/* 16 */
+/* 27 */
 /***/ (function(module, exports) {
 
 // empty (null-loader)
 
 /***/ }),
-/* 17 */
+/* 28 */
+/***/ (function(module, exports) {
+
+// empty (null-loader)
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+// empty (null-loader)
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+// empty (null-loader)
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -2712,7 +3311,52 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 18 */
+/* 32 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    ref: "root",
+    staticClass: "firecomponent--fire-image--container",
+    on: {
+      "mouseover": function($event) {
+        _vm.showEdit = true
+      },
+      "mouseleave": function($event) {
+        _vm.showEdit = false
+      }
+    }
+  }, [_vm._t("display", [_c('div', {
+    staticClass: "firecomponent--fire-image--display"
+  }, [_c('div', {
+    staticClass: "firecomponent--fire-image--ratio-enforcer",
+    style: ({
+      paddingTop: _vm.padding * 100 + '%'
+    })
+  }), _vm._v(" "), _c('div', {
+    staticClass: "firecomponent--fire-image--content",
+    style: ({
+      backgroundImage: 'url(' + _vm.displayURL + ')',
+      backgroundColor: _vm.bgColor
+    })
+  })])], {
+    src: _vm.displayURL
+  }), _vm._ssrNode(" "), (_vm.editable) ? _vm._ssrNode("<div" + (_vm._ssrClass("firecomponent--fire-image--edit-controller", {
+    'firecomponent--fire-image--hide-on-desktop': !_vm.showEditBtn
+  })) + " data-v-09c5f564>", "</div>", [_vm._t("edit-controller", [_c('label', {
+    staticClass: "firecomponent--button firecomponent--fire-image-change-label",
+    attrs: {
+      "for": _vm.uniqueName,
+      "title": "Click to upload new image"
+    }
+  }, [_vm._v("\n        Change\n      ")])], {
+    for: _vm.uniqueName
+  }), _vm._ssrNode(" <input type=\"file\"" + (_vm._ssrAttr("id", _vm.uniqueName)) + " data-v-09c5f564>")], 2) : _vm._e()], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -2777,7 +3421,125 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 19 */
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c(_vm.customTag, {
+    tag: "component",
+    staticClass: "firecomponent--editable-root",
+    class: {
+      'firecomponent--editing': _vm.isEditing, 'firecomponent--editable-indicator': (_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing
+    },
+    on: {
+      "mouseover": _vm.editableOnMouseOver,
+      "mouseleave": _vm.editableOnMouseLeave,
+      "focusin": _vm.editableOnFocus,
+      "focusout": _vm.editableOnBlur
+    }
+  }, [((_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing) ? _c('div', {
+    ref: "editElement",
+    attrs: {
+      "contenteditable": "true"
+    },
+    on: {
+      "change": _vm.editableOnInput
+    }
+  }, [_vm._v(_vm._s(_vm.shownVal))]) : (_vm.shownVal) ? [_vm._v(_vm._s(_vm.shownVal))] : _c('span', {
+    staticClass: "firecomponent-editable-placeholder"
+  }, [_vm._v("placeholder")]), (_vm.updating) ? _c('div', {
+    staticClass: "firecomponent--loader-container"
+  }, [_c('div', {
+    staticClass: "firecomponent--loader"
+  })]) : _vm._e(), (_vm.isEditing) ? _c('div', {
+    staticClass: "firecomponent--editable-controls"
+  }, [_c('button', {
+    staticClass: "firecomponent--btn firecomponent--save-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnSave($event)
+      }
+    }
+  }, [_vm._v("Save")]), _c('button', {
+    staticClass: "firecomponent--btn firecomponent--cancel-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnCancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])]) : _vm._e()], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c(_vm.customTag, {
+    tag: "component",
+    staticClass: "firecomponent--editable-root",
+    class: {
+      'firecomponent--editing': _vm.isEditing, 'firecomponent--editable-indicator': (_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing
+    },
+    on: {
+      "mouseover": _vm.editableOnMouseOver,
+      "mouseleave": _vm.editableOnMouseLeave,
+      "focusin": _vm.editableOnFocus,
+      "focusout": _vm.editableOnBlur
+    }
+  }, [((_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing) ? _c('div', {
+    ref: "editElement",
+    attrs: {
+      "contenteditable": "true"
+    },
+    on: {
+      "change": _vm.editableOnInput
+    }
+  }, [_vm._v(_vm._s(_vm.shownVal))]) : (_vm.shownVal) ? [_vm._v(_vm._s(_vm.shownVal))] : _c('span', {
+    staticClass: "firecomponent-editable-placeholder"
+  }, [_vm._v("placeholder")]), (_vm.updating) ? _c('div', {
+    staticClass: "firecomponent--loader-container"
+  }, [_c('div', {
+    staticClass: "firecomponent--loader"
+  })]) : _vm._e(), (_vm.isEditing) ? _c('div', {
+    staticClass: "firecomponent--editable-controls"
+  }, [_c('button', {
+    staticClass: "firecomponent--btn firecomponent--save-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnSave($event)
+      }
+    }
+  }, [_vm._v("Save")]), _c('button', {
+    staticClass: "firecomponent--btn firecomponent--cancel-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnCancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])]) : _vm._e()], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -2812,36 +3574,61 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports.render._withStripped = true
 
 /***/ }),
-/* 20 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    ref: "root",
-    staticClass: "firecomponent--fire-image--container"
-  }, [_vm._t("display", [_c('div', {
-    staticClass: "firecomponent--fire-image--display"
-  }, [_c('div', {
-    staticClass: "firecomponent--fire-image--ratio-enforcer",
-    style: ({
-      paddingTop: _vm.padding * 100 + '%'
-    })
-  }), _vm._v(" "), _c('div', {
-    staticClass: "firecomponent--fire-image--content",
-    style: ({
-      backgroundImage: 'url(' + _vm.imageLocation + ')'
-    })
-  })])], {
-    src: _vm.imageLocation
-  }), _vm._ssrNode(" "), (_vm.editable) ? _vm._ssrNode("<div class=\"firecomponent--fire-image--edit-controller\" data-v-6982fce2>", "</div>", [_vm._t("edit-controller", [_c('label', {
-    staticClass: "firecomponent--button firecomponent--fire-image-change-label",
-    attrs: {
-      "for": _vm.uniqueName,
-      "title": "Click to upload new image"
+  return _c(_vm.customTag, {
+    tag: "component",
+    staticClass: "firecomponent--editable-root",
+    class: {
+      'firecomponent--editing': _vm.isEditing, 'firecomponent--editable-indicator': (_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing
+    },
+    on: {
+      "mouseover": _vm.editableOnMouseOver,
+      "mouseleave": _vm.editableOnMouseLeave,
+      "focusin": _vm.editableOnFocus,
+      "focusout": _vm.editableOnBlur
     }
-  }, [_vm._v("\n        Change\n      ")])], {
-    for: _vm.uniqueName
-  }), _vm._ssrNode(" <input type=\"file\"" + (_vm._ssrAttr("id", _vm.uniqueName)) + " data-v-6982fce2>")], 2) : _vm._e()], 2)
+  }, [((_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing) ? _c('div', {
+    ref: "editElement",
+    attrs: {
+      "contenteditable": "true"
+    },
+    on: {
+      "change": _vm.editableOnInput
+    }
+  }, [_vm._v(_vm._s(_vm.shownVal))]) : (_vm.shownVal) ? [_vm._v(_vm._s(_vm.shownVal))] : _c('span', {
+    staticClass: "firecomponent-editable-placeholder"
+  }, [_vm._v("placeholder")]), (_vm.updating) ? _c('div', {
+    staticClass: "firecomponent--loader-container"
+  }, [_c('div', {
+    staticClass: "firecomponent--loader"
+  })]) : _vm._e(), (_vm.isEditing) ? _c('div', {
+    staticClass: "firecomponent--editable-controls"
+  }, [_c('button', {
+    staticClass: "firecomponent--btn firecomponent--save-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnSave($event)
+      }
+    }
+  }, [_vm._v("Save")]), _c('button', {
+    staticClass: "firecomponent--btn firecomponent--cancel-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnCancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])]) : _vm._e()], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 

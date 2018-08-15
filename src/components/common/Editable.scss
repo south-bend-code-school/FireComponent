@@ -1,0 +1,112 @@
+// .firecomponent--editing {
+//   border: 1px dashed;
+// }
+
+.firecomponent--editable-indicator::after {
+  content: '';
+  background-color: rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.firecomponent--loader-container {
+  position: absolute;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  > .firecomponent--loader {
+    ::before {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    }
+    ::after {
+      content: '';
+      position: absolute;
+      background-color: inherit;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      will-change: left, right;
+      animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+      animation-delay: 1.15s;
+    }
+  }
+}
+@keyframes indeterminate {
+    0% {
+      left: -35%;
+      right:100%;
+    }
+    60% {
+      left: 100%;
+      right: -90%;
+    }
+    100% {
+      left: 100%;
+      right: -90%;
+    }
+}
+
+@keyframes indeterminate-short {
+    0% {
+      left: -200%;
+      right: 100%;
+    }
+    60% {
+      left: 107%;
+      right: -8%;
+    }
+    100% {
+      left: 107%;
+      right: -8%;
+    }
+}
+.firecomponent--editable-root {
+  position: relative;
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+
+.firecomponent--editable-controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 1rem;
+  transform: translateY(100%);
+  > .firecomponent--btn {
+    margin: 0;
+    padding: 0 2px;
+    width: 60px;
+    vertical-align: middle;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.2);
+
+    &:first-child {
+      margin-right: 0;
+      border-bottom-left-radius: 2px;
+      border-right: 1px solid rgba(0,0,0,0.2);
+    }
+    &:last-child {
+      margin-left: 0;
+      border-bottom-right-radius: 2px;
+      border-left: 1px solid rgba(0,0,0,0.1);
+    }
+  }
+}
+
+.firecomponent-editable-placeholder {
+  visibility: hidden;
+}

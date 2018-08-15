@@ -1,12 +1,12 @@
 <template>
-  <div class="firecomponent--fire-image--container" ref="root">
-    <slot name="display" :src="imageLocation">
+  <div class="firecomponent--fire-image--container" ref="root" @mouseover="showEdit = true" @mouseleave="showEdit = false">
+    <slot name="display" :src="displayURL">
       <div class="firecomponent--fire-image--display">
         <div class="firecomponent--fire-image--ratio-enforcer" :style="{ paddingTop: padding*100+'%'}"></div>
-        <div class="firecomponent--fire-image--content" :style="{ backgroundImage: 'url('+imageLocation+')'}"></div>
+        <div class="firecomponent--fire-image--content" :style="{ backgroundImage: 'url('+displayURL+')', backgroundColor: bgColor }"></div>
       </div>
     </slot>
-    <div class="firecomponent--fire-image--edit-controller" v-if="editable">
+    <div class="firecomponent--fire-image--edit-controller" v-if="editable" :class="{ 'firecomponent--fire-image--hide-on-desktop': !showEditBtn }" @click.stop="() => {}">
       <slot name="edit-controller" :for="uniqueName">
         <label class="firecomponent--button firecomponent--fire-image-change-label" :for="uniqueName" title="Click to upload new image">
           Change
@@ -18,6 +18,12 @@
 </template>
 
 <style lang="scss" scoped>
+@media only screen and (min-width : 601px) {
+  .firecomponent--fire-image--hide-on-desktop {
+    display: none;
+  }
+}
+
 .firecomponent--fire-image--container {
   position: relative;
 }
@@ -53,7 +59,6 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    background-color: black;
     color: white;
     top: 0;
     bottom: 0;
@@ -64,12 +69,17 @@
 </style>
 
 <script>
+import * as StorageHelpers from '../../helpers/storage';
 export default {
   name: 'fire-image',
   props: {
-    storageRef: {
+    path: {
       type: [Object,String],
-      default: () => null
+      required: true,
+      validator (path) {
+        return (!!path.bucket && typeof path.bucket === 'string')
+          || StorageHelpers.VALID_PATH.test(path)
+      }
     },
     editable: {
       type: [Boolean],
@@ -98,40 +108,41 @@ export default {
     allowRotations: {
       type: [Boolean],
       default: () => true
+    },
+    bgColor: {
+      type: [String],
+      default: 'inherit'
+    },
+    noImageText: {
+      type: [String],
+      default: 'No Image'
+    },
+    textColor: {
+      type: [String],
+      default: '#909090'
     }
   },
 
   data () {
     return {
-      uploadedImage: null,
-      croppieInstance: null,
-      croppedImage: null,
       newUpload: false,
-      uploading: false,
-      uploadTasks: [],
-      imageLocation: null,
-      index: null
+      index: null,
+      imageURL: '',
+      showEdit: false,
+      width: 0,
+      height: 0,
+      loading: true
     }
   },
-
-  mounted () {
-    if(this._storageRef) {
-      this.loadFromStorage(this._storageRef)
-    }
-  },
-
   computed: {
     /**
      * A unique id for this fire-image component
      */
+    showEditBtn () {
+      return this.editable && this.showEdit
+    },
     uniqueName () {
       return Math.random().toString(36).substring(4)
-    },
-    width () {
-      return this.$el && this.$el.clientWidth ? this.$el.clientWidth : null
-    },
-    height () {
-      return this.width / this.aspectRatio
     },
     padding () {
       return 1/this.aspectRatio
@@ -142,35 +153,51 @@ export default {
       }
       return 'png'
     },
-    _storageRef () {
-      if(this.storageRef) {
+    reference () {
+      if (this.path) {
         try {
-          return typeof this.storageRef === 'string' ? this.$firebase.storage().ref(this.storageRef) : this.$firebase.storage().refFromURL(this.storageRef.toString())
+          return typeof this.path === 'string' ? this.$firebase.storage().ref(this.path) : this.$firebase.storage().refFromURL(this.path.toString())
         } catch (e) {
           console.error(e)
           return null
         }
       }
     },
-  },
-
-  watch: {
-    _storageRef (val) {
-      if(val) {
-        this.loadFromStorage(val)
-      }
+    displayURL () {
+      return this.imageURL
+        || `"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='${50/this.aspectRatio}px' width='50px'><text text-anchor='middle' x='25' y='${25/this.aspectRatio}' fill='${this.textColor}' font-size='5'>${this.loading ? 'Loading...' : this.noImageText}</text></svg>"`
     }
   },
-
+  watch: {
+    reference: {
+      handler (val) {
+        this.$nextTick(() => {
+          if (val) {
+            this.loadFromStorage(val)
+          }
+        })
+      },
+      immediate: true
+    }
+  },
   methods: {
-    loadFromStorage (ref) {
-      ref = ref.child(''+this.getIndexToDisplay())
-      ref.getDownloadURL().then((url) => {
-        if(ref.parent.toString() !== this._storageRef.toString()){return;}
-        this.imageLocation = url
-      },() => {
-        console.error('No Image at specified location.')
-      })
+    loadFromStorage (reference) {
+      this.loading = true
+      this.imageURL = ''
+      reference = reference.child(''+this.getIndexToDisplay())
+      reference.getDownloadURL()
+        .then((url) => {
+          if(reference.parent.toString() !== this.reference.toString()){return;}
+          this.imageURL = url
+        })
+        .catch((err) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.error(err)
+          }
+        })
+        .then(() => {
+          this.loading = false
+        })
     },
     getIndexToDisplay () {
       const displaySize = this.$refs.root.clientWidth
@@ -191,7 +218,7 @@ export default {
       return min.index
     },
     imageUploaded (e) {
-      const location = this._storageRef.toString()
+      const location = this.reference.toString()
       const config = {
         widths: this.widths,
         aspectRatio: this.aspectRatio,
@@ -214,7 +241,7 @@ export default {
       const callback = (e, urls) => {
         this.$fc_image.bus.$off(location + '-completed', callback)
         const index = this.getIndexToDisplay()
-        this.imageLocation = urls[index]
+        this.imageURL = urls[index]
       }
       return callback
     }

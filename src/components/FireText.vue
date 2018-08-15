@@ -101,13 +101,13 @@ const component = {
   },
 
   mounted (evt) {
-    this.$messenger.bus.$on('save', () => {
+    this.$fc_messenger.bus.$on('save', () => {
       if (this.editable) {
         this.updateFirebaseWithValue(this.updatedText)
       }
     })
 
-    this.$messenger.bus.$on('reset', () => {
+    this.$fc_messenger.bus.$on('reset', () => {
       if (this.editable) {
         this.discardEdits()
       }

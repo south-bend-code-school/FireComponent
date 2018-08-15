@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  .demo-root
     v-layout.mt-3(row, wrap)
       v-flex(xs12 md10 offset-md1)
         v-card
@@ -23,12 +23,16 @@
               v-flex(xs12 md4)
                 v-layout(row, wrap)
                   v-flex(xs12)
-                    fire-image.text-xs-center(
-                      :aspectRatio="4/3"
-                      :widths='[200,800]'
-                      :storageRef="sRef.child('image')"
-                      :editable="editable"
+                    router-link(
+                      to="/asdf"
                     )
+                      fire-image.text-xs-center(
+                        :aspectRatio="4/3"
+                        :widths='[200,800]'
+                        :path="sRef.child('image/asfjhg')"
+                        :editable="editable"
+                        noImageText="Hello?"
+                      )
                   v-flex.mt-2(xs12)
                     fire-input(
                       path="caption"
@@ -63,7 +67,6 @@
 </template>
 
 <script>
-import Messanger from 'firecomponent/src/components/FireMessanger'
 import firebase from '../firebase'
 
 export default {
@@ -75,15 +78,18 @@ export default {
       editable: true,
     }
   },
+  mounted () {
+    this.$fc_permission.bus.$emit('permissionChange', true)
+  },
   methods: {
     toggleEdit () {
       this.editable = !this.editable
     },
     resetData () {
-      Messanger.reset()
+      this.$messenger.reset()
     },
     saveData () {
-      Messanger.save()
+      this.$messenger.save()
     }
   },
   computed: {

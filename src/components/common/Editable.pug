@@ -1,0 +1,35 @@
+component.firecomponent--editable-root(
+  :is="customTag"
+  :class="{ 'firecomponent--editing': isEditing, 'firecomponent--editable-indicator': (showEditableIndicator && componentEditable) || isEditing }"
+  @mouseover="editableOnMouseOver"
+  @mouseleave="editableOnMouseLeave"
+  @focusin="editableOnFocus"
+  @focusout="editableOnBlur"
+)
+  div(
+    ref="editElement"
+    v-if="(showEditableIndicator && componentEditable) || isEditing"
+    contenteditable="true"
+    @change="editableOnInput"
+  ) {{shownVal}}
+  template(
+    v-else-if="shownVal"
+  ) {{shownVal}}
+  span.firecomponent-editable-placeholder(
+    v-else
+  ) placeholder
+  .firecomponent--loader-container(
+    v-if="updating"
+  )
+    .firecomponent--loader
+  .firecomponent--editable-controls(
+    v-if="isEditing"
+  )
+    button.firecomponent--btn.firecomponent--save-btn(
+      tabindex="0"
+      @click.stop="editableOnSave"
+    ) Save
+    button.firecomponent--btn.firecomponent--cancel-btn(
+      tabindex="0"
+      @click.stop="editableOnCancel"
+    ) Cancel

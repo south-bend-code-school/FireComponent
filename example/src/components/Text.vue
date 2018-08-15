@@ -72,13 +72,8 @@
             td {{ props.item.description }}
 
 </template>
-</v-data-table>
-</template>
-
-</template>
 
 <script>
-import Messanger from 'firecomponent/src/components/FireMessanger'
 import firebase from '../firebase'
 
 export default {
@@ -124,10 +119,10 @@ export default {
       this.editable = !this.editable
     },
     resetData () {
-      Messanger.reset()
+      this.$fc_messenger.reset()
     },
     saveData () {
-      Messanger.save()
+      this.$fc_messenger.save()
     }
   },
 }

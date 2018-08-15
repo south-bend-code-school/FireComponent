@@ -62,6 +62,8 @@ export default {
 </script>
 
 <style>
+@import "../node_modules/fire-component/dist/fire-component.css";
+@import "../node_modules/vuetify/dist/vuetify.min.css";
   .btn__content {
     flex: 1 1 auto;
   }

@@ -110,8 +110,8 @@ export default {
       this.snapshotVal = snapshot.exists() ? snapshot.val() : null
     })
 
-    this.$messenger.bus.$on('save', this.save)
-    this.$messenger.bus.$on('reset', this.reset)
+    this.$fc_messenger.bus.$on('save', this.save)
+    this.$fc_messenger.bus.$on('reset', this.reset)
   },
   beforeDestroy () {
     if (this.unsub) {

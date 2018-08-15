@@ -81,6 +81,7 @@
     "postcss": "^6.0.0",
     "postcss-cssnext": "^2.10.0",
     "pre-commit": "^1.2.0",
+    "pug": "^2.0.3",
     "rimraf": "^2.6.0",
     "sass-loader": "^7.0.1",
     "sinon": "2.2.0",
@@ -133,5 +134,6 @@
   "license": {
     "type": "MIT",
     "url": "http://www.opensource.org/licenses/mit-license.php"
-  }
+  },
+  "dependencies": {}
 }
