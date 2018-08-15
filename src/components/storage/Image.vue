@@ -241,7 +241,11 @@ export default {
       const callback = (e, urls) => {
         this.$fc_image.bus.$off(location + '-completed', callback)
         const index = this.getIndexToDisplay()
-        this.imageURL = urls[index]
+        if (!urls[index]) {
+          this.loadFromStorage(this.reference)
+        } else {
+          this.imageURL = urls[index]
+        }
       }
       return callback
     }

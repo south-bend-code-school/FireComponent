@@ -1400,7 +1400,11 @@ exports.default = {
       var callback = function callback(e, urls) {
         _this4.$fc_image.bus.$off(location + '-completed', callback);
         var index = _this4.getIndexToDisplay();
-        _this4.imageURL = urls[index];
+        if (!urls[index]) {
+          _this4.loadFromStorage(_this4.reference);
+        } else {
+          _this4.imageURL = urls[index];
+        }
       };
       return callback;
     }
