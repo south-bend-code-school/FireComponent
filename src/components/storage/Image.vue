@@ -35,6 +35,7 @@
   z-index: 1;
   width: 100%;
   max-width: 200px;
+  text-align: right;
   > * {
     z-index: 2;
   }
