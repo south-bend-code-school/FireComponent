@@ -394,8 +394,8 @@
   right: 0;
   bottom: 0;
   z-index: 1;
-  padding-right: 10px !important;
-  padding-bottom: 10px !important;
+  width: 100%;
+  max-width: 200px;
 }
 .firecomponent--fire-image--edit-controller > *[data-v-09c5f564] {
     z-index: 2;

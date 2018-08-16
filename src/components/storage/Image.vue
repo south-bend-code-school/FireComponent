@@ -33,8 +33,8 @@
   right: 0;
   bottom: 0;
   z-index: 1;
-  padding-right: 10px !important;
-  padding-bottom: 10px !important;
+  width: 100%;
+  max-width: 200px;
   > * {
     z-index: 2;
   }
