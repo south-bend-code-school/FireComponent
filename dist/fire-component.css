@@ -396,6 +396,7 @@
   z-index: 1;
   width: 100%;
   max-width: 200px;
+  text-align: right;
 }
 .firecomponent--fire-image--edit-controller > *[data-v-09c5f564] {
     z-index: 2;
