@@ -1,26 +1,26 @@
 /*!
  * fire-component v1.0.0
- * (c) 2018 David Mattia
+ * (c) 2019 David Mattia
  * Released under the MIT License.
  */
 
 @import url(//cdnjs.cloudflare.com/ajax/libs/croppie/2.5.0/croppie.min.css);
-.editor[data-v-0398dbd1] {
+.editor[data-v-2ca2147c] {
   border: 1px dashed #202020 !important;
   font-size: 16px;
   font-weight: 400;
   display: inherit;
 }
 
-.firecomponent--inline-editor[data-v-62016ed9] {
+.firecomponent--inline-editor[data-v-6bca1b64] {
   width: 100%;
   display: inline-block;
 }
-.firecomponent--inline-editor[data-v-62016ed9]:focus {
+.firecomponent--inline-editor[data-v-6bca1b64]:focus {
   outline: -webkit-focus-ring-color auto 5px;
 }
 
-.firecomponent--editable-indicator[data-v-3d6c45e0]::after {
+.firecomponent--editable-indicator[data-v-2d7d06d5]::after {
   content: '';
   background-color: rgba(0, 0, 0, .1);
   position: absolute;
@@ -31,7 +31,7 @@
   z-index: 0;
   pointer-events: none;
 }
-.firecomponent--loader-container[data-v-3d6c45e0] {
+.firecomponent--loader-container[data-v-2d7d06d5] {
   position: absolute;
   height: 2px;
   bottom: 0;
@@ -39,7 +39,7 @@
   width: 100%;
   overflow: hidden;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-3d6c45e0] ::before {
+.firecomponent--loader-container > .firecomponent--loader[data-v-2d7d06d5] ::before {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -47,9 +47,9 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-data-v-3d6c45e0 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    animation: indeterminate-data-v-2d7d06d5 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-3d6c45e0] ::after {
+.firecomponent--loader-container > .firecomponent--loader[data-v-2d7d06d5] ::after {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -57,10 +57,10 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-short-data-v-3d6c45e0 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    animation: indeterminate-short-data-v-2d7d06d5 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
     animation-delay: 1.15s;
 }
-@keyframes indeterminate-data-v-3d6c45e0 {
+@keyframes indeterminate-data-v-2d7d06d5 {
 0% {
     left: -35%;
     right: 100%;
@@ -74,7 +74,7 @@
     right: -90%;
 }
 }
-@keyframes indeterminate-short-data-v-3d6c45e0 {
+@keyframes indeterminate-short-data-v-2d7d06d5 {
 0% {
     left: -200%;
     right: 100%;
@@ -88,12 +88,12 @@
     right: -8%;
 }
 }
-.firecomponent--editable-root[data-v-3d6c45e0] {
+.firecomponent--editable-root[data-v-2d7d06d5] {
   position: relative;
   letter-spacing: normal;
   word-spacing: normal;
 }
-.firecomponent--editable-controls[data-v-3d6c45e0] {
+.firecomponent--editable-controls[data-v-2d7d06d5] {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -101,7 +101,7 @@
   font-size: 1rem;
   transform: translateY(100%);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-3d6c45e0] {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-2d7d06d5] {
     margin: 0;
     padding: 0 2px;
     width: 60px;
@@ -109,21 +109,21 @@
     text-align: center;
     background-color: rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-3d6c45e0]:first-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-2d7d06d5]:first-child {
       margin-right: 0;
       border-bottom-left-radius: 2px;
       border-right: 1px solid rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-3d6c45e0]:last-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-2d7d06d5]:last-child {
       margin-left: 0;
       border-bottom-right-radius: 2px;
       border-left: 1px solid rgba(0, 0, 0, .1);
 }
-.firecomponent-editable-placeholder[data-v-3d6c45e0] {
+.firecomponent-editable-placeholder[data-v-2d7d06d5] {
   visibility: hidden;
 }
 
-.firecomponent--editable-indicator[data-v-573f3184]::after {
+.firecomponent--editable-indicator[data-v-1f05abb9]::after {
   content: '';
   background-color: rgba(0, 0, 0, .1);
   position: absolute;
@@ -134,7 +134,7 @@
   z-index: 0;
   pointer-events: none;
 }
-.firecomponent--loader-container[data-v-573f3184] {
+.firecomponent--loader-container[data-v-1f05abb9] {
   position: absolute;
   height: 2px;
   bottom: 0;
@@ -142,7 +142,7 @@
   width: 100%;
   overflow: hidden;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-573f3184] ::before {
+.firecomponent--loader-container > .firecomponent--loader[data-v-1f05abb9] ::before {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -150,9 +150,9 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-data-v-573f3184 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    animation: indeterminate-data-v-1f05abb9 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-573f3184] ::after {
+.firecomponent--loader-container > .firecomponent--loader[data-v-1f05abb9] ::after {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -160,10 +160,10 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-short-data-v-573f3184 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    animation: indeterminate-short-data-v-1f05abb9 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
     animation-delay: 1.15s;
 }
-@keyframes indeterminate-data-v-573f3184 {
+@keyframes indeterminate-data-v-1f05abb9 {
 0% {
     left: -35%;
     right: 100%;
@@ -177,7 +177,7 @@
     right: -90%;
 }
 }
-@keyframes indeterminate-short-data-v-573f3184 {
+@keyframes indeterminate-short-data-v-1f05abb9 {
 0% {
     left: -200%;
     right: 100%;
@@ -191,12 +191,12 @@
     right: -8%;
 }
 }
-.firecomponent--editable-root[data-v-573f3184] {
+.firecomponent--editable-root[data-v-1f05abb9] {
   position: relative;
   letter-spacing: normal;
   word-spacing: normal;
 }
-.firecomponent--editable-controls[data-v-573f3184] {
+.firecomponent--editable-controls[data-v-1f05abb9] {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -204,7 +204,7 @@
   font-size: 1rem;
   transform: translateY(100%);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-573f3184] {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-1f05abb9] {
     margin: 0;
     padding: 0 2px;
     width: 60px;
@@ -212,21 +212,21 @@
     text-align: center;
     background-color: rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-573f3184]:first-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-1f05abb9]:first-child {
       margin-right: 0;
       border-bottom-left-radius: 2px;
       border-right: 1px solid rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-573f3184]:last-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-1f05abb9]:last-child {
       margin-left: 0;
       border-bottom-right-radius: 2px;
       border-left: 1px solid rgba(0, 0, 0, .1);
 }
-.firecomponent-editable-placeholder[data-v-573f3184] {
+.firecomponent-editable-placeholder[data-v-1f05abb9] {
   visibility: hidden;
 }
 
-.firecomponent--editable-indicator[data-v-78ca2479]::after {
+.firecomponent--editable-indicator[data-v-bc5945b8]::after {
   content: '';
   background-color: rgba(0, 0, 0, .1);
   position: absolute;
@@ -237,7 +237,7 @@
   z-index: 0;
   pointer-events: none;
 }
-.firecomponent--loader-container[data-v-78ca2479] {
+.firecomponent--loader-container[data-v-bc5945b8] {
   position: absolute;
   height: 2px;
   bottom: 0;
@@ -245,7 +245,7 @@
   width: 100%;
   overflow: hidden;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-78ca2479] ::before {
+.firecomponent--loader-container > .firecomponent--loader[data-v-bc5945b8] ::before {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -253,9 +253,9 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-data-v-78ca2479 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    animation: indeterminate-data-v-bc5945b8 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
-.firecomponent--loader-container > .firecomponent--loader[data-v-78ca2479] ::after {
+.firecomponent--loader-container > .firecomponent--loader[data-v-bc5945b8] ::after {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -263,10 +263,10 @@
     left: 0;
     bottom: 0;
     will-change: left, right;
-    animation: indeterminate-short-data-v-78ca2479 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    animation: indeterminate-short-data-v-bc5945b8 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
     animation-delay: 1.15s;
 }
-@keyframes indeterminate-data-v-78ca2479 {
+@keyframes indeterminate-data-v-bc5945b8 {
 0% {
     left: -35%;
     right: 100%;
@@ -280,7 +280,7 @@
     right: -90%;
 }
 }
-@keyframes indeterminate-short-data-v-78ca2479 {
+@keyframes indeterminate-short-data-v-bc5945b8 {
 0% {
     left: -200%;
     right: 100%;
@@ -294,12 +294,12 @@
     right: -8%;
 }
 }
-.firecomponent--editable-root[data-v-78ca2479] {
+.firecomponent--editable-root[data-v-bc5945b8] {
   position: relative;
   letter-spacing: normal;
   word-spacing: normal;
 }
-.firecomponent--editable-controls[data-v-78ca2479] {
+.firecomponent--editable-controls[data-v-bc5945b8] {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -307,7 +307,7 @@
   font-size: 1rem;
   transform: translateY(100%);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-78ca2479] {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-bc5945b8] {
     margin: 0;
     padding: 0 2px;
     width: 60px;
@@ -315,17 +315,17 @@
     text-align: center;
     background-color: rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-78ca2479]:first-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-bc5945b8]:first-child {
       margin-right: 0;
       border-bottom-left-radius: 2px;
       border-right: 1px solid rgba(0, 0, 0, .2);
 }
-.firecomponent--editable-controls > .firecomponent--btn[data-v-78ca2479]:last-child {
+.firecomponent--editable-controls > .firecomponent--btn[data-v-bc5945b8]:last-child {
       margin-left: 0;
       border-bottom-right-radius: 2px;
       border-left: 1px solid rgba(0, 0, 0, .1);
 }
-.firecomponent-editable-placeholder[data-v-78ca2479] {
+.firecomponent-editable-placeholder[data-v-bc5945b8] {
   visibility: hidden;
 }
 
@@ -382,14 +382,14 @@
 }
 
 @media only screen and (min-width: 601px) {
-.firecomponent--fire-image--hide-on-desktop[data-v-09c5f564] {
+.firecomponent--fire-image--hide-on-desktop[data-v-b6463ee2] {
     display: none;
 }
 }
-.firecomponent--fire-image--container[data-v-09c5f564] {
+.firecomponent--fire-image--container[data-v-b6463ee2] {
   position: relative;
 }
-.firecomponent--fire-image--edit-controller[data-v-09c5f564] {
+.firecomponent--fire-image--edit-controller[data-v-b6463ee2] {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -398,24 +398,24 @@
   max-width: 200px;
   text-align: right;
 }
-.firecomponent--fire-image--edit-controller > *[data-v-09c5f564] {
+.firecomponent--fire-image--edit-controller > *[data-v-b6463ee2] {
     z-index: 2;
 }
-.firecomponent--fire-image--edit-controller > input[data-v-09c5f564] {
+.firecomponent--fire-image--edit-controller > input[data-v-b6463ee2] {
     display: none;
 }
-.firecomponent--fire-image--display[data-v-09c5f564] {
+.firecomponent--fire-image--display[data-v-b6463ee2] {
   width: 100%;
   position: relative;
   display: block;
 }
-.firecomponent--fire-image--display > .firecomponent--fire-image--ratio-enforcer[data-v-09c5f564] {
+.firecomponent--fire-image--display > .firecomponent--fire-image--ratio-enforcer[data-v-b6463ee2] {
     display: block;
     height: 0;
     width: 100%;
     padding-top: 100%;
 }
-.firecomponent--fire-image--display > .firecomponent--fire-image--content[data-v-09c5f564] {
+.firecomponent--fire-image--display > .firecomponent--fire-image--content[data-v-b6463ee2] {
     position: absolute;
     background-repeat: no-repeat;
     background-size: cover;

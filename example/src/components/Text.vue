@@ -88,22 +88,22 @@ export default {
         { text: 'Title', align: 'left', value: 'title' },
         { text: 'Type', align: 'left', value: 'type' },
         { text: 'Default', align: 'left', value: 'default' },
-        { text: 'Description', align: 'left', value: 'description' },
+        { text: 'Description', align: 'left', value: 'description' }
       ],
       items: [
         {
-          title: "customTag",
-          type: "String",
-          default: "p",
-          description: "The tag the created element will be"
+          title: 'customTag',
+          type: 'String',
+          default: 'p',
+          description: 'The tag the created element will be'
         },
         {
-          title: "async",
-          type: "Boolean",
-          default: "false",
-          description: "Sets two way binding to firebase. If false, you will need to save using the FireMessanger instance"
-        },
-      ],
+          title: 'async',
+          type: 'Boolean',
+          default: 'false',
+          description: 'Sets two way binding to firebase. If false, you will need to save using the FireMessenger instance'
+        }
+      ]
     }
   },
   mounted () {
@@ -124,6 +124,6 @@ export default {
     saveData () {
       this.$fc_messenger.save()
     }
-  },
+  }
 }
 </script>

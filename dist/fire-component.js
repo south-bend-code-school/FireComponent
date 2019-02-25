@@ -1,6 +1,6 @@
 /*!
  * fire-component v1.0.0
- * (c) 2018 David Mattia
+ * (c) 2019 David Mattia
  * Released under the MIT License.
  */
 
@@ -432,21 +432,21 @@ function ImageBus(_Vue) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(25)
+  __webpack_require__(27)
 }
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(14),
   /* template */
-  __webpack_require__(35),
+  __webpack_require__(37),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-0398dbd1",
+  "data-v-2ca2147c",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/FireInput.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/FireInput.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] FireInput.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -457,9 +457,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0398dbd1", Component.options)
+    hotAPI.createRecord("data-v-2ca2147c", Component.options)
   } else {
-    hotAPI.reload("data-v-0398dbd1", Component.options)
+    hotAPI.reload("data-v-2ca2147c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -476,21 +476,21 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(30)
+  __webpack_require__(29)
 }
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(15),
   /* template */
-  __webpack_require__(40),
+  __webpack_require__(39),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-62016ed9",
+  "data-v-6bca1b64",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/InlineEditor.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/InlineEditor.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] InlineEditor.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -501,9 +501,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-62016ed9", Component.options)
+    hotAPI.createRecord("data-v-6bca1b64", Component.options)
   } else {
-    hotAPI.reload("data-v-62016ed9", Component.options)
+    hotAPI.reload("data-v-6bca1b64", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -530,11 +530,11 @@ var Component = __webpack_require__(0)(
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-3d6c45e0",
+  "data-v-2d7d06d5",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/firestore/Number.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/firestore/Number.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Number.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -545,9 +545,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3d6c45e0", Component.options)
+    hotAPI.createRecord("data-v-2d7d06d5", Component.options)
   } else {
-    hotAPI.reload("data-v-3d6c45e0", Component.options)
+    hotAPI.reload("data-v-2d7d06d5", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -564,21 +564,21 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(29)
+  __webpack_require__(26)
 }
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(17),
   /* template */
-  __webpack_require__(39),
+  __webpack_require__(36),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-573f3184",
+  "data-v-1f05abb9",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/firestore/Text.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/firestore/Text.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -589,9 +589,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-573f3184", Component.options)
+    hotAPI.createRecord("data-v-1f05abb9", Component.options)
   } else {
-    hotAPI.reload("data-v-573f3184", Component.options)
+    hotAPI.reload("data-v-1f05abb9", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -618,11 +618,11 @@ var Component = __webpack_require__(0)(
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-78ca2479",
+  "data-v-bc5945b8",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/rtdb/Text.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/rtdb/Text.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Text.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -633,9 +633,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-78ca2479", Component.options)
+    hotAPI.createRecord("data-v-bc5945b8", Component.options)
   } else {
-    hotAPI.reload("data-v-78ca2479", Component.options)
+    hotAPI.reload("data-v-bc5945b8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -652,13 +652,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(27)
+  __webpack_require__(25)
 }
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(19),
   /* template */
-  __webpack_require__(37),
+  __webpack_require__(35),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -666,7 +666,7 @@ var Component = __webpack_require__(0)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/storage/Editor.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/storage/Editor.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Editor.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -677,9 +677,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2ad374b4", Component.options)
+    hotAPI.createRecord("data-v-1acc222e", Component.options)
   } else {
-    hotAPI.reload("data-v-2ad374b4", Component.options)
+    hotAPI.reload("data-v-1acc222e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -696,21 +696,21 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(26)
+  __webpack_require__(30)
 }
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(20),
   /* template */
-  __webpack_require__(36),
+  __webpack_require__(40),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-09c5f564",
+  "data-v-b6463ee2",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/btmass02/Desktop/OpenSource/fire-component/src/components/storage/Image.vue"
+Component.options.__file = "/Users/brich/apps/sbcs/FireComponent/src/components/storage/Image.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Image.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -721,9 +721,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-09c5f564", Component.options)
+    hotAPI.createRecord("data-v-b6463ee2", Component.options)
   } else {
-    hotAPI.reload("data-v-09c5f564", Component.options)
+    hotAPI.reload("data-v-b6463ee2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -1717,15 +1717,15 @@ var _ImageBus = __webpack_require__(6);
 
 var _ImageBus2 = _interopRequireDefault(_ImageBus);
 
-var _FireMessanger = __webpack_require__(5);
+var _FireMessenger = __webpack_require__(5);
 
-var _FireMessanger2 = _interopRequireDefault(_FireMessanger);
+var _FireMessenger2 = _interopRequireDefault(_FireMessenger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function installBuses(_Vue) {
   _Vue.prototype.$fc_image = new _ImageBus2.default(_Vue);
-  _Vue.prototype.$fc_messenger = new _FireMessanger2.default(_Vue);
+  _Vue.prototype.$fc_messenger = new _FireMessenger2.default(_Vue);
   _Vue.prototype.$fc_permission = new _EditableManager2.default(_Vue);
 }
 
@@ -3903,104 +3903,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c(_vm.customTag, {
-    tag: "component"
-  }, [(_vm.editable) ? _c('span', {
-    key: _vm.editorKey,
-    ref: "editor",
-    staticClass: "editor",
-    style: (_vm.editorStyle),
-    attrs: {
-      "contenteditable": "true"
-    },
-    on: {
-      "input": _vm.contentChangeEventHandler
-    }
-  }, [_vm._v("\n    " + _vm._s(_vm.content) + "\n  ")]) : _vm._t("display", [_vm._v("\n    " + _vm._s(_vm.content) + "\n  ")], {
-    content: _vm.content
-  })], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-0398dbd1", module.exports)
-  }
-}
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    ref: "root",
-    staticClass: "firecomponent--fire-image--container",
-    on: {
-      "mouseover": function($event) {
-        _vm.showEdit = true
-      },
-      "mouseleave": function($event) {
-        _vm.showEdit = false
-      }
-    }
-  }, [_vm._t("display", [_c('div', {
-    staticClass: "firecomponent--fire-image--display"
-  }, [_c('div', {
-    staticClass: "firecomponent--fire-image--ratio-enforcer",
-    style: ({
-      paddingTop: _vm.padding * 100 + '%'
-    })
-  }), _vm._v(" "), _c('div', {
-    staticClass: "firecomponent--fire-image--content",
-    style: ({
-      backgroundImage: 'url(' + _vm.displayURL + ')',
-      backgroundColor: _vm.bgColor
-    })
-  })])], {
-    src: _vm.displayURL
-  }), _vm._v(" "), (_vm.editable) ? _c('div', {
-    staticClass: "firecomponent--fire-image--edit-controller",
-    class: {
-      'firecomponent--fire-image--hide-on-desktop': !_vm.showEditBtn
-    },
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        return (function () {})($event)
-      }
-    }
-  }, [_vm._t("edit-controller", [_c('label', {
-    staticClass: "firecomponent--button firecomponent--fire-image-change-label",
-    attrs: {
-      "for": _vm.uniqueName,
-      "title": "Click to upload new image"
-    }
-  }, [_vm._v("\n        Change\n      ")])], {
-    for: _vm.uniqueName
-  }), _vm._v(" "), _c('input', {
-    attrs: {
-      "type": "file",
-      "id": _vm.uniqueName
-    },
-    on: {
-      "change": _vm.imageUploaded
-    }
-  })], 2) : _vm._e()], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-09c5f564", module.exports)
-  }
-}
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     directives: [{
       name: "show",
@@ -4082,7 +3984,102 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2ad374b4", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-1acc222e", module.exports)
+  }
+}
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c(_vm.customTag, {
+    tag: "component",
+    staticClass: "firecomponent--editable-root",
+    class: {
+      'firecomponent--editing': _vm.isEditing, 'firecomponent--editable-indicator': (_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing
+    },
+    on: {
+      "mouseover": _vm.editableOnMouseOver,
+      "mouseleave": _vm.editableOnMouseLeave,
+      "focusin": _vm.editableOnFocus,
+      "focusout": _vm.editableOnBlur
+    }
+  }, [((_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing) ? _c('div', {
+    ref: "editElement",
+    attrs: {
+      "contenteditable": "true"
+    },
+    on: {
+      "change": _vm.editableOnInput
+    }
+  }, [_vm._v(_vm._s(_vm.shownVal))]) : (_vm.shownVal) ? [_vm._v(_vm._s(_vm.shownVal))] : _c('span', {
+    staticClass: "firecomponent-editable-placeholder"
+  }, [_vm._v("placeholder")]), (_vm.updating) ? _c('div', {
+    staticClass: "firecomponent--loader-container"
+  }, [_c('div', {
+    staticClass: "firecomponent--loader"
+  })]) : _vm._e(), (_vm.isEditing) ? _c('div', {
+    staticClass: "firecomponent--editable-controls"
+  }, [_c('button', {
+    staticClass: "firecomponent--btn firecomponent--save-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnSave($event)
+      }
+    }
+  }, [_vm._v("Save")]), _c('button', {
+    staticClass: "firecomponent--btn firecomponent--cancel-btn",
+    attrs: {
+      "tabindex": "0"
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return _vm.editableOnCancel($event)
+      }
+    }
+  }, [_vm._v("Cancel")])]) : _vm._e()], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-1f05abb9", module.exports)
+  }
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c(_vm.customTag, {
+    tag: "component"
+  }, [(_vm.editable) ? _c('span', {
+    key: _vm.editorKey,
+    ref: "editor",
+    staticClass: "editor",
+    style: (_vm.editorStyle),
+    attrs: {
+      "contenteditable": "true"
+    },
+    on: {
+      "input": _vm.contentChangeEventHandler
+    }
+  }, [_vm._v("\n    " + _vm._s(_vm.content) + "\n  ")]) : _vm._t("display", [_vm._v("\n    " + _vm._s(_vm.content) + "\n  ")], {
+    content: _vm.content
+  })], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2ca2147c", module.exports)
   }
 }
 
@@ -4147,77 +4144,12 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-3d6c45e0", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-2d7d06d5", module.exports)
   }
 }
 
 /***/ }),
 /* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c(_vm.customTag, {
-    tag: "component",
-    staticClass: "firecomponent--editable-root",
-    class: {
-      'firecomponent--editing': _vm.isEditing, 'firecomponent--editable-indicator': (_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing
-    },
-    on: {
-      "mouseover": _vm.editableOnMouseOver,
-      "mouseleave": _vm.editableOnMouseLeave,
-      "focusin": _vm.editableOnFocus,
-      "focusout": _vm.editableOnBlur
-    }
-  }, [((_vm.showEditableIndicator && _vm.componentEditable) || _vm.isEditing) ? _c('div', {
-    ref: "editElement",
-    attrs: {
-      "contenteditable": "true"
-    },
-    on: {
-      "change": _vm.editableOnInput
-    }
-  }, [_vm._v(_vm._s(_vm.shownVal))]) : (_vm.shownVal) ? [_vm._v(_vm._s(_vm.shownVal))] : _c('span', {
-    staticClass: "firecomponent-editable-placeholder"
-  }, [_vm._v("placeholder")]), (_vm.updating) ? _c('div', {
-    staticClass: "firecomponent--loader-container"
-  }, [_c('div', {
-    staticClass: "firecomponent--loader"
-  })]) : _vm._e(), (_vm.isEditing) ? _c('div', {
-    staticClass: "firecomponent--editable-controls"
-  }, [_c('button', {
-    staticClass: "firecomponent--btn firecomponent--save-btn",
-    attrs: {
-      "tabindex": "0"
-    },
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        return _vm.editableOnSave($event)
-      }
-    }
-  }, [_vm._v("Save")]), _c('button', {
-    staticClass: "firecomponent--btn firecomponent--cancel-btn",
-    attrs: {
-      "tabindex": "0"
-    },
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        return _vm.editableOnCancel($event)
-      }
-    }
-  }, [_vm._v("Cancel")])]) : _vm._e()], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-573f3184", module.exports)
-  }
-}
-
-/***/ }),
-/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -4253,7 +4185,75 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-62016ed9", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-6bca1b64", module.exports)
+  }
+}
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    ref: "root",
+    staticClass: "firecomponent--fire-image--container",
+    on: {
+      "mouseover": function($event) {
+        _vm.showEdit = true
+      },
+      "mouseleave": function($event) {
+        _vm.showEdit = false
+      }
+    }
+  }, [_vm._t("display", [_c('div', {
+    staticClass: "firecomponent--fire-image--display"
+  }, [_c('div', {
+    staticClass: "firecomponent--fire-image--ratio-enforcer",
+    style: ({
+      paddingTop: _vm.padding * 100 + '%'
+    })
+  }), _vm._v(" "), _c('div', {
+    staticClass: "firecomponent--fire-image--content",
+    style: ({
+      backgroundImage: 'url(' + _vm.displayURL + ')',
+      backgroundColor: _vm.bgColor
+    })
+  })])], {
+    src: _vm.displayURL
+  }), _vm._v(" "), (_vm.editable) ? _c('div', {
+    staticClass: "firecomponent--fire-image--edit-controller",
+    class: {
+      'firecomponent--fire-image--hide-on-desktop': !_vm.showEditBtn
+    },
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        return (function () {})($event)
+      }
+    }
+  }, [_vm._t("edit-controller", [_c('label', {
+    staticClass: "firecomponent--button firecomponent--fire-image-change-label",
+    attrs: {
+      "for": _vm.uniqueName,
+      "title": "Click to upload new image"
+    }
+  }, [_vm._v("\n        Change\n      ")])], {
+    for: _vm.uniqueName
+  }), _vm._v(" "), _c('input', {
+    attrs: {
+      "type": "file",
+      "id": _vm.uniqueName
+    },
+    on: {
+      "change": _vm.imageUploaded
+    }
+  })], 2) : _vm._e()], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-b6463ee2", module.exports)
   }
 }
 
@@ -4318,7 +4318,7 @@ module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-78ca2479", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-bc5945b8", module.exports)
   }
 }
 
