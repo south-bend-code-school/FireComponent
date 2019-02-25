@@ -1,5 +1,5 @@
 /*!
- * fire-component v1.0.0
+ * fire-component v1.0.1
  * (c) 2019 David Mattia
  * Released under the MIT License.
  */

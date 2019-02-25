@@ -40,7 +40,6 @@
       "stylelint"
     ]
   },
-  #"pre-commit": "lint:staged",
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.0",
     "babel-core": "^6.24.0",

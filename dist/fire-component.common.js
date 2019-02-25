@@ -1,5 +1,5 @@
 /*!
- * fire-component v1.0.0
+ * fire-component v1.0.1
  * (c) 2019 David Mattia
  * Released under the MIT License.
  */
@@ -1584,7 +1584,7 @@ function installProperties(_Vue) {
 }
 
 function insertComponent(_Vue, _Component, anchorId, tag) {
-  var insertElem = window.document.createElement(tag || "div");
+  var insertElem = window.document.createElement(tag || 'div');
   insertElem.id = anchorId;
   window.document.body.appendChild(insertElem);
   new _Vue({
